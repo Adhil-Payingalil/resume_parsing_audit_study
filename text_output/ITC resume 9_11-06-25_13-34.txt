@@ -1,0 +1,80 @@
+```json
+{
+  "candidate_summary": "A seasoned Software Test Automation Engineer with over 5 years of experience in manual and automation testing. The candidate has a proven track record in designing and implementing robust, scalable automated test frameworks. They are proficient in various automation tools and methodologies, including Selenium Webdriver, Playwright, Cypress, REST Assured, and Appium. They have experience in Agile methodologies and have contributed to seamless project execution. They also have experience in identifying and documenting bugs and tracking defects, ensuring swift resolution.",
+  "industry_sector": "Technology",
+  "EDA": {
+    "experience": {
+      "total_years": 5,
+      "recent_positions": [
+        {
+          "title": "Lead Test Automation Engineer (Remote)",
+          "company": "STEP218",
+          "dates": "MAY 2024 - PRESENT",
+          "company_size": "small"
+        },
+        {
+          "title": "Lead Test Automation Engineer",
+          "company": "VENTUREDIVE",
+          "dates": "SEPTEMBER 2018 - APRIL 2024",
+          "company_size": "small"
+        }
+      ]
+    },
+    "education": {
+      "highest_degree": "Bachelor of Engineering",
+      "institutions": [
+        {
+          "name": "NED UNIVERSITY OF ENGINEERING AND TECHNOLOGY",
+          "is_prestigious": false,
+          "national_ranking": null
+        }
+      ],
+      "fields_of_study": ["Software Engineering"]
+    },
+    "skills": {
+      "technical": [
+        "Playwright (JavaScript)",
+        "Cypress (JavaScript)",
+        "Selenium Webdriver (Java)",
+        "Appium (Java)",
+        "REST Assured (Java)",
+        "Page Object Model (POM)",
+        "Cucumber (BDD)",
+        "Maven",
+        "Gradle",
+        "CI/CD Pipeline (Jenkins)",
+        "JMeter",
+        "Git/Bitbucket",
+        "Postman",
+        "JIRA",
+        "Zephyr",
+        "SQL",
+        "XML/JSON",
+        "SOAP API",
+        "REST API",
+        "HTML",
+        "CSS"
+      ],
+      "soft": [
+        "Collaboration",
+        "Communication",
+        "Problem-solving",
+        "Agile methodologies",
+        "Test design",
+        "Process improvement"
+      ],
+      "languages": []
+    },
+    "quality_scores": {
+      "overall": 7,
+      "experience": 7,
+      "education": 5,
+      "skills": 8
+    },
+    "background": {
+      "likely_home_country": "Pakistan",
+      "international_experience_ratio": 0.2
+    }
+  }
+}
+```

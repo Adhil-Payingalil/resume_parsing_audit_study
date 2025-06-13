@@ -1,0 +1,116 @@
+```json
+{
+  "candidate_summary": "Enthusiastic IT and Engineering professional with 16 years of experience in IT/computer networks. Possesses strong technical skills in network configuration, troubleshooting, and security. Experienced in LAN planning, installation, and VLAN configuration. Demonstrates excellent communication and teamwork skills. Actively seeks to learn new technologies and share knowledge with colleagues. Holds certifications such as CCNA and has experience with various network tools and protocols.",
+  "industry_sector": "Information Technology",
+  "EDA": {
+    "experience": {
+      "total_years": 16,
+      "recent_positions": [
+        {
+          "title": "CCTV Technical Engineer, Freelancer (part-time)",
+          "company": "Sri Lanka",
+          "dates": "Jan 2020- Oct 2023",
+          "company_size": "small"
+        },
+        {
+          "title": "Digital Broadcast Technical Officer",
+          "company": "ITN TV Channel",
+          "dates": "Jun 2011- Oct 2023",
+          "company_size": "medium"
+        },
+        {
+          "title": "AV Technician",
+          "company": "Four Seasons Hotel, Doha - Qatar",
+          "dates": "Jan 2010- Dec 2010",
+          "company_size": "large"
+        }
+      ]
+    },
+    "education": {
+      "highest_degree": "Advanced Diploma",
+      "institutions": [
+        {
+          "name": "Cisco Networking Academy",
+          "is_prestigious": false,
+          "national_ranking": null
+        },
+        {
+          "name": "Great Lake Institute, Sri Lanka",
+          "is_prestigious": false,
+          "national_ranking": null
+        },
+        {
+          "name": "City and Guilds, Sri Lanka",
+          "is_prestigious": false,
+          "national_ranking": null
+        }
+      ],
+      "fields_of_study": [
+        "Networking",
+        "Cybersecurity",
+        "Telecommunication Systems"
+      ]
+    },
+    "skills": {
+      "technical": [
+        "Cisco Catalyst Switch 2960",
+        "Cisco Router IRS 900",
+        "Cisco Firewall",
+        "LAN Planning",
+        "VLAN Configuration",
+        "VLSM",
+        "DHCP",
+        "ARP",
+        "RIP",
+        "OSPF",
+        "IPSec",
+        "Telnet",
+        "SSH",
+        "SSL",
+        "UDP",
+        "TCP/IP",
+        "DNS",
+        "Wireshark",
+        "Nmap",
+        "GNS3",
+        "Cisco Packet Racer",
+        "Win 11",
+        "Kali Linux",
+        "VMware",
+        "Crimping tools",
+        "Keystones",
+        "Cable testers",
+        "Punch tools",
+        "Faceplate",
+        "RJ45 Connectors",
+        "Twisted pairs Cable",
+        "Patch cords",
+        "Optical fiber",
+        "WPA2",
+        "SSID"
+      ],
+      "soft": [
+        "Communication",
+        "Teamwork",
+        "Prioritization",
+        "Organization",
+        "Problem-solving",
+        "Resourcefulness"
+      ],
+      "languages": [
+        "English"
+      ]
+    },
+    "quality_scores": {
+      "overall": 6,
+      "experience": 6,
+      "education": 5,
+      "skills": 7
+    },
+    "background": {
+      "likely_home_country": "Sri Lanka",
+      "international_experience_ratio": 0.25
+    }
+  }
+}
+```

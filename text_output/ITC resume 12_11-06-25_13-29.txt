@@ -1,0 +1,90 @@
+```json
+{
+  "candidate_summary": "A PMP-certified IT professional with 9 years of experience in Project Management, Tech Support Operations, CRM, Training & Quality. The candidate has experience in digital transformation projects, B2B loyalty app development, and managing large-scale projects for Fortune 500 companies. They have a proven track record of driving growth, improving customer success metrics, and delivering complex integration projects. Skills include project management, business growth strategies, SaaS digital transformation, and strong leadership abilities.",
+  "industry_sector": "Information Technology",
+  "EDA": {
+    "experience": {
+      "total_years": 9,
+      "recent_positions": [
+        {
+          "title": "Project Manager",
+          "company": "Original4Sure",
+          "dates": "Apr 2022 - Jun 2024",
+          "company_size": "small"
+        },
+        {
+          "title": "Associate Project Manager",
+          "company": "Original4Sure",
+          "dates": "Jan 2021 - Mar 2022",
+          "company_size": "small"
+        },
+        {
+          "title": "Tech Support Manager",
+          "company": "Times Internet Limited",
+          "dates": "Jan 2019 - Dec 2020",
+          "company_size": "large"
+        }
+      ]
+    },
+    "education": {
+      "highest_degree": "Bachelor of Engineering",
+      "institutions": [
+        {
+          "name": "NMIMS University",
+          "is_prestigious": false,
+          "national_ranking": null
+        },
+        {
+          "name": "The University of Mumbai",
+          "is_prestigious": false,
+          "national_ranking": null
+        }
+      ],
+      "fields_of_study": ["Operation Management", "Computer Engineering"]
+    },
+    "skills": {
+      "technical": [
+        "Project Management Tools: Asana, Notion, Jira, Confluence",
+        "CRM/Ticketing Tools: Fresh Desk, SalesForce",
+        "Basics of Java",
+        "SQL",
+        "REST API",
+        "Microsoft Office",
+        "Microsoft PowerPoint",
+        "Microsoft Excel",
+        "Waterfall and Agile Methodologies",
+        "SaaS Digital Transformation"
+      ],
+      "soft": [
+        "Project and Program Management",
+        "Business Growth Strategies",
+        "Cross-Functional Team Leadership",
+        "Change Management",
+        "Critical Thinking",
+        "Analytical Skills",
+        "Time management",
+        "Problem Solving",
+        "Decision Making",
+        "Strong Team Leadership Skills",
+        "Interpersonal Skills",
+        "Strong Verbal and Written Communication",
+        "Collaboration",
+        "Adaptability",
+        "Attention to Detail",
+        "Basics of scrum methodologies"
+      ],
+      "languages": []
+    },
+    "quality_scores": {
+      "overall": 6,
+      "experience": 6,
+      "education": 5,
+      "skills": 7
+    },
+    "background": {
+      "likely_home_country": "India",
+      "international_experience_ratio": 0
+    }
+  }
+}
+```

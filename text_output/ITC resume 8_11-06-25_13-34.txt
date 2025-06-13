@@ -1,0 +1,95 @@
+```json
+{
+  "candidate_summary": "A seasoned bilingual Senior Business Analyst with over 11 years of expertise in the IT industry, specializing in transforming complex business needs into innovative, high-impact solutions. Excels in collaborating with cross-functional teams to drive successful project outcomes, leveraging a deep understanding of both technical and strategic aspects to enhance operational efficiency and deliver measurable results. Expertise includes process optimization, SDLC management, root cause analysis, and cross-functional team coordination within the insurance and financial services sectors. Proficient in SQL, project management tools, and Agile methodologies.",
+  "industry_sector": "Financial Services",
+  "EDA": {
+    "experience": {
+      "total_years": 11,
+      "recent_positions": [
+        {
+          "title": "IT Business Analyst",
+          "company": "FWU Takaful GmbH",
+          "dates": "November 2017 – April 2024",
+          "company_size": "medium"
+        },
+        {
+          "title": "Full Stack Developer",
+          "company": "Paris Tokyo Design",
+          "dates": "August 2017 - November 2017",
+          "company_size": "small"
+        },
+        {
+          "title": "Web and Mobile App Developer",
+          "company": "Arlasa Group DMCC",
+          "dates": "September 2015 - June 2017",
+          "company_size": "small"
+        }
+      ]
+    },
+    "education": {
+      "highest_degree": "B.Sc. (Hons)",
+      "institutions": [
+        {
+          "name": "University of Mauritius",
+          "is_prestigious": false,
+          "national_ranking": null
+        }
+      ],
+      "fields_of_study": ["Computer Science & Engineering"]
+    },
+    "skills": {
+      "technical": [
+        "Atlassian JIRA",
+        "Confluence",
+        "Asana",
+        "Microsoft Teams",
+        "Agile",
+        "Scrum",
+        "Kanban",
+        "SQL Server Management Studio (SSMS)",
+        "Toad for SQL Server",
+        "Pentaho",
+        "Microsoft Excel",
+        "Microsoft PowerPoint",
+        "SharePoint",
+        "Postman",
+        "FileZilla",
+        "Putty",
+        "WinSCP",
+        "Remote Desktop Connection",
+        "Visual Studio",
+        "Sublime Text",
+        "GitLab",
+        "Apache Subversion",
+        "Adobe ColdFusion",
+        "React",
+        "Java",
+        "SQLite",
+        "Ionic framework"
+      ],
+      "soft": [
+        "Stakeholder management",
+        "Critical thinking",
+        "Empathy",
+        "Change management",
+        "Facilitation",
+        "Active listening",
+        "Conflict resolution",
+        "Data analysis",
+        "Root cause analysis"
+      ],
+      "languages": []
+    },
+    "quality_scores": {
+      "overall": 7,
+      "experience": 7,
+      "education": 5,
+      "skills": 8
+    },
+    "background": {
+      "likely_home_country": "Mauritius",
+      "international_experience_ratio": 1
+    }
+  }
+}
+```

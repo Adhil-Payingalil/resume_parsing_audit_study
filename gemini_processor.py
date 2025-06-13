@@ -1,3 +1,12 @@
+"""
+This module defines the GeminiProcessor class for interacting with the Google Gemini API.
+Responsibilities:
+- Load prompt templates from markdown files.
+- Upload PDF resumes to Gemini.
+- Generate and save structured content via prompts.
+- Handle logging and cleanup.
+
+"""
 import os
 import re
 from datetime import datetime
@@ -13,8 +22,15 @@ logger = get_logger(__name__)
 
 class GeminiProcessor:
     """
-    A class to handle interactions with the Google Gemini API.
-    Provides methods for file processing, prompt management, and content generation.
+    ## GeminiProcessor
+
+    Handles all interactions with the Google Gemini API for resume parsing.
+
+    ### Responsibilities
+    - Loads prompt templates (from markdown files) for structured extraction.
+    - Uploads resumes as files to Gemini.
+    - Sends prompts and receives structured LLM output.
+    - Handles file cleanup and logging.
     """
     
     def __init__(
@@ -52,7 +68,15 @@ class GeminiProcessor:
         self.client = genai.Client(api_key=api_key)
     
     def _setup_tools(self, enable_google_search: bool) -> List[types.Tool]:
-        """Set up the tools for the Gemini model."""
+        """
+        Set up tools for the Gemini API.
+
+        Args:
+            enable_google_search (bool): Whether to enable Google Search.
+
+        Returns:
+            List[types.Tool]: List of enabled tools.
+        """
         tools = []
         if enable_google_search:
             tools.append(types.Tool(google_search=types.GoogleSearch()))
@@ -61,13 +85,17 @@ class GeminiProcessor:
     
     def load_prompt_template(self, prompt_file_path: str) -> str:
         """
-        Load a prompt template from a markdown file.
-        
+        Load a prompt template from a markdown file (between triple backticks).
+
         Args:
-            prompt_file_path (str): Path to the prompt template file
-            
+            prompt_file_path (str): Path to the prompt template file.
+
         Returns:
-            str: The loaded prompt template
+            str: The loaded prompt template.
+
+        Raises:
+            FileNotFoundError: If the file is missing.
+            ValueError: If no triple-backtick block is found.
         """
         try:
             with open(prompt_file_path, 'r', encoding='utf-8') as f:
@@ -76,7 +104,7 @@ class GeminiProcessor:
             # Extract the prompt template between triple backticks
             prompt_match = re.search(r'```\n(.*?)\n```', content, re.DOTALL)
             if prompt_match:
-                self.prompt_template = prompt_match.group(1)
+                self.prompt_template = prompt_match.group(1) # Strip leading/trailing whitespace and backticks
                 logger.info(f"Successfully loaded prompt template from {prompt_file_path}")
                 return self.prompt_template
             else:
@@ -90,13 +118,16 @@ class GeminiProcessor:
     
     def upload_file(self, document_path: str) -> types.FileData:
         """
-        Upload a file to be processed by Gemini.
-        
+        Upload a file (PDF resume) to Gemini.
+
         Args:
-            file_path (str): Path to the file to upload
-            
+            document_path (str): Path to the file.
+
         Returns:
-            types.FileData: The uploaded file object
+            types.FileData: The uploaded file object.
+
+        Raises:
+            FileNotFoundError: If the file does not exist.
         """
         if not os.path.exists(document_path):
             raise FileNotFoundError(f"File not found: {document_path}")
@@ -112,7 +143,9 @@ class GeminiProcessor:
             raise
     
     def delete_uploaded_file(self) -> None:
-        """Delete the currently uploaded file."""
+        """
+        Delete the uploaded file from Gemini (cleanup after processing).
+        """
         if self.uploaded_resume_file:
             try:
                 self.client.files.delete(name=self.uploaded_resume_file.name)
@@ -124,13 +157,16 @@ class GeminiProcessor:
     
     def generate_content(self, prompt: Optional[str] = None) -> types.GenerateContentResponse:
         """
-        Generate content using the Gemini model.
-        
+        Generate content using Gemini (prompt + uploaded file).
+
         Args:
-            prompt (Optional[str]): Custom prompt to use. If None, uses loaded template
-            
+            prompt (Optional[str]): Custom prompt to use (default: loaded template).
+
         Returns:
-            types.GenerateContentResponse: The generated content
+            types.GenerateContentResponse: The LLM's response.
+
+        Raises:
+            ValueError: If no prompt or file is available.
         """
         if not self.uploaded_resume_file:
             raise ValueError("No file has been uploaded")

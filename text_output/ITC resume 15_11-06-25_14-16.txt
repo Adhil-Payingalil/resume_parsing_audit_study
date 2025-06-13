@@ -1,0 +1,84 @@
+```json
+{
+  "candidate_summary": "A Senior Salesforce Business Analyst & Administrator with over 7 years of experience in Agile Scrum Project Management and Salesforce CRM implementations. Proven track record of collaborating with cross-functional teams to deliver innovative solutions and drive business growth. Exhibits in-depth knowledge of SDLC, PMLC, Agile methodologies. Experienced in Requirements Elicitation, User Stories, Salesforce Configuration, QA/UAT Testing. Proficient in analyzing requirements, writing product briefs, use cases, and documentation. Strong background in Salesforce Configurations & Deployments. Recognized for exceptional communication skills.",
+  "industry_sector": "Information Technology",
+  "EDA": {
+    "experience": {
+      "total_years": 7,
+      "recent_positions": [
+        {
+          "title": "Senior Salesforce Consultant",
+          "company": "Deloitte",
+          "dates": "May 2023 – Mar 2024",
+          "company_size": "large"
+        },
+        {
+          "title": "Salesforce Consultant",
+          "company": "Salesforce Consultant",
+          "dates": "Sep 2021 – Apr 2023",
+          "company_size": "small"
+        },
+        {
+          "title": "Business Analyst & Salesforce Administrator",
+          "company": "S & P Global Inc.",
+          "dates": "Jun 2019 - Aug 2021",
+          "company_size": "large"
+        }
+      ]
+    },
+    "education": {
+      "highest_degree": "Master of Science",
+      "institutions": [
+        {
+          "name": "Indian Institute of Technology IIT, Roorkee",
+          "is_prestigious": true,
+          "national_ranking": null
+        }
+      ],
+      "fields_of_study": ["Applied Mathematics"]
+    },
+    "skills": {
+      "technical": [
+        "Salesforce",
+        "Copado",
+        "ServiceNow",
+        "SharePoint",
+        "SOQL",
+        "Data Loader",
+        "Visio",
+        "Pencil",
+        "AWS",
+        "Scrum",
+        "Kanban",
+        "Lean",
+        "SAFe",
+        "Agile Methodologies",
+        "Atlassian JIRA",
+        "Confluence",
+        "Azure DevOps",
+        "Microsoft Project",
+        "Miro Board",
+        "Slack"
+      ],
+      "soft": [
+        "Agile Leadership Skills",
+        "Facilitation",
+        "Problem-solving",
+        "Logical and Analytical skills",
+        "Communication Skills"
+      ],
+      "languages": []
+    },
+    "quality_scores": {
+      "overall": 8,
+      "experience": 7,
+      "education": 8,
+      "skills": 9
+    },
+    "background": {
+      "likely_home_country": "India",
+      "international_experience_ratio": 1
+    }
+  }
+}
+```

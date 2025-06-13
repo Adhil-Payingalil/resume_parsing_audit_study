@@ -1,0 +1,106 @@
+```json
+{
+  "candidate_summary": "A Product Manager with 7+ years of experience in the insurance and retail sectors, demonstrating expertise in driving business growth through strategic initiatives and developing products from concept to market. Proven ability to detect customer needs, achieve product-market fit, and maximize profit and scalability across B2B, B2C, and two-sided platforms. Core competencies include OKR Goal Setting & Product Strategy, User-Centric Product Discovery & Problem Framing, Stakeholder Management & Cross-functional Leadership, Product Road mapping & Prioritization, Communication & Documentation, and Release Management & Impact Reporting.",
+  "industry_sector": "Insurance",
+  "EDA": {
+    "experience": {
+      "total_years": 7,
+      "recent_positions": [
+        {
+          "title": "Senior Product Manager",
+          "company": "Azki",
+          "dates": "Sep 2023 - Jun 2024",
+          "company_size": "small"
+        },
+        {
+          "title": "Product manager",
+          "company": "Okala.com",
+          "dates": "Dec 2021 - Mar 2023",
+          "company_size": "medium"
+        },
+        {
+          "title": "Product manager",
+          "company": "Abzarmart.com",
+          "dates": "Aug 2018 - Dec 2021",
+          "company_size": "small"
+        }
+      ]
+    },
+    "education": {
+      "highest_degree": "Master of Entrepreneurship",
+      "institutions": [
+        {
+          "name": "University of Tehran",
+          "is_prestigious": true,
+          "national_ranking": 1
+        },
+        {
+          "name": "Tehran Polytechnic",
+          "is_prestigious": false,
+          "national_ranking": null
+        }
+      ],
+      "fields_of_study": [
+        "IT Businesses",
+        "Aerospace engineering"
+      ]
+    },
+    "skills": {
+      "technical": [
+        "Jira",
+        "Azure DevOps",
+        "Confluence",
+        "Growth book for A/B Testing",
+        "Figma",
+        "Hotjar.com",
+        "Pendo.io",
+        "Clarity",
+        "Sentry",
+        "Google analytics",
+        "GA4",
+        "Google Tag Management",
+        "Visio",
+        "Miro.com",
+        "Firebase",
+        "SQL",
+        "Metabase",
+        "PowerBI",
+        "PHP",
+        "NodeJS",
+        "Restful APIs",
+        "MySQL",
+        "MongoDB",
+        "Elasticsearch"
+      ],
+      "soft": [
+        "Product Management",
+        "User Research",
+        "Market Analysis",
+        "Stakeholder Management",
+        "Cross-functional Leadership",
+        "Product Roadmapping",
+        "Prioritization",
+        "Communication",
+        "Documentation",
+        "Release Management",
+        "Impact Reporting"
+      ],
+      "languages": [
+        "English",
+        "French",
+        "Persian"
+      ]
+    },
+    "quality_scores": {
+      "overall": 7,
+      "experience": 7,
+      "education": 7,
+      "skills": 7
+    },
+    "background": {
+      "likely_home_country": "Iran",
+      "international_experience_ratio": 0
+    }
+  }
+}
+```

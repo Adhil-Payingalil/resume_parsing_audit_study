@@ -1,0 +1,104 @@
+```json
+{
+  "candidate_summary": "The candidate is a software developer with experience in Java, SQL, and Microsoft Power Automate. They have worked on developing and maintaining applications, automating workflows, and collaborating with stakeholders. Their experience includes roles at Ricoh Canada and Mobilloite Technologies. They possess a Bachelor's degree in computer science and engineering and are Oracle Certified Java Professional. The resume highlights technical skills and experience in application development and automation.",
+  "industry_sector": "Information Technology",
+  "EDA": {
+    "experience": {
+      "total_years": 2,
+      "recent_positions": [
+        {
+          "title": "Application Developer (Co-op)",
+          "company": "Ricoh Canada",
+          "dates": "Apr 2023-Aug 2023",
+          "company_size": "large"
+        },
+        {
+          "title": "Jr. Software Developer",
+          "company": "Mobilloite Technologies",
+          "dates": "Dec 2016-June 2017",
+          "company_size": "small"
+        },
+        {
+          "title": "System Engineer Trainee",
+          "company": "Ducat",
+          "dates": "Mar 2015-Nov 2016",
+          "company_size": "small"
+        }
+      ]
+    },
+    "education": {
+      "highest_degree": "Bachelors",
+      "institutions": [
+        {
+          "name": "Ι.Ε.Τ.Ε New Delhi",
+          "is_prestigious": false,
+          "national_ranking": null
+        }
+      ],
+      "fields_of_study": [
+        "computer science and engineering"
+      ]
+    },
+    "skills": {
+      "technical": [
+        "Java",
+        "SQL/PLSQL",
+        "C++",
+        "C#",
+        "Java EE",
+        "Servlets",
+        "JSP",
+        "JNDI",
+        "EJB",
+        "REST",
+        "SOAP",
+        "JSON",
+        "XML",
+        "JMS",
+        "Spring",
+        "Hibernate",
+        "Swing",
+        "JSF",
+        "JDBC",
+        "JPA",
+        "Oracle",
+        "MySQL",
+        "Mongo DB",
+        "Singleton",
+        "Prototype",
+        "Façade",
+        "Factory",
+        "MVC",
+        "Tomcat",
+        "Jetty",
+        "JBoss",
+        "WebSphere",
+        "WebLogic",
+        "Git",
+        "Maven",
+        "Gradle",
+        "Microsoft Power Automate"
+      ],
+      "soft": [
+        "designing",
+        "documentation",
+        "collaboration",
+        "gathering requirements",
+        "problem-solving",
+        "communication"
+      ],
+      "languages": []
+    },
+    "quality_scores": {
+      "overall": 5,
+      "experience": 5,
+      "education": 5,
+      "skills": 6
+    },
+    "background": {
+      "likely_home_country": "India",
+      "international_experience_ratio": 0.5
+    }
+  }
+}
+```

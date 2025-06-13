@@ -1,0 +1,92 @@
+```json
+{
+  "candidate_summary": "A highly skilled IT professional with 5 years of experience as a Scrum Master, demonstrating expertise in training development teams on Scrum methodology and leading cross-functional teams. Proven ability to resolve conflicts, enhance team collaboration, and support Product Owners. Adept at working with distributed teams and driving continuous improvement. Possesses experience in managing digital transformation projects and proficient in utilizing SQL DB. Holds a Bachelor's degree in Computer Science and a diploma in IT Business Analysis.",
+  "industry_sector": "Information Technology",
+  "EDA": {
+    "experience": {
+      "total_years": 5,
+      "recent_positions": [
+        {
+          "title": "Scrum Master",
+          "company": "Stella tech",
+          "dates": "May 2017 - August 2022",
+          "company_size": "small"
+        },
+        {
+          "title": "Project Manager",
+          "company": "Inavant",
+          "dates": "April 2016 - May 2017",
+          "company_size": "small"
+        },
+        {
+          "title": "Clarity PPM Technical Consultant",
+          "company": "ITROI Consulting",
+          "dates": "January 2011 – April 2014",
+          "company_size": "small"
+        }
+      ]
+    },
+    "education": {
+      "highest_degree": "Bachelor",
+      "institutions": [
+        {
+          "name": "Universidad Autonoma de Nuevo Leon (UANL)",
+          "is_prestigious": false,
+          "national_ranking": null
+        },
+        {
+          "name": "Cambrian College",
+          "is_prestigious": false,
+          "national_ranking": null
+        }
+      ],
+      "fields_of_study": [
+        "Computer Science",
+        "IT Business Analysis"
+      ]
+    },
+    "skills": {
+      "technical": [
+        "Project Management Tools",
+        "Microsoft Project",
+        "Atlassian JIRA",
+        "Miro Board",
+        "Trello",
+        "Project Libre",
+        "Zoho Projects",
+        "Scrum",
+        "Microsoft Excel",
+        "Microsoft Word",
+        "Microsoft Power Point",
+        "Microsoft Visio",
+        "SQL Manager",
+        "SharePoint",
+        "Confluence",
+        "Planning poker online",
+        "SQL DB",
+        "GitLab"
+      ],
+      "soft": [
+        "Communication",
+        "Teamwork",
+        "Critical thinking",
+        "Conflict resolution",
+        "Interpersonal skills",
+        "Emotional intelligence",
+        "Decision-making"
+      ],
+      "languages": []
+    },
+    "quality_scores": {
+      "overall": 6,
+      "experience": 6,
+      "education": 5,
+      "skills": 7
+    },
+    "background": {
+      "likely_home_country": "Mexico",
+      "international_experience_ratio": 0.2
+    }
+  }
+}
+```

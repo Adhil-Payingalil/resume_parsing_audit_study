@@ -1,0 +1,106 @@
+```json
+{
+  "candidate_summary": "Experienced software developer with 15+ years of expertise in Microsoft .NET Technologies, Relational Databases and SQL coding. Proficient in leading end-to-end projects across various sectors including manufacturing and petroleum. Skilled in application development, testing and optimization. Excels at coordinating ground-up planning, programming, and implementation for core modules. Maintains strong object-oriented and software architecture fundamentals.",
+  "industry_sector": "Information Technology",
+  "EDA": {
+    "experience": {
+      "total_years": 12,
+      "recent_positions": [
+        {
+          "title": "Senior Software Developer",
+          "company": "Secil Rubber Inc",
+          "dates": "07/2015 – 05/2024",
+          "company_size": "small"
+        },
+        {
+          "title": "Software Developer (Remote)",
+          "company": "Mega Industry Control Systems",
+          "dates": "01/2020 - 02/2024",
+          "company_size": "small"
+        },
+        {
+          "title": "Software Developer (Remote)",
+          "company": "The NETworkers LLC.",
+          "dates": "05/2016 – 05/2024",
+          "company_size": "small"
+        }
+      ]
+    },
+    "education": {
+      "highest_degree": "Bachelor of Science",
+      "institutions": [
+        {
+          "name": "Canakkale Onsekiz Mart University",
+          "is_prestigious": false,
+          "national_ranking": null
+        }
+      ],
+      "fields_of_study": ["Computer Engineering"]
+    },
+    "skills": {
+      "technical": [
+        ".NET Framework",
+        "Visual Basic",
+        "C#",
+        "ASP.NET",
+        "Web Forms",
+        "Windows Forms",
+        "HTML5",
+        "CSS",
+        "JavaScript",
+        "jQuery",
+        "Bootstrap",
+        "CMS",
+        "E-Commerce",
+        "SQL",
+        "MSSQL",
+        "MySQL",
+        "Firebird",
+        "Relational Databases",
+        "ERP Systems (SAP, Infor syteline)",
+        "MS Office",
+        "Windows Server",
+        "IIS Management",
+        "SAP Crystal Reports",
+        "B2B",
+        "SAP S/4HANA",
+        "Microsoft Excel",
+        "PowerBI"
+      ],
+      "soft": [
+        "Adaptability",
+        "Creativity",
+        "Critical Thinking",
+        "Data Analysis",
+        "Technology Integration",
+        "Customer-Oriented",
+        "Agile development methodologies",
+        "Data structures and algorithms",
+        "Analyzing and Problem-Solving Skills",
+        "Project Management",
+        "Project Planning",
+        "Communication Skills",
+        "Helping Others",
+        "Software Development Lifecycle",
+        "Computer Literacy",
+        "Code Review",
+        "Coding Best Practices",
+        "Continuous Improvement",
+        "Developing Solutions",
+        "Solution Architecture"
+      ],
+      "languages": ["Turkish", "English"]
+    },
+    "quality_scores": {
+      "overall": 6,
+      "experience": 6,
+      "education": 4,
+      "skills": 7
+    },
+    "background": {
+      "likely_home_country": "Turkey",
+      "international_experience_ratio": 0.25
+    }
+  }
+}
+```

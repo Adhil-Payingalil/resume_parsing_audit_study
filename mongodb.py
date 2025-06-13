@@ -42,7 +42,7 @@ def save_LLM_response_to_mongodb(
                     file_path="HRC resume 10.pdf", #Default file for testing
                     mongo_client= None, # Provide a mongo_client if running inside a loop
                     model_name=None):
-    """
+    """  
     Save the LLM response to MongoDB.
 
     Args:

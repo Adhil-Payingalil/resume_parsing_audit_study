@@ -1,0 +1,212 @@
+```json
+{
+  "JSON_Resume": {
+    "basics": {
+      "name": "John Doe",
+      "label": "",
+      "image": "",
+      "email": "",
+      "phone": "",
+      "url": "",
+      "summary": "Cisco Certified Network Engineer with 8 years of experience managing medium to large-scale network infrastructures, from on- premises to hybrid cloud architectures. Skilled in leading network operations and driving major projects, including site expansions and service migrations, to meet customer demands and optimize company network performance.",
+      "location": {},
+      "profiles": []
+    },
+    "work": [
+      {
+        "name": "Caspo Inc.",
+        "position": "Network Engineer",
+        "url": null,
+        "startDate": "2020-09-01",
+        "endDate": "2024-08-01",
+        "summary": null,
+        "highlights": [
+          "Migrated latency-sensitive services to an SD-WAN solution, reducing latency by 15%.",
+          "Supported special network operations with a maximum 10-minute SLA, and handled up to 200 regular L2/L3 change requests and troubleshooting tickets monthly.",
+          "Implemented a tertiary route via IPSec tunnel, enhancing network and service access resiliency.",
+          "Polished service route to ensure that loads are properly balanced among available lines.",
+          "Enforced firewall policies and concurrent upgrades on network devices to strengthen security and prevent breaches.",
+          "Implemented site expansion which supported 100 users ensuring that best practices in routing, switching and high availability are applied.",
+          "Executed a server farm firewall replacement with minimal to zero business interruption.",
+          "Deployed a Zscaler VPN solution to provide secure remote access for 400 users.",
+          "Manage, maintain and monitor MSP network infrastructure across Philippines, Taiwan, Malaysia, United Kingdom and Germany.",
+          "Documented network and firewall zoning diagram, SoP and MoP for easier onboarding and implementation guidelines.",
+          "Facilitated knowledge transfer and thorough handover of completed projects to ensure seamless operation and maintenance.",
+          "Developed a remote forensic tool using python for immediate troubleshooting, reducing user interaction by 80%.",
+          "Developed an automated BGP AS-Prepending tool using python to control inbound routing, accelerating change implementation by 60% and minimizing human error.",
+          "Launched an ELK stack for system and threat logging, significantly enhancing network observability."
+        ]
+      },
+      {
+        "name": "TPG Telecom",
+        "position": "Corporate Provisioning Engineer (Voice Services)",
+        "url": null,
+        "startDate": "2018-11-01",
+        "endDate": "2020-07-01",
+        "summary": null,
+        "highlights": [
+          "Managed approximately 30 daily tickets related to provisioning and troubleshooting VoIP services, including ATA solutions, SIP trunk, and activation and configuration of softphones and hardware devices.",
+          "Engaged in an inbound and outbound call to cater onsite technician in hardware installation.",
+          "Collaborated with cross-functional team to resolve critical tickets."
+        ]
+      },
+      {
+        "name": "Smart Communications Inc.",
+        "position": "Transport and Planning Network Engineer",
+        "url": null,
+        "startDate": "2016-12-01",
+        "endDate": "2018-11-01",
+        "summary": null,
+        "highlights": [
+          "Rolled out 200 Cisco and Huawei Routers to support the transport network in Batangas City.",
+          "Prepared MoP and Script which ensures faster and safer configuration approach.",
+          "Planned VLAN and IP allocation providing a more efficient and organized device and service management.",
+          "Conducted Site Survey for candidate cell sites to prove line of sight to neighboring tower or sites."
+        ]
+      }
+    ],
+    "volunteer": [],
+    "education": [
+      {
+        "institution": "Bulacan State University",
+        "url": null,
+        "area": "Electronics and Communication Engineering",
+        "studyType": "Bachelor of Science",
+        "startDate": "2011-06-01",
+        "endDate": "2016-04-01",
+        "score": null,
+        "courses": []
+      }
+    ],
+    "awards": [],
+    "certificates": [
+      {
+        "name": "Certified Kubernetes Application Developer",
+        "date": null,
+        "issuer": null,
+        "url": null
+      },
+      {
+        "name": "Cisco Certified Specialist - Enterprise Core",
+        "date": null,
+        "issuer": null,
+        "url": null
+      },
+      {
+        "name": "Palo Alto Networks Certified Network Security Engineer",
+        "date": null,
+        "issuer": null,
+        "url": null
+      }
+    ],
+    "publications": [],
+    "skills": [
+      {
+        "name": "Network Devices",
+        "level": null,
+        "keywords": [
+          "Cisco Switches",
+          "Routers and Wireless Access Point",
+          "Fortigate and Palo Alto Next Generation Firewalls",
+          "VeloCloud SDWAN",
+          "Forti-SDWAN",
+          "Cisco Meraki",
+          "Cisco ISE",
+          "F5 Load Balancer",
+          "VMware Esxi and DNS Filter"
+        ]
+      },
+      {
+        "name": "Networking Skills",
+        "level": null,
+        "keywords": [
+          "LAN",
+          "WAN",
+          "OSPF",
+          "EIGRP",
+          "BGP",
+          "MPLS L3VPN",
+          "Static",
+          "VRRP",
+          "HSRP",
+          "STP",
+          "VLAN",
+          "Inter-VLAN",
+          "DHCP",
+          "NAT",
+          "Etherchannel",
+          "IPSEC",
+          "SDWAN"
+        ]
+      },
+      {
+        "name": "Cloud Platforms",
+        "level": null,
+        "keywords": [
+          "Azure",
+          "AWS"
+        ]
+      },
+      {
+        "name": "VPN Solutions",
+        "level": null,
+        "keywords": [
+          "F5",
+          "OpenVPN",
+          "ZScaler",
+          "Forticlient",
+          "Global Protect"
+        ]
+      },
+      {
+        "name": "Monitoring Tools",
+        "level": null,
+        "keywords": [
+          "PRTG",
+          "Solarwinds",
+          "ELK",
+          "Zabbix"
+        ]
+      },
+      {
+        "name": "VOIP Platforms",
+        "level": null,
+        "keywords": [
+          "3CX",
+          "Elastix",
+          "Ingenius"
+        ]
+      },
+      {
+        "name": "VOIP Phones",
+        "level": null,
+        "keywords": [
+          "Grandstream",
+          "Avaya",
+          "Polycom"
+        ]
+      },
+      {
+        "name": "Soft Skills",
+        "level": null,
+        "keywords": [
+          "Communication",
+          "Leadership",
+          "Documentation",
+          "Adaptability",
+          "Collaboration"
+        ]
+      }
+    ],
+    "languages": [],
+    "interests": [],
+    "references": [
+      {
+        "name": null,
+        "reference": "Available upon request"
+      }
+    ],
+    "projects": []
+  }
+}
+```

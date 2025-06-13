@@ -1,0 +1,167 @@
+```json
+{
+  "JSON_Resume": {
+    "basics": {
+      "name": "John Doe",
+      "label": "",
+      "image": "",
+      "email": "",
+      "phone": "",
+      "url": "",
+      "summary": "Experienced software developer with 15+ years of expertise in Microsoft .NET Technologies, Relational Databases and\nSQL coding. Proficient in leading end-to-end projects across various sectors including manufacturing and petroleum.\nSkilled in application development, testing and optimization. Excels at coordinating ground-up planning, programming,\nand implementation for core modules. Maintains strong object-oriented and software architecture fundamentals.",
+      "location": {},
+      "profiles": []
+    },
+    "work": [
+      {
+        "name": "Secil Rubber Inc",
+        "position": "Senior Software Developer",
+        "url": null,
+        "startDate": "2015-07-01",
+        "endDate": "2024-05-01",
+        "summary": null,
+        "highlights": [
+          "Developed front end and back end of over 20 Business Applications including web-based, desktop applications\nand service software, such as IT Service Desk Software, Balanced Scorecard Software, Budget Plan Management\n& Tracking Software and Contract Management System. Exhibited strong understanding of Customer\nRequirements in the development of tailored software applications.",
+          "Managed and optimized Database Design for a variety of software projects to enhance efficiency and\nperformance.",
+          "Generated numerous reports on budget, sales, costs, production, and other areas by extracting data from ERP\ndatabase using SQL queries, stored procedures, functions. Published these reports in Crystal Reports, Power BI, and\ncustom-developed applications.",
+          "Developed a price prediction software that resulted in a 75% labor cost reduction and decreased the time for\nproviding quotes to customers.",
+          "Designed and developed B2B Order Management & Tracking System integrated with INFOR STYLINE ERP and later\nSAP ERP",
+          "Led projects including CRM, HR Portal, Purchasing Management System and Expense Portal",
+          "Managed integration of SAP S/4HANA modules (MM, SD, PP, PS, CM, QM) into company operations",
+          "As a member of the inventory control team, conducted troubleshooting and maintenance to minimize\ndiscrepancies between the Warehouse Management Systems and the production environment for smooth and\nuninterrupted operations.",
+          "Successfully integrated third-party applications like HR System and Power BI with ERP Systems in line with business\nrequirements",
+          "Designed and implemented an Internal Training program for new hires, improving the onboarding process. Led a\nteam of developers, leveraging my knowledge in Computer Science to deliver high-quality software applications.",
+          "Worked with the PLC programming team to gather and distribute live reports from production machinery data.",
+          "Since the company regularly obtains ISO 14001, ISO 27001, and IATF 16949 certifications, all tasks performed in the\nIT department adhere to these quality management standards and the 5S working environment standards are\nimplemented throughout the factory."
+        ]
+      },
+      {
+        "name": "Mega Industry Control Systems",
+        "position": "Software Developer (Remote)",
+        "url": null,
+        "startDate": "2020-01-01",
+        "endDate": "2024-02-01",
+        "summary": null,
+        "highlights": [
+          "Completed tank monitoring system software for major fuel terminals nationwide.",
+          "Developed B2B order management module for CRM software.",
+          "Conducted maintenance on existing software, including code corrections and performance enhancements.",
+          "Implemented complex SQL queries and stored procedures for database optimization, significantly reducing\nlatency in software performance.",
+          "Employed technologies including VB.Net, C#, MS SQL, SQL Server, JavaScript, Bootstrap, and CSS."
+        ]
+      },
+      {
+        "name": "The NETworkers LLC.",
+        "position": "Software Developer (Remote)",
+        "url": null,
+        "startDate": "2016-05-01",
+        "endDate": "2024-05-01",
+        "summary": null,
+        "highlights": [
+          "Designed, developed, and maintained responsive websites.",
+          "Developed and maintained Fleet Management System and Online Payment System.",
+          "Utilized technologies: VB.Net, C#, MSSQL, MySQL, JavaScript, Bootstrap, CSS, JQuery."
+        ]
+      },
+      {
+        "name": "Safran Information Systems",
+        "position": "Software Developer",
+        "url": null,
+        "startDate": "2012-02-01",
+        "endDate": "2015-06-01",
+        "summary": null,
+        "highlights": [
+          "Developed Content Management System with .Net and MySQL.",
+          "Designed and developed web projects using .Net, created responsive websites.",
+          "Provided IT Helpdesk and Consultancy Services.",
+          "Utilized technologies including VB.Net, MSSQL, SQL Server, MySQL, JavaScript, Bootstrap, and HTML5."
+        ]
+      }
+    ],
+    "volunteer": [],
+    "education": [
+      {
+        "institution": "Canakkale Onsekiz Mart University",
+        "url": null,
+        "area": "Computer Engineering",
+        "studyType": "Bachelor of Science",
+        "startDate": "2010-08-01",
+        "endDate": "",
+        "score": "",
+        "courses": []
+      }
+    ],
+    "awards": [],
+    "certificates": [],
+    "publications": [],
+    "skills": [
+      {
+        "name": "Skills",
+        "level": "",
+        "keywords": [
+          "Adaptability",
+          "Creativity",
+          "Critical Thinking",
+          "Data Analysis",
+          "Technology Integration",
+          "Customer-Oriented",
+          "Agile development methodologies",
+          "Data structures and algorithms",
+          "Analyzing and Problem-Solving Skills",
+          "Project Management",
+          "Project Planning",
+          "Communication Skills",
+          "Helping Others",
+          "Software Development Lifecycle",
+          "Computer Literacy",
+          ".NET Framework",
+          "Visual Basic",
+          "C#",
+          "ASP.NET",
+          "Web Forms",
+          "Windows Forms",
+          "HTML5",
+          "CSS",
+          "JavaScript",
+          "jQuery",
+          "Bootstrap",
+          "CMS",
+          "E-Commerce",
+          "SQL",
+          "MSSQL",
+          "MySQL",
+          "Firebird",
+          "Relational Databases",
+          "ERP Systems (SAP, Infor syteline)",
+          "MS Office",
+          "Windows Server",
+          "IIS Management",
+          "SAP Crystal Reports",
+          "B2B",
+          "SAP S/4HANA",
+          "Microsoft Excel",
+          "PowerBI",
+          "Code Review",
+          "Coding Best Practices",
+          "Continuous Improvement",
+          "Developing Solutions",
+          "Solution Architecture"
+        ]
+      }
+    ],
+    "languages": [
+      {
+        "language": "Turkish",
+        "fluency": "Native/ Bilingual"
+      },
+      {
+        "language": "English",
+        "fluency": "Full Professional"
+      }
+    ],
+    "interests": [],
+    "references": [],
+    "projects": []
+  }
+}
+```

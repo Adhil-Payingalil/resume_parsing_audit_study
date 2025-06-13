@@ -1,0 +1,117 @@
+```json
+{
+  "JSON_Resume": {
+    "basics": {
+      "name": "John Doe",
+      "label": "Business Analyst",
+      "image": "",
+      "email": "",
+      "phone": "",
+      "url": "",
+      "summary": "Detail-oriented Business Analyst with over 8 years of experience in the financial services. Contribute to analyze, document and develop business requirements and specifications for new applications or enhancements/upgrades to systems. Collaborated with project managers to create project plans, project updates and timeline estimates. Assist in creation and execution of comprehensive test plans thus equip with Agile practices and JIRA tool. Generate in depth documentation to support the analysis including data mapping, process flows. Strong analytical and communication skills to work effectively with cross functional teams thus ensuring customer satisfaction by delivering projects on time, within scope and budget.",
+      "location": {},
+      "profiles": []
+    },
+    "work": [
+      {
+        "name": "Hinduja Global Services",
+        "position": "BUSINESS ANALYST",
+        "url": "",
+        "startDate": "2022-01-01",
+        "endDate": "2022-06-01",
+        "summary": "",
+        "highlights": [
+          "Created a list of issues and bugs in an application by liaising with business users and vendors to help in extracting ongoing problems faced.",
+          "Ensured issues and bugs are rectified, streamlining report extraction dashboard that resulted in 25% increase in data accuracy.",
+          "Liaised with vendors to understand payment extraction processes and implemented solutions that resulted in uploading payments to CERSAI portal 60% faster.",
+          "Aided in deployment of enhancements and bug fixation with help of a support team in UAT and Production environment."
+        ]
+      },
+      {
+        "name": "Neebal Technologies",
+        "position": "BUSINESS ANALYST",
+        "url": "",
+        "startDate": "2019-08-01",
+        "endDate": "2022-12-01",
+        "summary": "",
+        "highlights": [
+          "Analyzed existing user roles and entitlements on banking platform for digital transformation projects, ensuring smooth transition to new systems.",
+          "Rectified issues in transaction limit management functionality by liaising with vendor leading to 15% increase in application migration reliability.",
+          "Evaluated existing cheque printing fields and layout and carried out testing in new application leading to 10% increased accuracy in layout.",
+          "Engaged in Oralce ELCM product demo along with stakeholders for completing requirement gathering and finalized a product backlog.",
+          "Prioritized and managed changes to the product backlog based on delivery of items and impact.",
+          "Reviewed/analyzed business requirements to ensure they are quantifiable and testable.",
+          "Developed test cases with testing team and conducted UAT testing for each sprint release.",
+          "Logged issues through JIRA tickets with supporting data logs and tracked progress to get it resolved and closed as per ticket priority.",
+          "Ensured environment readiness in UAT/production by liaising with change management, IT architecture team for implementation.",
+          "Conducted daily stand-up meetings and sprint review meetings to ensure stakeholders are engaged and informed."
+        ]
+      },
+      {
+        "name": "3i Infotech Ltd",
+        "position": "BUSINESS ANALYST",
+        "url": "",
+        "startDate": "2014-01-01",
+        "endDate": "2019-08-01",
+        "summary": "",
+        "highlights": [
+          "Facilitated corporate customers in implementation, for mapping file formats generated from customer SAP/Oracle or ERP system to bank format which automated payment process by 20% leading to minimal manual intervention.",
+          "Managed testing and feedback on files generated from online systems leading to successful implementation of SWIFT MT / ISO20022 messaging system.",
+          "Developed test cases and conducted UAT testing for application enhancement leading to successful implementation of new features on bank portal that resulted in 30% increase in transactions.",
+          "Developed a payment file referral in understanding different types of payment file format supported in bank environment.",
+          "Guided new user with online assistance, for accessing corporate banking portal, to assign user entitlements according to hierarchy in organization and creating online transactions (single and batch).",
+          "Provided demo of process workflow to clients on banking products and services to build their confidence onto new banking platform.",
+          "Provided mentorship and guidance to newly hired team members, fostering a collaborative and productive team environment."
+        ]
+      }
+    ],
+    "volunteer": [],
+    "education": [
+      {
+        "institution": "Mumbai University, India",
+        "url": "",
+        "area": "computer science",
+        "studyType": "Masters",
+        "startDate": "",
+        "endDate": "2013",
+        "score": "",
+        "courses": []
+      },
+      {
+        "institution": "Mumbai University, India",
+        "url": "",
+        "area": "computer science",
+        "studyType": "Bachelors",
+        "startDate": "",
+        "endDate": "2011",
+        "score": "",
+        "courses": []
+      }
+    ],
+    "awards": [],
+    "certificates": [],
+    "publications": [],
+    "skills": [
+      {
+        "name": "Skills",
+        "level": "",
+        "keywords": [
+          "Agile (Scrum)",
+          "Waterfall",
+          "MS SQL Server",
+          "Oracle / MySQL",
+          "Microsoft Visio",
+          "Balsamique",
+          "Test case development and execution",
+          "Bug Lifecycle",
+          "JIRA"
+        ]
+      }
+    ],
+    "languages": [],
+    "interests": [],
+    "references": [],
+    "projects": []
+  }
+}
+```

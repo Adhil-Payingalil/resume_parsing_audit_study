@@ -1,0 +1,199 @@
+```json
+{
+  "JSON_Resume": {
+    "basics": {
+      "name": "John Doe",
+      "label": "",
+      "image": "",
+      "email": "",
+      "phone": "",
+      "url": "",
+      "summary": "Seasoned bilingual Senior Business Analyst with over 11 years of expertise in the IT industry for transforming complex\nbusiness needs into innovative, high-impact solutions. Excels in collaborating with cross-functional teams to drive\nsuccessful project outcomes, leveraging a deep understanding of both technical and strategic aspects to enhance\noperational efficiency and deliver measurable results.",
+      "location": {},
+      "profiles": []
+    },
+    "work": [
+      {
+        "name": "FWU Takaful GmbH",
+        "position": "IT Business Analyst",
+        "url": null,
+        "startDate": "2017-11-01",
+        "endDate": "2024-04-01",
+        "summary": "A global financial services company offering tech-driven life insurance and investment solutions with a focus on client\nindependence.",
+        "highlights": [
+          "Automated the processing of high-volume financial alterations related to insurance policies using Adobe\nColdFusion leading to a 100% reduction in manual effort for the IT team, and a 60% enhancement in\nefficiency for the Operations Team.",
+          "Spearheaded the digital transformation of insurance sales by implementing remote signature capabilities with\nSignPos during the pandemic, resulting in a remarkable 75% increase in sales."
+        ]
+      },
+      {
+        "name": "Paris Tokyo Design",
+        "position": "Full Stack Developer",
+        "url": null,
+        "startDate": "2017-08-01",
+        "endDate": "2017-11-01",
+        "summary": "Paris Tokyo is a leading French-owned advertising and design agency offering bespoke IT solutions.",
+        "highlights": [
+          "Engineered and launched a cutting-edge e-commerce platform with customizable delivery schedules, secure\npayment gateways, and automated recurring billing, leading to a 25% revenue boost through enhanced\nsubscription services.",
+          "Transformed a siloed development team into a high-performing, collaborative unit by implementing Agile\nmethodologies and cultivating a supportive work environment, driving a 50% boost in productivity and\nsignificantly enhancing employee satisfaction.",
+          "Leveraged bilingualism to bridge communication gaps and ensured precise requirements gathering resulting\nin shortened project timelines and an increase in customer loyalty by more than 20%"
+        ]
+      },
+      {
+        "name": "Arlasa Group DMCC",
+        "position": "Web and Mobile App Developer",
+        "url": null,
+        "startDate": "2015-09-01",
+        "endDate": "2017-06-01",
+        "summary": "Providing a location-based mobile platform providing both B2C and B2B solutions, empowering travelers and\nbusinesses alike.",
+        "highlights": [
+          "Strategically implemented an optimized SQLite database that enhanced system performance by pinpointing\nand addressing critical bottlenecks, resulting in a 50% reduction in page load times.",
+          "Implemented lonic framework in a cross-platform mobile application to streamline development and testing\nprocesses, reducing development cycles by 90% by enabling rapid prototyping and iterative development.",
+          "Mentored and developed a high-performing team of website administrators, through targeted training,\ncomprehensive support, and process optimization, thereby boosting productivity by 25% and reducing error\nrates by 30%."
+        ]
+      },
+      {
+        "name": "One.com",
+        "position": "IT Support Specialist",
+        "url": null,
+        "startDate": "2014-01-01",
+        "endDate": "2015-08-01",
+        "summary": "One.com is a leading web hosting provider offering user-friendly tools and affordable plans for individuals and\nbusinesses to create a strong online presence",
+        "highlights": [
+          "Reduced average ticket resolution time by 25% through in-depth technical expertise, enabling resolution of\ncomplex issues without escalation, and implementing process improvements.",
+          "Developed and implemented a comprehensive knowledge base, resulting in a 20% decrease in repetitive\nsupport inquiries and a 25% increase in first-contact resolution rate.",
+          "Collaborated with development team to identify and resolve underlying system issues, resulting in a 25%\nreduction in recurring customer complaints."
+        ]
+      },
+      {
+        "name": "Fruit IT Outsourcing Ltd",
+        "position": "Mobile and Web Developer",
+        "url": null,
+        "startDate": "2012-07-01",
+        "endDate": "2014-01-01",
+        "summary": "A software development company specializing in delivering innovative and tailored IT solutions.",
+        "highlights": []
+      }
+    ],
+    "volunteer": [],
+    "education": [
+      {
+        "institution": "University of Mauritius",
+        "url": null,
+        "area": "Computer Science & Engineering",
+        "studyType": "B.Sc. (Hons)",
+        "startDate": null,
+        "endDate": "2012",
+        "score": null,
+        "courses": []
+      }
+    ],
+    "awards": [],
+    "certificates": [
+      {
+        "name": "Certified Scrum Master (CSM)",
+        "date": "2018-05-01",
+        "issuer": "Scrum Alliance",
+        "url": null
+      }
+    ],
+    "publications": [],
+    "skills": [
+      {
+        "name": "Project Management tools",
+        "level": null,
+        "keywords": [
+          "Atlassian JIRA",
+          "Confluence",
+          "Asana",
+          "Microsoft Teams"
+        ]
+      },
+      {
+        "name": "Methodologies",
+        "level": null,
+        "keywords": [
+          "Agile",
+          "Scrum",
+          "Kanban"
+        ]
+      },
+      {
+        "name": "Database Management",
+        "level": null,
+        "keywords": [
+          "SQL Server Management Studio (SSMS)",
+          "Toad for SQL Server"
+        ]
+      },
+      {
+        "name": "Business Intelligence",
+        "level": null,
+        "keywords": [
+          "Pentaho"
+        ]
+      },
+      {
+        "name": "Data Analysis and Reporting",
+        "level": null,
+        "keywords": [
+          "Microsoft Excel"
+        ]
+      },
+      {
+        "name": "Presentation and Documentation",
+        "level": null,
+        "keywords": [
+          "Microsoft PowerPoint",
+          "SharePoint"
+        ]
+      },
+      {
+        "name": "API Testing",
+        "level": null,
+        "keywords": [
+          "Postman"
+        ]
+      },
+      {
+        "name": "Remote Access Tools",
+        "level": null,
+        "keywords": [
+          "FileZilla",
+          "Putty",
+          "WinSCP",
+          "Remote Desktop Connection"
+        ]
+      },
+      {
+        "name": "Software Development and Version Control",
+        "level": null,
+        "keywords": [
+          "Visual Studio",
+          "Sublime Text",
+          "GitLab",
+          "Apache Subversion"
+        ]
+      },
+      {
+        "name": "Soft Skills",
+        "level": null,
+        "keywords": [
+          "Stakeholder management",
+          "Critical thinking",
+          "Empathy",
+          "Change management",
+          "Facilitation",
+          "Active listening",
+          "Conflict resolution",
+          "Data analysis",
+          "Root cause analysis"
+        ]
+      }
+    ],
+    "languages": [],
+    "interests": [],
+    "references": [],
+    "projects": []
+  }
+}
+```

@@ -1,0 +1,97 @@
+```json
+{
+  "candidate_summary": "A PMP-certified IT professional with 9 years of experience in Project Management, Tech Support Operations, CRM, Training & Quality. Experienced in digital transformation projects across Fortune 500 companies. Adept at leading cross-functional teams, developing customer success metrics, and delivering complex integration projects. Skilled in project management methodologies, CRM tools, and basic programming languages. Proven ability to drive revenue growth, reduce costs, and improve operational efficiency. Looking for opportunities to leverage expertise in project management and digital transformation to drive business success.",
+  "industry_sector": "Information Technology",
+  "EDA": {
+    "experience": {
+      "total_years": 9,
+      "recent_positions": [
+        {
+          "title": "Project Manager",
+          "company": "Original4Sure",
+          "dates": "Apr 2022 - Jun 2024",
+          "company_size": "small"
+        },
+        {
+          "title": "Associate Project Manager",
+          "company": "Original4Sure",
+          "dates": "Jan 2021 - Mar 2022",
+          "company_size": "small"
+        },
+        {
+          "title": "Tech Support Manager",
+          "company": "Times Internet Limited",
+          "dates": "Jan 2019 - Dec 2020",
+          "company_size": "large"
+        }
+      ]
+    },
+    "education": {
+      "highest_degree": "Bachelor of Engineering",
+      "institutions": [
+        {
+          "name": "NMIMS University",
+          "is_prestigious": false,
+          "national_ranking": null
+        },
+        {
+          "name": "The University of Mumbai",
+          "is_prestigious": false,
+          "national_ranking": null
+        }
+      ],
+      "fields_of_study": [
+        "Operation Management",
+        "Computer Engineering"
+      ]
+    },
+    "skills": {
+      "technical": [
+        "Project and Program Management",
+        "SaaS Digital Transformation",
+        "Waterfall and Agile Methodologies",
+        "Microsoft Office",
+        "Microsoft PowerPoint",
+        "Microsoft Excel",
+        "Asana",
+        "Notion",
+        "Jira",
+        "Confluence",
+        "Fresh Desk",
+        "SalesForce",
+        "Java",
+        "SQL",
+        "REST API"
+      ],
+      "soft": [
+        "Business Growth Strategies",
+        "Cross-Functional Team Leadership",
+        "Change Management",
+        "Critical Thinking",
+        "Analytical Skills",
+        "Time management",
+        "Problem Solving",
+        "Decision Making",
+        "Strong Team Leadership Skills",
+        "Interpersonal Skills",
+        "Strong Verbal and Written Communication",
+        "Collaboration",
+        "Adaptability",
+        "Attention to Detail",
+        "Basics of scrum methodologies"
+      ],
+      "languages": []
+    },
+    "quality_scores": {
+      "overall": 7,
+      "experience": 7,
+      "education": 6,
+      "skills": 8
+    },
+    "background": {
+      "likely_home_country": "India",
+      "international_experience_ratio": 0
+    }
+  }
+}
+```

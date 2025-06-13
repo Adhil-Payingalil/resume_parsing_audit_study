@@ -1,0 +1,255 @@
+```json
+{
+  "JSON_Resume": {
+    "basics": {
+      "name": "John Doe",
+      "label": "Certified Project Manager",
+      "image": "",
+      "email": "",
+      "phone": "",
+      "url": "",
+      "summary": "Certified Project Manager with 10+ years of diverse industry experience leading $5M+ technology initiatives and digital transformations. Skilled in cross-functional team leadership, stakeholder engagement, project governance, and process optimization, using SaaS platforms to enhance service delivery and achieve operational savings. Consistently delivers projects on time, within budget, while driving customer-focused value.",
+      "location": {},
+      "profiles": []
+    },
+    "work": [
+      {
+        "name": "Vosyn, Toronto",
+        "position": "Project Team Lead (Contract)",
+        "url": null,
+        "startDate": "2024-11-01",
+        "endDate": "Present",
+        "summary": "AI voice technology platform delivering real-time translation and multilingual communication solutions",
+        "highlights": [
+          "Lead PMO team establishing governance framework and SOPs across 500+ member organization.",
+          "Drive operational efficiency improvements through data-driven insights and KPI tracking.",
+          "Guide cross-functional AI development teams in Agile best practices implementation."
+        ]
+      },
+      {
+        "name": "PricewaterhouseCoopers",
+        "position": "Project Manager",
+        "url": null,
+        "startDate": "2021-08-01",
+        "endDate": "2024-09-01",
+        "summary": null,
+        "highlights": [
+          "Led cross-functional team of 20+ to deliver $1.5M+ digital transformation projects in banking and finance, overseeing business development, proposals, and project execution.",
+          "Delivered an interim Lead Management System with Liferay DXP, integrating siloed databases to increase lead conversion by 15%, paving the way for Salesforce CRM implementation.",
+          "Ensured detailed project initiation and planning for a FinTech solution, gathering requirements for 50+ features across 14 user personas, performing gap analysis, and mapping user journeys.",
+          "Managed a team of 6 business analysts to define functional and non-functional requirements for an AI-driven credit scoring model, improving risk assessment accuracy.",
+          "Conducted workshops to document AS-IS/TO-BE processes, reducing project misalignment by 10% and facilitating 5+ implementation roadmaps.",
+          "Trained 45+ team members in Scrum, driving agile adoption and improving project delivery speed by 30% through iterative and incremental release approach.",
+          "Facilitated steering committee meetings to ensure 95% alignment on strategic goals, resolve critical blockers, and maintain an up-to-date change management registry."
+        ]
+      },
+      {
+        "name": "upskillable",
+        "position": "Project Manager / Scrum Master",
+        "url": null,
+        "startDate": "2021-08-01",
+        "endDate": "2024-09-01",
+        "summary": "Career development platform aligning talent with opportunities through tailored psychometric assessments",
+        "highlights": [
+          "Designed mobile-first features with 99% system availability, supporting seamless on-the-go learning experiences for 1,000+ concurrent users.",
+          "Optimized UX/UI, reducing signup abandonment rates and increasing CSAT scores from 3.5 to 4.2 through iterative user testing and design refinement."
+        ]
+      },
+      {
+        "name": "SSD-Tech",
+        "position": "Project Manager / Business Development",
+        "url": null,
+        "startDate": "2017-11-01",
+        "endDate": "2020-06-01",
+        "summary": "Tech firm offering innovative value-added services and solutions for telecom operators and enterprises globally",
+        "highlights": [
+          "Managed MVP development of a Cybersecurity Solution, exceeding user sign-up targets by 30% through iterative pre-launch optimizations and UI/UX enhancements based on continuous focus group feedback.",
+          "Successfully launched products in 3 South Asian markets with a $150K budget, coordinating efforts with 8 vendors to achieve rapid market penetration.",
+          "Reduced post-release issues by 40% through a comprehensive QA process, including unit, integration, and automated regression testing."
+        ]
+      },
+      {
+        "name": "aamra holdings limited",
+        "position": "Senior Product Manager",
+        "url": null,
+        "startDate": "2015-03-01",
+        "endDate": "2017-11-01",
+        "summary": "ICT solutions provider, specializing in IT services, connectivity solutions, custom development",
+        "highlights": [
+          "Directed ERP system design and deployment using open-source technologies, increasing operational efficiency by 20% and saving $50K annually through workflow automation.",
+          "Managed full product lifecycle, from requirements gathering to after-sales support and product retirement, ensuring smooth execution across teams."
+        ]
+      },
+      {
+        "name": "Samsung Electronics (Bangladesh & United Kingdom)",
+        "position": "Product Specialist",
+        "url": null,
+        "startDate": "2010-03-01",
+        "endDate": "2014-12-01",
+        "summary": null,
+        "highlights": [
+          "Developed and implemented an eCatalogue for Samsung Flagship Retail Stores, reducing waiting times by 15% and driving a 10% improvement in customer satisfaction."
+        ]
+      }
+    ],
+    "volunteer": [],
+    "education": [
+      {
+        "institution": "Toronto Metropolitan University",
+        "url": null,
+        "area": "Project Management for Technical Professionals",
+        "studyType": null,
+        "startDate": null,
+        "endDate": "2025-08-01",
+        "score": null,
+        "courses": []
+      },
+      {
+        "institution": "Independent University, Bangladesh",
+        "url": null,
+        "area": "Electrical and Telecommunication Engineering",
+        "studyType": "Bachelor",
+        "startDate": null,
+        "endDate": null,
+        "score": null,
+        "courses": []
+      }
+    ],
+    "awards": [],
+    "certificates": [
+      {
+        "name": "Certified SAFe 6 Scrum Master (SSM)",
+        "date": "2024",
+        "issuer": "Scaled Agile, Inc.",
+        "url": null
+      },
+      {
+        "name": "Certified Scrum Product Owner (CSPO)",
+        "date": "2024",
+        "issuer": "Scrum Alliance, USA",
+        "url": null
+      },
+      {
+        "name": "Certified ScrumMaster (CSM)",
+        "date": "2023",
+        "issuer": "Scrum Alliance, USA",
+        "url": null
+      },
+      {
+        "name": "Certified Google Project Management Professional",
+        "date": "2022",
+        "issuer": "Google, USA",
+        "url": null
+      }
+    ],
+    "publications": [],
+    "skills": [
+      {
+        "name": "Project Management",
+        "level": null,
+        "keywords": [
+          "Project Planning & Execution",
+          "Budget & Cost Control",
+          "Risk Management",
+          "Performance Monitoring",
+          "Scope Management",
+          "Change Management",
+          "Quality Assurance",
+          "Release Planning",
+          "Project Governance"
+        ]
+      },
+      {
+        "name": "Methodologies & Frameworks",
+        "level": null,
+        "keywords": [
+          "Agile (Scrum, Kanban, SAFe)",
+          "Waterfall",
+          "SDLC",
+          "Lean",
+          "Process Improvement"
+        ]
+      },
+      {
+        "name": "Leadership",
+        "level": null,
+        "keywords": [
+          "Cross-functional Team Leadership",
+          "Stakeholder Management",
+          "Resource Management",
+          "Vendor Management",
+          "Strategic Planning",
+          "Executive Communications",
+          "Conflict Resolution"
+        ]
+      },
+      {
+        "name": "Tools & Platforms",
+        "level": null,
+        "keywords": [
+          "MS Project",
+          "Jira",
+          "Azure DevOps",
+          "ServiceNow",
+          "Confluence",
+          "Trello",
+          "MS Office Suite",
+          "Google Workspace",
+          "SharePoint",
+          "Visio",
+          "PowerBI",
+          "Salesforce",
+          "HubSpot",
+          "Liferay DXP",
+          "Cloud Platforms"
+        ]
+      }
+    ],
+    "languages": [],
+    "interests": [],
+    "references": [],
+    "projects": [
+      {
+        "name": "Digital Card-less Financing ($1M)",
+        "startDate": null,
+        "endDate": null,
+        "description": "Delivered digital transformation project that reduced loan processing from 2 weeks to same-day, improving operational efficiency by 40% and data accuracy by 20%, while enabling processing of 600+ daily applications via an integrated e-commerce app.",
+        "highlights": [],
+        "url": null
+      },
+      {
+        "name": "Learning Management System ($5M, EdTech portfolio)",
+        "startDate": null,
+        "endDate": null,
+        "description": "Delivered LMS to overcome pandemic-driven learning challenges, that increased user engagement from 3 to 5 hours within 3 months.",
+        "highlights": [],
+        "url": null
+      },
+      {
+        "name": "Smartphone Portfolio Development ($2.5M)",
+        "startDate": null,
+        "endDate": null,
+        "description": "Developed 50+ smartphone models, producing 1.5M+ devices and capturing a 19% market share in Bangladesh.",
+        "highlights": [],
+        "url": null
+      },
+      {
+        "name": "Market Analytics for SMS Campaigns",
+        "startDate": null,
+        "endDate": null,
+        "description": "Integrated and leveraged web analytics tools to design targeted promotional campaigns, selling over 5 million messages and driving sustained revenue growth.",
+        "highlights": [],
+        "url": null
+      },
+      {
+        "name": "Samsung Marketing Campaigns",
+        "startDate": null,
+        "endDate": null,
+        "description": "Executed high-impact marketing campaigns for Samsung Galaxy K Zoom and Galaxy Tab S, achieving 90%+ sales targets and generating $2 million in revenue.",
+        "highlights": [],
+        "url": null
+      }
+    ]
+  }
+}
+```

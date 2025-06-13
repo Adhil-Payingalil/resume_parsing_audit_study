@@ -1,0 +1,94 @@
+```json
+{
+  "candidate_summary": "Experienced IT Project Manager with over 8 years of experience in Agile and Waterfall environments, adept at strategic planning and stakeholder management. Proven track record in leading cross-functional teams, driving Agile ceremonies, and managing project scope. Adept at fostering collaboration and committed to team development. Technical skills include Agile methodologies, project management tools like Jira and MS Project, and data analysis tools like PowerBI. Holds an MBA from IIM Kozhikode and a Master of Technology from IIT Madras. Certifications include PMP and Lean Six Sigma Green Belt.",
+  "industry_sector": "IT/Management Consulting",
+  "EDA": {
+    "experience": {
+      "total_years": 8,
+      "recent_positions": [
+        {
+          "title": "Assistant Manager, Membership portfolio (volunteering)",
+          "company": "Project Management Institute - Ottawa Valley Outaouais Chapter (PMI-OVOC)",
+          "dates": "June 2024 - Present",
+          "company_size": "small"
+        },
+        {
+          "title": "Project Management Consultant",
+          "company": "Resources Global Professionals",
+          "dates": "Mar. 2022-Dec. 2023",
+          "company_size": "medium"
+        },
+        {
+          "title": "Manager - Project Planning & Risk",
+          "company": "Larsen & Toubro",
+          "dates": "Aug. 2016-Aug. 2020",
+          "company_size": "large"
+        }
+      ]
+    },
+    "education": {
+      "highest_degree": "Master of Business Administration",
+      "institutions": [
+        {
+          "name": "Indian Institute of Management Kozhikode (IIM Kozhikode)",
+          "is_prestigious": true,
+          "national_ranking": null
+        },
+        {
+          "name": "Indian Institute of Technology Madras (IIT Madras)",
+          "is_prestigious": true,
+          "national_ranking": null
+        },
+        {
+          "name": "National Institute of Technology Calicut (NIT Calicut)",
+          "is_prestigious": false,
+          "national_ranking": null
+        }
+      ],
+      "fields_of_study": [
+        "Business Administration",
+        "Technology",
+        "Civil Engineering"
+      ]
+    },
+    "skills": {
+      "technical": [
+        "Agile (Scrum, Kanban, XP, Lean)",
+        "Waterfall",
+        "Jira",
+        "Confluence",
+        "MS Project",
+        "Primavera",
+        "MS PowerBI",
+        "Tableau",
+        "MS Excel",
+        "Python",
+        "Slack",
+        "SharePoint",
+        "MS Office suite",
+        "Google suite"
+      ],
+      "soft": [
+        "Leadership",
+        "Mentoring",
+        "Communication",
+        "Conflict Resolution",
+        "Problem-solving",
+        "Team Development",
+        "Collaboration"
+      ],
+      "languages": []
+    },
+    "quality_scores": {
+      "overall": 7,
+      "experience": 7,
+      "education": 8,
+      "skills": 7
+    },
+    "background": {
+      "likely_home_country": "India",
+      "international_experience_ratio": 0.25
+    }
+  }
+}
+```

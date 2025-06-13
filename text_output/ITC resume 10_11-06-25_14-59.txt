@@ -1,0 +1,223 @@
+```json
+{
+  "JSON_Resume": {
+    "basics": {
+      "name": "John Doe",
+      "label": "Junior Scrum Master",
+      "image": "",
+      "email": "",
+      "phone": "",
+      "url": "",
+      "summary": "Organized | Adaptable | Collaborative | Progress Reporter | Conflict Resolution Expert | Facilitator",
+      "location": {},
+      "profiles": []
+    },
+    "work": [
+      {
+        "name": "BusyQA, Canada",
+        "position": "Scrum Master",
+        "url": "",
+        "startDate": "2024-04",
+        "endDate": "Present",
+        "summary": "A leading provider of project management information services specializing in quality assurance and software testing",
+        "highlights": [
+          "Implemented Scrum ceremonies for a Learning Management System with an 8-member team, enhancing stakeholder communication and feedback collection, leading to project completion 2 weeks early and earning the \"Employee of the Month\" award in July 2024",
+          "Utilized strong facilitation and problem-solving skills, along with the adept application of Agile principles, to optimize team velocity by 30% within 2 months",
+          "Coached the Scrum team to facilitate the digital transformation of a legacy system using Azure DevOps and CI/CD pipeline, resulting in a 40% reduction in deployment time within 3 months"
+        ]
+      },
+      {
+        "name": "Venture7 Technology, India",
+        "position": null,
+        "url": null,
+        "startDate": null,
+        "endDate": null,
+        "summary": "Al-powered software technology consulting, offering design-led product engineering, digital transformation, and SaaS development services",
+        "highlights": [
+          "Led agile ceremonies and coordinated diverse teams across multiple time zones using JIRA and Confluence, optimizing time management and achieving a significant reduction in development cycle time along with a 30% boost in team productivity",
+          "Developed an organized project plan and backlog in JIRA, using WSJF (Weighted Shortest Job First) technique addressing the need for clear task prioritization, which resulted in the successful execution of the project and timely delivery of critical milestones",
+          "Improved team performance by monitoring progress with Trello and tracking sprint goals, implementing continuous feedback-based improvements, leading to a 25% increase in team efficiency",
+          "Prepared weekly status reports, using excellent communication skills to ensure transparency and alignment with stakeholders and senior management, resulting in a 20% increase in project tracking accuracy"
+        ]
+      },
+      {
+        "name": "Xapotech Systems, India",
+        "position": "Agile QA Analyst",
+        "url": null,
+        "startDate": "2019-08",
+        "endDate": "2021-10",
+        "summary": "A leading provider of technology solutions for software and cloud services for businesses",
+        "highlights": [
+          "Collaborated with the software development team using Agile practices to prepare 50+ test cases, leveraging teamwork to understand project requirements, and resolved 20+ critical issues, cutting post-release defects by 30% and improving product quality",
+          "Innovated the testing process by developing automated scripts, adopting TDD, leveraging reporting and analytics tools to evaluate over 200 financial transactions and 50 UI/UX components, significantly enhancing testing effectiveness, accuracy, and platform quality while reducing defects by 20%"
+        ]
+      }
+    ],
+    "volunteer": [
+      {
+        "organization": "Silicon Valley Project Management (USA)",
+        "position": "Scrum Master",
+        "url": null,
+        "startDate": "2024-07",
+        "endDate": "Present",
+        "summary": null,
+        "highlights": []
+      }
+    ],
+    "education": [
+      {
+        "institution": "Himalayan University (India)",
+        "url": null,
+        "area": "Computer Applications",
+        "studyType": "Master's",
+        "startDate": null,
+        "endDate": "2018",
+        "score": null,
+        "courses": []
+      },
+      {
+        "institution": "Punjab Technical University (India)",
+        "url": null,
+        "area": "Computer Applications",
+        "studyType": "Bachelor's",
+        "startDate": null,
+        "endDate": "2010",
+        "score": null,
+        "courses": []
+      }
+    ],
+    "awards": [],
+    "certificates": [
+      {
+        "name": "Certified Scrum Master (CSM® - Credential ID 35237579-8468)",
+        "date": null,
+        "issuer": null,
+        "url": null
+      },
+      {
+        "name": "SAFe 6.0 Scrum Master (SSM® - Credential ID 001489966)",
+        "date": null,
+        "issuer": null,
+        "url": null
+      },
+      {
+        "name": "Advanced Business Communication",
+        "date": null,
+        "issuer": "Toronto Metropolitan University",
+        "url": null
+      }
+    ],
+    "publications": [],
+    "skills": [
+      {
+        "name": "Project Management Tools",
+        "level": null,
+        "keywords": [
+          "JIRA",
+          "Confluence",
+          "Trello",
+          "MIRO",
+          "Azure DevOps"
+        ]
+      },
+      {
+        "name": "Project Management Methodologies",
+        "level": null,
+        "keywords": [
+          "Waterfall",
+          "Scrum",
+          "Kanban",
+          "Agile Principles"
+        ]
+      },
+      {
+        "name": "Software Development & Design",
+        "level": null,
+        "keywords": [
+          "SDLC/STLC",
+          "SQL",
+          "HTML5",
+          "CSS3",
+          "JavaScript",
+          "C#",
+          ".Net"
+        ]
+      },
+      {
+        "name": "Communication & Collaboration",
+        "level": null,
+        "keywords": [
+          "Slack",
+          "MS Teams",
+          "Status reporting"
+        ]
+      },
+      {
+        "name": "Additional Tools",
+        "level": null,
+        "keywords": [
+          "CI/CD",
+          "GIT"
+        ]
+      },
+      {
+        "name": "Soft Skills",
+        "level": null,
+        "keywords": [
+          "Servant Leadership",
+          "Organization",
+          "Project Management",
+          "Teamwork",
+          "Agile coaching",
+          "Communication",
+          "Time Management",
+          "Problem-solving",
+          "Interpersonal skills",
+          "Conflict resolution"
+        ]
+      }
+    ],
+    "languages": [],
+    "interests": [],
+    "references": [],
+    "projects": [
+      {
+        "name": "Project 2: E-commerce platform development using Drupal",
+        "startDate": null,
+        "endDate": null,
+        "description": null,
+        "highlights": [
+          "Spearheaded the development of a feature-rich E-commerce platform on Drupal, resolving team conflicts to boost coordination, resulting in a 25% increase in sales and an additional CAD 80K in revenue within the first quarter",
+          "Facilitated cross-functional team collaboration to integrate payment gateways, inventory management, and customer support features, which significantly enhanced site functionality and led to a 40% reduction in customer support inquiries",
+          "Deployed Kanban methodology to optimize workflow and task management, resulting in a 30% reduction in cycle time and timely delivery of key features"
+        ],
+        "url": null
+      },
+      {
+        "name": "Project 1: US Healthcare Management System",
+        "startDate": null,
+        "endDate": null,
+        "description": null,
+        "highlights": [],
+        "url": null
+      },
+      {
+        "name": "Project 2: CRM System Enhancement",
+        "startDate": null,
+        "endDate": null,
+        "description": null,
+        "highlights": [],
+        "url": null
+      },
+      {
+        "name": "Project: Financial Services Platform",
+        "startDate": null,
+        "endDate": null,
+        "description": null,
+        "highlights": [],
+        "url": null
+      }
+    ]
+  }
+}
+```

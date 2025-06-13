@@ -1,0 +1,156 @@
+```json
+{
+  "JSON_Resume": {
+    "basics": {
+      "name": "John Doe",
+      "label": "",
+      "image": "",
+      "email": "",
+      "phone": "",
+      "url": "",
+      "summary": "A results-driven Senior Salesforce Business Analyst & Administrator with over 7 years of experience in Agile\nScrum Project Management and Salesforce CRM implementations. Proven track record of collaborating with\ncross-functional teams to deliver innovative solutions and drive business growth.\n\n• Exhibits in-depth knowledge of Software Development Life Cycle (SDLC), Project Management Life\nCycle (PMLC), Agile methodologies such as Scrum Framework, Scaled Agile Frameworks (SAFe),\nartifacts and deliverables.\n• Experienced working in varied client-facing roles with proven expertise in Requirements Elicitation,\nRefinement and Authoring User Stories, Configuration and Implementation of Salesforce functionalities,\nQA/UAT Testing, and Demo of the Features for various multinational clients.\n• Proficient in analyzing requirements, writing product briefs, use cases, and documentation, defining\nacceptance criteria and key success metrics/KPIs, and managing backlog prioritisations and trade-offs.\n• Possess a strong background in Salesforce Configurations & Deployments via Copado and Change Sets.\n• Recognised for exceptional communication skills and a strong commitment to customer satisfaction with\na passion for digital transformations through technology to meet evolving business needs.\n• Alumnus of one of the World's Top Universities, IIT Roorkee (Acceptance Rate of <2%).",
+      "location": {},
+      "profiles": []
+    },
+    "work": [
+      {
+        "name": "Deloitte",
+        "position": "Senior Salesforce Consultant",
+        "url": "",
+        "startDate": "2023-05-01",
+        "endDate": "2024-03-01",
+        "summary": "",
+        "highlights": [
+          "Spearheaded the Salesforce CRM implementation and delivered projects worth $5 million for Fortune\n500 clients as a Salesforce Functional Lead.",
+          "Collaborated with stakeholders to gather requirements, design solutions, and implement changes,\nenhancing business processes for 4 North American clients.",
+          "Led cross-functional teams in resolving 95% of critical implementation challenges within 48 hours,\nensuring on-time project delivery.",
+          "Designed and executed comprehensive training programs, improving user proficiency scores by 30%."
+        ]
+      },
+      {
+        "name": "Salesforce Consultant",
+        "position": "",
+        "url": "",
+        "startDate": "2021-09-01",
+        "endDate": "2023-04-01",
+        "summary": "",
+        "highlights": [
+          "Developed and prioritized product backlogs, resulting in the successful delivery of 15+ high-impact\nfeatures aligned with business strategy.",
+          "Managed the rollout of Salesforce Service Cloud, achieving a 20% improvement in customer service\nefficiency."
+        ]
+      },
+      {
+        "name": "S & P Global Inc.",
+        "position": "Business Analyst & Salesforce Administrator",
+        "url": "",
+        "startDate": "2019-06-01",
+        "endDate": "2021-08-01",
+        "summary": "",
+        "highlights": [
+          "Improved Salesforce data quality by implementing data loading and cleansing processes, increasing data\nconsistency by 35%.",
+          "Configured over 50+ custom reports, dashboards, and visualizations, providing valuable insights to drive\ndecision-making for senior management.",
+          "Implemented automation solutions using Flows, Process Builders & Workflows that reduced manual\ntasks and increased operational efficiency.",
+          "Provided timely support and troubleshooting assistance to over 1K+ users, ensuring high user\nengagement.",
+          "Achieved a 95% user satisfaction rate through effective support, training, and system enhancements."
+        ]
+      },
+      {
+        "name": "Vectorr",
+        "position": "Business Analyst",
+        "url": "",
+        "startDate": "2017-05-01",
+        "endDate": "2019-05-01",
+        "summary": "",
+        "highlights": [
+          "Managed the end-to-end SDLC of the project, enhancing sales team productivity by 35%.",
+          "Engaged with internal stakeholders to understand business needs and priorities, driving continuous\ndevelopment and improvement.",
+          "Crafted detailed business requirements, authored user stories and acceptance criteria, and refined them.",
+          "Collaborated with UI/UX designers and developers on implementing solutions, providing detailed\nexplanations and feedback.",
+          "Contributed to configuring the mobile application to deliver an enhanced user interface driving sales\nimprovements by 20%."
+        ]
+      }
+    ],
+    "volunteer": [],
+    "education": [
+      {
+        "institution": "Indian Institute of Technology IIT, Roorkee",
+        "url": "www.iitr.ac.in/",
+        "area": "Applied Mathematics",
+        "studyType": "Integrated Bachelor & Master of Science",
+        "startDate": "2012-06-01",
+        "endDate": "2017-04-01",
+        "score": "",
+        "courses": []
+      }
+    ],
+    "awards": [],
+    "certificates": [],
+    "publications": [],
+    "skills": [
+      {
+        "name": "Tools & Technologies",
+        "level": "",
+        "keywords": [
+          "Salesforce",
+          "Copado",
+          "ServiceNow",
+          "SharePoint",
+          "SOQL",
+          "Data Loader",
+          "Visio",
+          "Pencil",
+          "AWS"
+        ]
+      },
+      {
+        "name": "Methodologies",
+        "level": "",
+        "keywords": [
+          "Scrum",
+          "Kanban",
+          "Lean",
+          "SAFe",
+          "Agile Methodologies"
+        ]
+      },
+      {
+        "name": "Project Management",
+        "level": "",
+        "keywords": [
+          "Atlassian JIRA & Confluence",
+          "Azure DevOps",
+          "Microsoft Project",
+          "Miro Board",
+          "Slack"
+        ]
+      },
+      {
+        "name": "Soft Skills",
+        "level": "",
+        "keywords": [
+          "Agile Leadership Skills",
+          "Facilitation",
+          "Problem-solving",
+          "Logical and Analytical skills"
+        ]
+      },
+      {
+        "name": "Certifications",
+        "level": "",
+        "keywords": [
+          "9 Salesforce Certifications",
+          "2 Copado DevOps",
+          "PMP®",
+          "PSPOTM",
+          "ITIL® 4",
+          "AWS Cloud"
+        ]
+      }
+    ],
+    "languages": [],
+    "interests": [],
+    "references": [],
+    "projects": []
+  }
+}
+```
