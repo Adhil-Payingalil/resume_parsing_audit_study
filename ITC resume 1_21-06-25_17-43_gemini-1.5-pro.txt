@@ -1,0 +1,256 @@
+```json
+{
+  "basics": {
+    "name": "",
+    "email": "",
+    "phone": "",
+    "summary": "A highly versatile and experienced Product Designer with over 10 years of experience creating user-centered solutions for web and mobile platforms.  Skilled in design thinking, user research, and information architecture, they have a proven track record of driving innovation and business success through data-driven design and iterative prototyping.  They are adept at collaborating with cross-functional teams and presenting actionable insights to C-suite leaders.",
+    "label": "Product Designer",
+    "city": "",
+    "region": ""
+  },
+  "skills": [
+    {
+      "name": "Design Skills",
+      "keywords": [
+        "Interaction design",
+        "User research",
+        "Information architecture",
+        "Data-driven design",
+        "Usability testing",
+        "Design system implementation",
+        "Iterative prototyping",
+        "Design thinking",
+        "User-centered design (UCD)",
+        "Lean UX"
+      ]
+    },
+    {
+      "name": "UX Tools",
+      "keywords": [
+        "Figma",
+        "Sketch",
+        "Invision",
+        "Miro",
+        "Creative Suite",
+        "Azure",
+        "HTML",
+        "CSS",
+        "Jira",
+        "Google Analytics"
+      ]
+    },
+    {
+      "name": "Soft Skills",
+      "keywords": [
+        "Empathy",
+        "Communication",
+        "Problem-solving",
+        "Critical thinking",
+        "Collaboration",
+        "Adaptability"
+      ]
+    },
+    {
+      "name": "Languages",
+      "keywords": [
+        "Arabic",
+        "French"
+      ]
+    }
+  ],
+  "work_experience": [
+    {
+      "company": "BeIN Media Group",
+      "client": null,
+      "position": "UX/UI Designer",
+      "startDate": "2022-08",
+      "endDate": "2023-02",
+      "highlights": [
+        "Redesigned a Video On Demand mobile application, optimizing onboarding, subscription, and listing pages based on usability research findings from over 130 pages.",
+        "Enhanced key features, integrating customizable trailers and a Top 10 browsing feature, resulting in an 18% increase in content views.",
+        "Recommended an open app model with optimized onboarding, diverse payment methods, and tailored subscription plans based on design thinking principles and competitive analysis."
+      ],
+      "location": ""
+    },
+    {
+      "company": "Mikitsune",
+      "client": null,
+      "position": "Product Lead - Founder",
+      "startDate": "2017-09",
+      "endDate": "2020-04",
+      "highlights": [
+        "Designed and launched a kid's activity e-commerce app, achieving 100% adoption within a year.",
+        "Developed a modular design system that accelerated product launch timelines by 20% and enhanced scalability.",
+        "Designed a flexible subscription system, booking management, and insightful status reports to optimize activity offerings and maximize revenue for businesses."
+      ],
+      "location": ""
+    },
+    {
+      "company": "Leo Burnett W.L.L",
+      "client": "Qatar Foundation",
+      "position": "Senior Digital Designer",
+      "startDate": "2018-05",
+      "endDate": "2020-03",
+      "highlights": [
+        "Designed marketing sites and landing pages, contributing to a 20% growth in website traffic and increased user engagement.",
+        "Redesigned the Qatar Sports Day website, improving findability and simplifying registration for over 10,000 visitors, reducing registration time through usability and guerrilla testing.",
+        "Designed the Akhlaquna Award interactive experience, streamlining candidate applications, jury review dashboards, and improving the design system."
+      ],
+      "location": ""
+    },
+    {
+      "company": null,
+      "client": "Droobi Healthcare diabetes management app, Sejaal arabic news app",
+      "position": "Product Designer - UX Designer (freelance)",
+      "startDate": "2016-08",
+      "endDate": "2017-05",
+      "highlights": [
+        "Designed a user-centric health monitoring app, increasing user adherence to healthy habits by 20% through infographics and data visualization.",
+        "Led UX design for Sejaal, an Arabic news app, improving content accessibility and raising readership by 15%."
+      ],
+      "location": ""
+    },
+    {
+      "company": "Splendor Telecom SAL",
+      "client": null,
+      "position": "Product Lead & Digital Creative Director",
+      "startDate": "2015-02",
+      "endDate": "2016-08",
+      "highlights": [
+        "Designed Nympay Fintech and Nymcard money remittance apps, improving conversion rates by 25%.",
+        "Established a comprehensive design system across three startups, increasing design process efficiency and brand recognition by 20%.",
+        "Secured buy-in for new features and drove successful product rollouts through presentations to C-level executives."
+      ],
+      "location": ""
+    },
+    {
+      "company": "BBMC Telecom SARL",
+      "client": "Splendor Telecom SAL",
+      "position": "Product Lead & Digital Creative Director",
+      "startDate": "2014-06",
+      "endDate": "2016-01",
+      "highlights": [
+        "Designed intuitive interfaces for Nymgo VoIP, increasing user adoption by 20% and website traffic by 15% through user research, usability testing, eye-tracking, and analytics.",
+        "Developed a cohesive brand identity and design language, increasing brand recognition.",
+        "Streamlined the design process using high-fidelity prototypes and collaborated with cross-functional teams to deliver products on time and within budget."
+      ],
+      "location": ""
+    },
+    {
+      "company": "Leo Burnett W.L.L",
+      "client": "Ooredoo Telecom and CBQ Bank",
+      "position": "Senior Digital Designer",
+      "startDate": "2012-09",
+      "endDate": "2013-11",
+      "highlights": [
+        "Delivered user-friendly web and mobile interfaces, improving user satisfaction scores by 20%.",
+        "Refined information architecture and executed a content strategy through card sorting, reducing navigation errors by 10% and increasing stakeholder approval."
+      ],
+      "location": ""
+    },
+    {
+      "company": "Koein",
+      "client": "Azadea, Nasco Insurance Group, Beiruthome, Leila Restaurant, Basil Soda",
+      "position": "Graphic Designer",
+      "startDate": "2009-09",
+      "endDate": "2012-06",
+      "highlights": [
+        "Art directed and designed user-centered websites, increasing project approval rates by 15%.",
+        "Improved information architecture and reduced bounce rates by 15% through card sorting and content strategy exercises."
+      ],
+      "location": ""
+    }
+  ],
+  "volunteer_experience": [
+    {
+      "company": "Monavenir School Board",
+      "client": "Le Petit Prince School",
+      "position": "Brand Identity Design (Volunteer)",
+      "startDate": null,
+      "endDate": "2024-10",
+      "highlights": [],
+      "location": "Canada"
+    },
+    {
+      "company": "Starlink",
+      "client": "Ooredoo Telecom and Ministry of Communication and Information Technology",
+      "position": "UX/CX - User Experience, Customer Experience Manager",
+      "startDate": "2023-03",
+      "endDate": "2024-01",
+      "highlights": [
+        "Redesigned navigation, information architecture, and user flows for B2B/B2C websites, increasing customer engagement by 15%.",
+        "Crafted a geospatial data visualization app through a design thinking workshop, leading to a successful MVP launch within 1 month.",
+        "Conducted A/B testing on new app features, optimizing user flow and increasing product sales demand by 5%."
+      ],
+      "location": ""
+    }
+  ],
+  "education": [
+    {
+      "institution": "Salford University",
+      "location": "",
+      "area": "International Business & Management for Design",
+      "studyType": "Master of Science",
+      "startDate": null,
+      "endDate": "2006",
+      "score": ""
+    },
+    {
+      "institution": "Lebanese American University",
+      "location": "",
+      "area": "Graphic Design",
+      "studyType": "Bachelor of Science",
+      "startDate": null,
+      "endDate": "2004",
+      "score": "Distinction"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "User Experience Certificate",
+      "issuer": "Nielsen Norman Group",
+      "date": "2019"
+    },
+    {
+      "name": "Successful Design systems",
+      "issuer": "Smashing Magazine",
+      "date": "2023"
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Fluent"
+    },
+    {
+      "language": "Arabic",
+      "fluency": "Fluent"
+    },
+    {
+      "language": "French",
+      "fluency": "Fluent"
+    }
+  ],
+  "eda": {
+    "has_canadian_us_work_experience": false,
+    "has_canadian_us_volunteering": true,
+    "has_canadian_us_education": false,
+    "experience_level": "senior",
+    "has_management_experience": true,
+    "primary_industry_sector": "Design",
+    "highest_degree": "Master",
+    "years_since_highest_degree": 17,
+    "most_recent_experience_year": 2024,
+    "total_employers": 7,
+    "technical_role_ratio": 1,
+    "num_languages_listed": 2,
+    "num_certificates": 2,
+    "has_career_gap": false,
+    "resume_word_count": 712,
+    "resume_quality_score": 9,
+    "has_missing_locations": true,
+    "fallback_reason": "Several work and education locations are missing."
+  }
+}
+```

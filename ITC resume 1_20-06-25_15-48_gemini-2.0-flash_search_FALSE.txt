@@ -1,0 +1,264 @@
+```json
+{
+  "resume_data": {
+    "basics": {
+      "name": "",
+      "label": "Versatile Product Designer",
+      "email": "",
+      "phone": "",
+      "city": "",
+      "region": "",
+      "summary": "Versatile Product Designer with 10+ years of experience creating data-driven, user-centered solutions for web and mobile platforms. Skilled at developing interactive prototypes with Figma to shape strategic direction and foster stakeholder alignment. Proven ability to harmonize user needs with business goals, delivering results like a 20% boost in user retention."
+    },
+    "skills": [
+      {
+        "name": "Design Skills",
+        "keywords": [
+          "Interaction design",
+          "user research",
+          "information architecture data-driven design",
+          "usability testing",
+          "design system implementation",
+          "iterative prototyping"
+        ]
+      },
+      {
+        "name": "Methodologies",
+        "keywords": [
+          "Design thinking",
+          "user-centered design (ucd)",
+          "lean UX"
+        ]
+      },
+      {
+        "name": "UX Tools",
+        "keywords": [
+          "Figma",
+          "Sketch",
+          "Invision",
+          "Miro",
+          "Creative Suite",
+          "Azure",
+          "HTML",
+          "CSS",
+          "Jira",
+          "Google Analytic"
+        ]
+      },
+      {
+        "name": "Soft Skills",
+        "keywords": [
+          "Empathy",
+          "communication",
+          "problem-solving",
+          "critical thinking",
+          "collaboration",
+          "adaptability"
+        ]
+      },
+      {
+        "name": "Languages",
+        "keywords": [
+          "Arabic",
+          "english",
+          "french"
+        ]
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "Starlink",
+        "client": "Ooredoo Telecom and Ministry of Communication and Information Technology",
+        "position": "UX/CX - User Experience, Customer Experience Manager",
+        "location": "",
+        "startDate": "2023-03",
+        "endDate": "2024-01",
+        "highlights": [
+          "Redesigned navigation, information architecture, and user flows for B2B/B2C websites based on benchmarking and heuristic evaluations. Implemented UX best practices that enhanced user discovery of our services, resulting in a 15% increase in customer engagement.",
+          "Crafted a geospatial data visualization app by conducting a design thinking workshop with cross-functional teams. Maintained continuous collaboration to ensure the developed product aligned with the designs and brand identity, leading to the successful MVP launch within 1 month.",
+          "Conducted A/B testing on new app features, optimizing user flow and feature adoption, driving a 5% increase in product sales demand."
+        ]
+      },
+      {
+        "company": "BeIN Media Group",
+        "client": null,
+        "position": "UX/UI Designer",
+        "location": "",
+        "startDate": "2022-08",
+        "endDate": "2023-02",
+        "highlights": [
+          "Redesigned a Video On Demand mobile application, optimizing onboarding, subscription, and listing pages. Analyzed usability research findings from over 130 pages to guide targeted modifications.",
+          "Enhanced key features to improve content discovery and user control, integrating customizable trailers and a Top 10 browsing feature that increased content views by 18%.",
+          "Applied design thinking principles alongside competitive analysis to recommend an open app model, optimized onboarding, diverse payment methods, and tailored subscription plans."
+        ]
+      },
+      {
+        "company": "Mikitsune",
+        "client": null,
+        "position": "Product lead - Founder",
+        "location": "",
+        "startDate": "2017-09",
+        "endDate": "2020-04",
+        "highlights": [
+          "Demonstrated entrepreneurial initiative by designing and launching a kid's activity e-commerce app.",
+          "Created high-fidelity prototypes and pixel-perfect UI, leading to 100% adoption within a year.",
+          "Developed a modular design system that accelerated product launch timelines by 20%, enhancing scalability and ease of future updates.",
+          "Designed a flexible subscription system, booking management, and insightful status reports to empower businesses to optimize activity offerings, streamline operations, and maximize revenue."
+        ]
+      },
+      {
+        "company": "Leo Burnett W.L.L",
+        "client": "Qatar Foundation, a leading education institution.",
+        "position": "Senior Digital Designer",
+        "location": "",
+        "startDate": "2018-05",
+        "endDate": "2020-03",
+        "highlights": [
+          "Designed marketing sites & landing pages, enforcing brand consistency across digital channels. Contributing to a 20% growth in website traffic and a higher user engagement rate.",
+          "Redesigned the Qatar Sports Day website, improving findability and simplifying registration for over 10,000 visitors, and implemented usability & guerrilla testing that reduced registration time.",
+          "Designed the Akhlaquna Award interactive experience, streamlined the candidate application forms and dashboards, enhanced the jury review dashboard, and improved the design system."
+        ]
+      },
+      {
+        "company": "Droobi Healthcare diabetes management app, Sejaal arabic news app.",
+        "client": null,
+        "position": "Product Designer - UX Designer (freelance)",
+        "location": "",
+        "startDate": "2016-08",
+        "endDate": "2017-05",
+        "highlights": [
+          "Designed a user-centric health monitoring app. By leveraging infographics and data visualization techniques, leading to a 20% increase in user adherence to healthy habits.",
+          "Led UX design for Sejaal, an Arabic news app, defining user flows, information architecture & page structures. This approach improved content accessibility, raising readership by 15%."
+        ]
+      },
+      {
+        "company": "Splendor Telecom SAL",
+        "client": null,
+        "position": "Product Lead & Digital Creative Director",
+        "location": "",
+        "startDate": "2015-02",
+        "endDate": "2016-08",
+        "highlights": [
+          "Designed Nympay Fintech and Nymcard money remittance apps, ensuring a secure, intuitive user experience, which improved conversion rates by 25%.",
+          "Established a comprehensive design system across three startups, increasing design process efficiency and ensuring brand consistency, leading to a 20% increase in brand recognition.",
+          "Delivered design presentations to C-level executives, securing buy-in for new features and driving successful product rollouts."
+        ]
+      },
+      {
+        "company": "BBMC Telecom SARL",
+        "client": "Splendor Telecom SAL",
+        "position": "Product Lead & Digital Creative Director",
+        "location": "",
+        "startDate": "2014-06",
+        "endDate": "2016-01",
+        "highlights": [
+          "Designed intuitive interfaces for Nymgo VoIP, leveraging user research, usability testing, eye-tracking, and analytics to increase user adoption by 20% and improve website traffic by 15%",
+          "Developed a cohesive brand identity & design language, resulting in increased brand recognition",
+          "Streamlined the design process using high-fidelity prototypes & collaborated with cross-functional teams to deliver products on time and within budget."
+        ]
+      },
+      {
+        "company": "Leo Burnett W.L.L",
+        "client": "Ooredoo Telecom and CBQ Bank",
+        "position": "Senior Digital Designer",
+        "location": "",
+        "startDate": "2012-09",
+        "endDate": "2013-11",
+        "highlights": [
+          "Delivered user-friendly web and mobile interfaces aligned with major brand requirements, resulting in a 20% improvement in user satisfaction scores for top clients.",
+          "Refined information architecture and executed a comprehensive content strategy through card sorting, achieving a 10% reduction in navigation errors and higher stakeholder approval."
+        ]
+      },
+      {
+        "company": "Koein",
+        "client": "Azadea, Nasco Insurance Group, Beiruthome, Leila Restaurant, Basil Soda.",
+        "position": "Graphic Designer",
+        "location": "",
+        "startDate": "2009-09",
+        "endDate": "2012-06",
+        "highlights": [
+          "Art directed and designed user-centered websites for versatile clients. Demonstrated exceptional adaptability and a comprehensive skillset, contributing to a 15% increase in project approval rates",
+          "Conducted card sorting and content strategy exercises, improving information architecture and reducing bounce rates by 15%."
+        ]
+      }
+    ],
+    "volunteer_experience": [
+      {
+        "company": "Monavenir School Board, Le Petit Prince School",
+        "client": null,
+        "position": "Brand Identity Design",
+        "location": "Canada",
+        "startDate": "2024-10",
+        "endDate": null,
+        "highlights": []
+      }
+    ],
+    "education": [
+      {
+        "institution": "Salford University",
+        "location": "Salford, Greater Manchester, England",
+        "area": "International Business & Management for Design",
+        "studyType": "Master of Science",
+        "startDate": null,
+        "endDate": "2006-01",
+        "score": ""
+      },
+      {
+        "institution": "Lebanese American University",
+        "location": "Beirut and Byblos, Lebanon",
+        "area": "Graphic Design",
+        "studyType": "Bachelor of Science (Distinction)",
+        "startDate": null,
+        "endDate": "2004-01",
+        "score": ""
+      }
+    ],
+    "certificates": [
+      {
+        "name": "User Experience Certificate",
+        "issuer": "Nielsen Norman Group",
+        "date": "2019-01"
+      },
+      {
+        "name": "Successful Design systems",
+        "issuer": "Smashing Magazine",
+        "date": "2023-01"
+      }
+    ],
+    "languages": [
+      {
+        "language": "English",
+        "fluency": "Fluent"
+      },
+      {
+        "language": "Arabic",
+        "fluency": "fluent"
+      },
+      {
+        "language": "french",
+        "fluency": "fluent"
+      }
+    ]
+  },
+  "eda": {
+    "has_canadian_us_work_experience": false,
+    "has_canadian_us_volunteering": true,
+    "has_canadian_us_education": false,
+    "experience_level": "senior",
+    "has_management_experience": true,
+    "primary_industry_sector": "Information Technology",
+    "highest_degree": "Master",
+    "years_since_highest_degree": 19,
+    "most_recent_experience_year": 2024,
+    "total_employers": 7,
+    "technical_role_ratio": -1,
+    "num_languages_listed": 2,
+    "num_certificates": 2,
+    "has_career_gap": false,
+    "resume_word_count": 558,
+    "resume_quality_score": 7,
+    "has_missing_locations": false,
+    "fallback_reason": ""
+  }
+}
+```
