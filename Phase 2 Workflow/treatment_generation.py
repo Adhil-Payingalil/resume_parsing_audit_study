@@ -35,6 +35,11 @@ import sys
 sys.path.append('..')
 sys.path.append('../libs')
 
+
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from libs.mongodb import get_all_file_ids,_get_mongo_client ,get_document_by_fileid, _clean_raw_llm_response
 from libs.gemini_processor import GeminiProcessor
 from utils import get_logger
@@ -87,7 +92,7 @@ cwe_treatment_df = cwe_treatment_df[cwe_treatment_df['sector'] == SECTOR].reset_
 
 # Load the model once to be reused in the loop for cosine similarity calculations
 SIMILARITY_MODEL = SentenceTransformer(
-    r'Phase 2 Workflow\models\all-MiniLM-L6-v2'
+    r'Phase 2 Workflow/models/all-MiniLM-L6-v2'
 )
 
 def extract_rephrased_text(resume_data):

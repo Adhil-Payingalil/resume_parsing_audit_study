@@ -14,3 +14,9 @@ models
 *.txt
 pdf_converter.py/*
 just pdf/*
+Phase 2.1 Workflow - Job Matching/test_results/*
+Adhoc analysis/industry_label_analysis/output/*
+Phase 2.1 Workflow - Job Matching/data/*
+Phase 2.1 Workflow - Job Matching/Job Scraping Modules/data
+
+

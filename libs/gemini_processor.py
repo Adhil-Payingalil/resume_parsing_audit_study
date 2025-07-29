@@ -1,11 +1,12 @@
 import os
 import re
+import hashlib
 from datetime import datetime
 import sys 
 
 sys.path.append(".")
 from utils import get_logger
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
@@ -20,7 +21,7 @@ logger = get_logger(__name__)
 class GeminiProcessor:
     """
     A class to handle interactions with the Google Gemini API.
-    Provides methods for file processing, prompt management, and content generation.
+    Provides methods for file processing, prompt management, content generation, and embedding generation.
     """
     
     def __init__(
@@ -235,6 +236,154 @@ class GeminiProcessor:
         finally:
             if self.uploaded_resume_file:
                 self.delete_uploaded_file()
+
+    def generate_embedding(self, text: str, task_type: str = "RETRIEVAL_DOCUMENT") -> List[float]:
+        """
+        Generate embedding for text using Gemini API with caching.
+        
+        Args:
+            text (str): Text to generate embedding for
+            task_type (str): Type of embedding task ("RETRIEVAL_QUERY", "RETRIEVAL_DOCUMENT", "SEMANTIC_SIMILARITY")
+            
+        Returns:
+            List[float]: Embedding vector
+        """
+        try:
+            # Generate hash for caching
+            text_hash = self._generate_text_hash(text, task_type)
+            
+            # Check cache first
+            cached_embedding = self._check_embedding_cache(text_hash)
+            if cached_embedding:
+                logger.info(f"Cache hit for embedding with hash: {text_hash[:16]}...")
+                return cached_embedding
+            
+            # Generate new embedding
+            logger.info(f"Generating new embedding for text (length: {len(text)}) with task_type: {task_type}")
+            
+            response = self.client.models.embed_content(
+                model="models/embedding-001",
+                contents=text
+            )
+            
+            embedding = response.embeddings[0].values
+            
+            # Save to cache
+            self._save_embedding_to_cache(text_hash, embedding, task_type)
+            
+            logger.info(f"Successfully generated embedding (dimensions: {len(embedding)})")
+            return embedding
+            
+        except Exception as e:
+            logger.error(f"Error generating embedding: {e}")
+            raise
+    
+    def generate_embeddings_batch(self, texts: List[str], task_type: str = "RETRIEVAL_DOCUMENT") -> List[List[float]]:
+        """
+        Generate embeddings for multiple texts using Batch API.
+        
+        Args:
+            texts (List[str]): List of texts to generate embeddings for
+            task_type (str): Type of embedding task
+            
+        Returns:
+            List[List[float]]: List of embedding vectors
+        """
+        try:
+            logger.info(f"Generating batch embeddings for {len(texts)} texts with task_type: {task_type}")
+            
+            # For now, use synchronous API in a loop (Batch API implementation would go here)
+            # TODO: Implement proper Batch API when available
+            embeddings = []
+            for i, text in enumerate(texts):
+                logger.info(f"Processing text {i+1}/{len(texts)}")
+                embedding = self.generate_embedding(text, task_type)
+                embeddings.append(embedding)
+            
+            logger.info(f"Successfully generated {len(embeddings)} embeddings")
+            return embeddings
+            
+        except Exception as e:
+            logger.error(f"Error generating batch embeddings: {e}")
+            raise
+    
+    def _generate_text_hash(self, text: str, task_type: str) -> str:
+        """
+        Generate a hash for the text and task type combination.
+        
+        Args:
+            text (str): Input text
+            task_type (str): Task type
+            
+        Returns:
+            str: SHA256 hash
+        """
+        content = f"{text}:{task_type}:embedding-001"
+        return hashlib.sha256(content.encode('utf-8')).hexdigest()
+    
+    def _check_embedding_cache(self, text_hash: str) -> Optional[List[float]]:
+        """
+        Check if embedding exists in cache.
+        
+        Args:
+            text_hash (str): Hash of the text
+            
+        Returns:
+            Optional[List[float]]: Cached embedding if found, None otherwise
+        """
+        try:
+            from libs.mongodb import _get_mongo_client
+            mongo_client = _get_mongo_client()
+            if not mongo_client:
+                logger.warning("MongoDB client not available, skipping cache check")
+                return None
+            
+            db = mongo_client["Resume_study"]
+            cache_collection = db["embedding_cache"]
+            
+            cached_doc = cache_collection.find_one({"text_hash": text_hash})
+            if cached_doc:
+                logger.info(f"Found cached embedding for hash: {text_hash[:16]}...")
+                return cached_doc["embedding"]
+            
+            return None
+            
+        except Exception as e:
+            logger.warning(f"Error checking embedding cache: {e}")
+            return None
+    
+    def _save_embedding_to_cache(self, text_hash: str, embedding: List[float], task_type: str):
+        """
+        Save embedding to cache.
+        
+        Args:
+            text_hash (str): Hash of the text
+            embedding (List[float]): Embedding vector
+            task_type (str): Task type used
+        """
+        try:
+            from libs.mongodb import _get_mongo_client
+            mongo_client = _get_mongo_client()
+            if not mongo_client:
+                logger.warning("MongoDB client not available, skipping cache save")
+                return
+            
+            db = mongo_client["Resume_study"]
+            cache_collection = db["embedding_cache"]
+            
+            cache_doc = {
+                "text_hash": text_hash,
+                "model_name": "embedding-001",
+                "task_type": task_type,
+                "embedding": embedding,
+                "created_at": datetime.now()
+            }
+            
+            cache_collection.insert_one(cache_doc)
+            logger.info(f"Saved embedding to cache with hash: {text_hash[:16]}...")
+            
+        except Exception as e:
+            logger.warning(f"Error saving embedding to cache: {e}")
 
 
 if __name__ == "__main__":
