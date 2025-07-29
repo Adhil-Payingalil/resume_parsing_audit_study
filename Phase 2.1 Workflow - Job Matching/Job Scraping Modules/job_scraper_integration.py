@@ -1,28 +1,21 @@
 """
 Job Scraper Integration Module
-Integrates the Job_scrapper library with the resume audit study workflow.
 
-# =============================
-# Centralized Configuration (User Configurable)
-# =============================
-CONFIG = {
-    "SITE_NAME": ["linkedin"],
-    "SEARCH_TERMS": ["Data Analyst", "Project Manager"],
-    "LOCATIONS": ["Toronto, ON"],
-    "RESULTS_WANTED": 50,
-    "JOB_TYPE": None,
-    "IS_REMOTE": False,
-    "HOURS_OLD": None,
-    "COUNTRY_INDEED": "Canada",
-    "PROXIES": None,
-    "DELAY_SECONDS": 7,
-    "VERBOSE": 2,
-    "DESCRIPTION_FORMAT": "markdown",
-    "EASY_APPLY": False,
-    "LINKEDIN_FETCH_DESCRIPTION": False
-}
-# =============================
+# Major Steps
 
+1. **Database Setup**: Connect to MongoDB, create indexes for performance
+2. **Job Scraping**: Scrape jobs from Indeed/LinkedIn using jobspy library
+3. **Data Cleaning**: Standardize columns, remove duplicates, validate data
+4. **MongoDB Storage**: Save new jobs with duplicate filtering
+5. **AI Embeddings**: Generate embeddings for new job postings using Gemini
+6. **Job Management**: Track status, provide statistics and query interface
+
+# Key Features
+- Multi-platform job scraping (Indeed, LinkedIn)
+- Duplicate prevention and data validation
+- Automatic AI embedding generation
+- Scalable batch processing
+- Comprehensive error handling
 """
 
 import os

@@ -11,7 +11,8 @@ Based on the provided Base Resume JSON and Treatment Instructions, perform the f
 
 1.  **Analyze:** Carefully read the entire Base Resume to understand its structure, tone, and the candidate's professional profile.
 
-2.  **Integrate Treatment:** Add the new information from the Treatment Instructions into the resume.
+2.  **Integrate Treatment, and Company names:** Add the new information from the Treatment Instructions into the resume. Also replace the company names with the given list
+  * Treatments: Add the new information from the Treatment Instructions into the resume.
     * If adding education, place it at the top of the `education` array. Not under the `certifications` array.
     * If adding experience, place it at the top of the `work_experience` array.
 
@@ -27,13 +28,16 @@ Based on the provided Base Resume JSON and Treatment Instructions, perform the f
 
 
 ## INPUTS
+0. Treatment Type
+{treatment_type}
+
 1. Original JSON resume object: 
 {JSON_resume_object}
 
 2. The treatment(s) that you're supposed to add to the resume:
 {Treatment_object}
 
-3. The style of rephrasing:
+4. The style of rephrasing:
 {style_guide}
 
 ## Output Schema
