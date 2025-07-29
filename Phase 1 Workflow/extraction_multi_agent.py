@@ -2,7 +2,7 @@
 Resume Extraction and Key Metrics Multi-Agent Workflow
 =============================================
 
-This script automates the process of extracting structured data from resumes using multiple Gemini LLM agents, performing Key Metrics Analysis, and validating the results. It is designed for batch processing of resume files and saving results to MongoDB.
+This script automates the process of extracting structured data from resumes using multiple Gemini LLM agents, performing Key Metrics Analysis, validating the results, and generating vector embeddings for semantic search. It is designed for batch processing of resume files and saving results to MongoDB.
 
 Workflow Overview
 -----------------
@@ -10,11 +10,11 @@ Workflow Overview
 2. **Conversion**: Converts `.docx` resumes to PDF and archives the originals.
 3. **Upload**: Uploads each resume to the root Gemini agent.
 4. **First Pass (Resume Data Extraction)**: Uses a Gemini agent to extract structured data from the resume using a prompt template.
-
 5. **Second Pass (Key Metrics Analysis)**: Runs key metrics analysis on the extracted data using another Gemini agent and a separate prompt template.
 6. **Third Pass (Validation)**: Validates the extracted and analyzed data using a validation agent.
-7. **Saving Results**: Saves all LLM responses to MongoDB. If saving fails, raw responses are logged for debugging.
-8. **Cleanup**: Deletes uploaded files from the agent and moves processed files to the archive directory.
+7. **Vector Embedding Generation**: Generates semantic embeddings from the extracted resume content for job matching and search capabilities.
+8. **Saving Results**: Saves all LLM responses and embeddings to MongoDB. If saving fails, raw responses are logged for debugging.
+9. **Cleanup**: Deletes uploaded files from the agent and moves processed files to the archive directory.
 
 **Agent Retry Logic and Pipeline Re-runs**
 ------------------------------------------
@@ -26,11 +26,23 @@ Workflow Overview
     - Validation flags are logged when the score is low.
 - Files are only moved to the processed directory after all retries and re-runs are complete, ensuring only successfully processed files are archived.
 
+**Embedding Generation**
+------------------------
+- **Content Extraction**: Uses the same logic as `batch_resume_embedding.py` to extract key content:
+    - Professional summary from `basics.summary`
+    - All skills and keywords from `skills` array
+    - Recent work experience (last 2 positions) from `work_experience` array
+    - Highest education level from `education` array
+- **Embedding Model**: Uses Gemini's `embedding-001` model with `RETRIEVAL_DOCUMENT` task type
+- **Storage**: Embeddings are stored in MongoDB with metadata including generation timestamp and model information
+- **Error Handling**: Embedding generation failures don't stop the workflow; resumes are still processed and saved
+
 Key Components
 --------------
 
-- **GeminiProcessor**: Handles LLM interactions for each task (extraction, key metrics, validation).
-- **MongoDB Integration**: Saves structured responses for further analysis.
+- **GeminiProcessor**: Handles LLM interactions for each task (extraction, key metrics, validation, embeddings).
+- **MongoDB Integration**: Saves structured responses and embeddings for further analysis and semantic search.
+- **Text Extraction**: Extracts key content for embedding generation using `libs.text_extraction`.
 - **Logging**: Tracks progress and errors for each file, including retry and re-run attempts.
 - **Error Handling & Retries**: Retries LLM calls if invalid JSON is detected in responses, and re-runs the pipeline if validation fails.
 
@@ -48,12 +60,13 @@ How to Use
 2. Ensure MongoDB is running and accessible.
 3. Run this script. It will process all files in the input directory.
 4. Check the output directories and MongoDB for results.
+5. Resumes will be ready for semantic search and job matching with generated embeddings.
 
 Dependencies
 ------------
 - Python 3.x
 - `docx2pdf` for file conversion
-- Custom modules: `libs.gemini_processor`, `libs.mongodb`, `utils`
+- Custom modules: `libs.gemini_processor`, `libs.mongodb`, `libs.text_extraction`, `utils`
 
 """
 import os
@@ -452,12 +465,51 @@ if __name__ == "__main__":
                         continue
                 else:
                     break
-                
+
+            # Step 6: Generate Vector Embedding (New Step)
+            logger.info(f'Generating vector embedding for {processed_filename}')
+            embedding = None
+            try:
+                # Parse the resume_data_response to get the nested resume_data
+                if resume_data_response and hasattr(resume_data_response, 'text') and resume_data_response.text:
+                    from libs.mongodb import _clean_raw_llm_response
+                    parsed_resume_data = _clean_raw_llm_response(resume_data_response.text, processed_filename)
+                    
+                    if parsed_resume_data and isinstance(parsed_resume_data, dict):
+                        # Create a temporary document structure with the nested resume_data
+                        temp_doc = {
+                            "resume_data": parsed_resume_data
+                        }
+                        
+                        # Extract content for embedding using the same logic as batch_resume_embedding
+                        from libs.text_extraction import extract_resume_content_from_mongo_doc
+                        content_for_embedding = extract_resume_content_from_mongo_doc(temp_doc)
+                        
+                        if content_for_embedding:
+                            # Generate embedding using the root_gemini processor
+                            embedding = root_gemini.generate_embedding(
+                                text=content_for_embedding,
+                                task_type="RETRIEVAL_DOCUMENT"
+                            )
+                            
+                            if embedding:
+                                logger.info(f"Successfully generated embedding for {processed_filename} (dimensions: {len(embedding)})")
+                            else:
+                                logger.warning(f"Failed to generate embedding for {processed_filename}")
+                        else:
+                            logger.warning(f"No content extracted for embedding for {processed_filename}")
+                    else:
+                        logger.warning(f"Could not parse resume_data_response for {processed_filename}")
+                else:
+                    logger.warning(f"No resume_data_response available for embedding generation for {processed_filename}")
+                    
+            except Exception as e:
+                logger.error(f"Error generating embedding for {processed_filename}: {e}")
 
         except Exception as e:
             logger.exception(f'Error processing file {filename}: {e}', exc_info=True)
 
-        # Step 6: Save all LLM responses to MongoDB (if available)
+        # Step 7: Save all LLM responses to MongoDB (if available)
         llm_responses_dict = {}
         if resume_data_response is not None:
             llm_responses_dict["resume_data"] = resume_data_response
@@ -475,6 +527,30 @@ if __name__ == "__main__":
                     file_path=file_path,
                     mongo_client=mongo_client,
                 )
+                
+                # Add embedding to the document if available (update the saved document)
+                if embedding:
+                    try:
+                        db = mongo_client[DB_NAME]
+                        collection = db["Standardized_resume_data"]
+                        result = collection.update_one(
+                            {"file_id": processed_filename},
+                            {
+                                "$set": {
+                                    "text_embedding": embedding,
+                                    "embedding_generated_at": datetime.now(),
+                                    "embedding_model": "embedding-001",
+                                    "embedding_task_type": "RETRIEVAL_DOCUMENT"
+                                }
+                            }
+                        )
+                        if result.modified_count > 0:
+                            logger.info(f"Successfully added embedding to MongoDB for {processed_filename}")
+                        else:
+                            logger.warning(f"No document updated with embedding for {processed_filename}")
+                    except Exception as e:
+                        logger.error(f"Error adding embedding to MongoDB for {processed_filename}: {e}")
+                
             except Exception as e:
                 logger.error(f"Error saving to MongoDB for {processed_filename}: {e}")
                 # If saving fails, log raw LLM responses for debugging
@@ -487,7 +563,7 @@ if __name__ == "__main__":
                     with open(os.path.join(raw_log_dir, f"{processed_filename}_key_metrics_raw.txt"), "w", encoding="utf-8") as f:
                         f.write(key_metrics_response.text)
         
-        # Step 7: Cleanup - delete uploaded file and move processed file
+        # Step 8: Cleanup - delete uploaded file and move processed file
         root_gemini.delete_uploaded_file()
         os.makedirs(PROCESSED_DIR, exist_ok=True)
         dest_path = safe_move(file_path, os.path.join(PROCESSED_DIR, processed_filename))
