@@ -266,13 +266,12 @@ Return ONLY a valid JSON object with this structure:
             "candidate_id": "<resume_id>",
             "rank": <number>,
             "score": <0-100>,
-            "reasoning": "<detailed explanation>",
+            "summary": "<one sentence summary of match quality>",
             "is_valid": <true if score >= 70, false otherwise>
         },
         ...
     ],
-    "best_match": "<resume_id of best candidate>",
-    "summary": "<brief comparison of why best candidate was chosen>"
+    "best_match": "<resume_id of best candidate>"
 }
 
 Do not include any other text or formatting.
@@ -326,7 +325,7 @@ Do not include any other text or formatting.
             
             # Validate each candidate result
             for candidate in result["candidates"]:
-                required_fields = ["candidate_id", "rank", "score", "reasoning", "is_valid"]
+                required_fields = ["candidate_id", "rank", "score", "summary", "is_valid"]
                 for field in required_fields:
                     if field not in candidate:
                         raise ValueError(f"Missing required field in candidate: {field}")
@@ -458,49 +457,68 @@ Do not include any other text or formatting.
                         "rank": candidate_result["rank"]
                     })
             
-            # Store single match result with best match and all matched resumes
-            match_doc = {
-                # References
+            # Create list of matched resumes with summaries
+            matched_resumes = []
+            for resume in valid_resumes:
+                candidate_result = next(
+                    (c for c in validation_results["candidates"] 
+                     if str(c["candidate_id"]) == str(resume["_id"])),
+                    None
+                )
+                if candidate_result:
+                    matched_resumes.append({
+                        "file_id": resume.get("file_id"),
+                        "similarity_score": resume["similarity_score"],
+                        "llm_score": candidate_result["score"],
+                        "rank": candidate_result["rank"],
+                        "summary": candidate_result["summary"]
+                    })
+            
+            # Prepare base job document
+            job_doc_base = {
                 "job_posting_id": job_doc["_id"],
-                "resume_id": best_match_resume["_id"],
-                
-                # Key job details
                 "job_url_direct": job_doc.get("job_url_direct"),
-                "title": job_doc.get("title"),  # Fixed field name
-                "company": job_doc.get("company"),  # Fixed field name
-                "description": job_doc.get("description"),  # Fixed field name
-                
-                # Best match resume details
-                "file_id": best_match_resume.get("file_id"),
-                "resume_data": best_match_resume.get("resume_data"),
-                "key_metrics": best_match_resume.get("key_metrics"),
-                
-                # Matching metrics
-                "semantic_similarity": best_match_resume["similarity_score"],
-                "match_score": best_match_result["score"],
-                "match_reasoning": best_match_result["reasoning"],
-                "match_summary": validation_results["summary"],
-                
-                # All matched resumes
+                "title": job_doc.get("title"),
+                "company": job_doc.get("company"),
+                "description": job_doc.get("description"),
                 "matched_resumes": matched_resumes,
-                
-                # Status
-                "match_status": "TEST_VALIDATED" if best_match_result["is_valid"] else "TEST_REJECTED",
                 "created_at": datetime.now(),
                 "validated_at": datetime.now(),
                 "test_run": True
             }
             
-            # Store in MongoDB
-            self.matches_collection.insert_one(match_doc)
-            logger.info(f"Stored match result for job {job_doc.get('_id')} with best match resume {best_match_resume.get('_id')}")
+            # If best match is valid (score >= 70), store in matches collection
+            if best_match_result["is_valid"]:
+                match_doc = {
+                    **job_doc_base,
+                    "resume_id": best_match_resume["_id"],
+                    "file_id": best_match_resume.get("file_id"),
+                    "resume_data": best_match_resume.get("resume_data"),
+                    "key_metrics": best_match_resume.get("key_metrics"),
+                    "semantic_similarity": best_match_resume["similarity_score"],
+                    "match_score": best_match_result["score"],
+                    "match_summary": best_match_result["summary"],
+                    "match_status": "TEST_VALIDATED"
+                }
+                self.matches_collection.insert_one(match_doc)
+                logger.info(f"Stored valid match for job {job_doc.get('_id')} with best match resume {best_match_resume.get('_id')}")
+            else:
+                # If no valid match, store in unmatched collection
+                unmatched_doc = {
+                    **job_doc_base,
+                    "match_status": "TEST_REJECTED"
+                }
+                self.db["unmatched_job_postings"].insert_one(unmatched_doc)
+                logger.info(f"Stored unmatched job {job_doc.get('_id')} with {len(matched_resumes)} potential matches")
             
             # Count valid and rejected matches
             valid_matches = len([r for r in matched_resumes if r["llm_score"] >= 70])
             rejected_matches = len([r for r in matched_resumes if r["llm_score"] < 70])
             
             logger.info(f"Job {job_doc.get('_id')} results: {valid_matches} valid, {rejected_matches} rejected")
-            logger.info(f"Best match summary: {validation_results.get('summary')}")
+            # Get best match summary
+            best_match_summary = best_match_result.get("summary") if best_match_result else None
+            logger.info(f"Best match summary: {best_match_summary}")
             
             return {
                 "status": "success",
@@ -508,7 +526,7 @@ Do not include any other text or formatting.
                 "rejected_matches": rejected_matches,
                 "total_processed": len(valid_resumes),
                 "best_match": validation_results["best_match"],
-                "summary": validation_results["summary"]
+                "best_match_summary": best_match_summary
             }
             
         except Exception as e:
