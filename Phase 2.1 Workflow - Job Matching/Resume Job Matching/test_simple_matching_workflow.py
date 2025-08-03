@@ -45,7 +45,7 @@ class SimpleMatchingWorkflow:
         
         # Initialize Gemini processor for LLM validation
         self.gemini_processor = GeminiProcessor(
-            model_name="gemini-1.5-flash",
+            model_name="gemini-2.5-pro",
             temperature=0.1,
             enable_google_search=False
         )
