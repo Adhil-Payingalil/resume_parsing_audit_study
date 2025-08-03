@@ -46,7 +46,7 @@ class SimpleMatchingWorkflow:
         # Initialize Gemini processor for LLM validation
         self.gemini_processor = GeminiProcessor(
             model_name="gemini-2.5-pro",
-            temperature=0.1,
+            temperature=0.3,
             enable_google_search=False
         )
         
@@ -81,9 +81,9 @@ class SimpleMatchingWorkflow:
                 {
                     "$project": {
                         "_id": 1,
-                        "job_title": 1,
-                        "company_name": 1,
-                        "job_description_raw": 1,
+                        "title": 1,
+                        "company": 1,
+                        "description": 1,
                         "jd_embedding": 1,
                         "job_url_direct": 1,
                         "job_location": 1,
@@ -173,115 +173,121 @@ class SimpleMatchingWorkflow:
             logger.error(f"Error in MongoDB vector search: {e}")
             return []
     
-    def llm_validate_match(self, job_doc: Dict[str, Any], resume_doc: Dict[str, Any]) -> Dict[str, Any]:
+    def llm_validate_matches(self, job_doc: Dict[str, Any], resume_docs: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
-        Use LLM to validate the quality of a job-resume match.
+        Use LLM to validate and compare multiple resumes against a job posting at once.
         
         Args:
             job_doc (Dict[str, Any]): Job document
-            resume_doc (Dict[str, Any]): Resume document
+            resume_docs (List[Dict[str, Any]]): List of resume documents with similarity scores
             
         Returns:
-            Dict[str, Any]: Validation result with score and reasoning
+            Dict[str, Any]: Validation results for all resumes with rankings
         """
         try:
-            # Create validation prompt
-            prompt = self._create_validation_prompt(job_doc, resume_doc)
+            # Create validation prompt for multiple resumes
+            prompt = self._create_multiple_validation_prompt(job_doc, resume_docs)
             
             # Get LLM response
             response = self.gemini_processor.generate_content(prompt)
             
             # Parse response
-            validation_result = self._parse_validation_response(response.text)
+            validation_results = self._parse_multiple_validation_response(response.text)
             
-            # Add similarity score
-            validation_result["similarity_score"] = resume_doc.get("similarity_score", 0.0)
-            
-            logger.info(f"LLM validation completed for job {job_doc.get('_id')} and resume {resume_doc.get('_id')}")
-            return validation_result
+            logger.info(f"LLM validation completed for job {job_doc.get('_id')} with {len(resume_docs)} resumes")
+            return validation_results
             
         except Exception as e:
             logger.error(f"Error in LLM validation: {e}")
             return {
-                "llm_score": 0.0,
-                "llm_reasoning": f"Error during validation: {str(e)}",
-                "is_valid": False,
-                "similarity_score": resume_doc.get("similarity_score", 0.0)
+                "error": str(e),
+                "results": []
             }
     
-    def _create_validation_prompt(self, job_doc: Dict[str, Any], resume_doc: Dict[str, Any]) -> str:
+    def _create_multiple_validation_prompt(self, job_doc: Dict[str, Any], resume_docs: List[Dict[str, Any]]) -> str:
         """
-        Create the prompt for LLM validation.
+        Create the prompt for LLM validation of multiple resumes.
         
         Args:
             job_doc (Dict[str, Any]): Job document
-            resume_doc (Dict[str, Any]): Resume document
+            resume_docs (List[Dict[str, Any]]): List of resume documents
             
         Returns:
             str: Formatted prompt for LLM
         """
-        # Extract key information
+        # Extract key job information
         job_title = job_doc.get("title", "Unknown")
         company_name = job_doc.get("company", "Unknown")
         job_description = job_doc.get("description", "")[:1500]  # Limit length
-        
-        # Handle nested resume data structure
-        resume_data = resume_doc.get("resume_data", {}).get("resume_data", {})
-        key_metrics = resume_doc.get("key_metrics", {})
-        
-        # Extract resume details
-        skills = resume_data.get("skills", [])
-        work_experience = resume_data.get("work_experience", [])
-        education = resume_data.get("education", [])
-        
-        # Log resume data for debugging
-        logger.debug(f"Resume data for validation: {json.dumps(resume_data, indent=2)}")
-        
-        experience_level = key_metrics.get("experience_level", "Unknown")
-        primary_industry = key_metrics.get("primary_industry_sector", "Unknown")
-        
+
+        # Create the base prompt
         prompt = f"""
-You are an expert technical recruiter evaluating the match between a job posting and a resume.
+You are an expert technical recruiter evaluating multiple candidates for a job posting.
 
 JOB DETAILS:
 Title: {job_title}
 Company: {company_name}
 Description: {job_description}
 
-RESUME DETAILS:
-Experience Level: {experience_level}
-Primary Industry: {primary_industry}
+CANDIDATE RESUMES:
+"""
+
+        # Add each resume's details
+        for idx, resume in enumerate(resume_docs, 1):
+            resume_data = resume.get("resume_data", {}).get("resume_data", {})
+            key_metrics = resume.get("key_metrics", {})
+            
+            skills = resume_data.get("skills", [])
+            work_experience = resume_data.get("work_experience", [])
+            education = resume_data.get("education", [])
+            similarity_score = resume.get("similarity_score", 0.0)
+            
+            prompt += f"""
+CANDIDATE {idx}:
+ID: {resume.get("_id")}
+Experience Level: {key_metrics.get("experience_level", "Unknown")}
+Primary Industry: {key_metrics.get("primary_industry_sector", "Unknown")}
+Similarity Score: {similarity_score:.2f}
 Skills: {json.dumps(skills, indent=2)}
 Work Experience: {json.dumps(work_experience, indent=2)}
 Education: {json.dumps(education, indent=2)}
+"""
 
-TASK: Evaluate this match and provide a score from 0-100, where:
-- 90-100: Excellent match, highly qualified candidate
-- 70-89: Good match, well-qualified candidate  
-- 50-69: Fair match, some qualifications but gaps exist
-- 30-49: Poor match, significant gaps
-- 0-29: Very poor match, not suitable
+        prompt += """
+TASK: Evaluate all candidates and:
+1. Score each candidate from 0-100 based on job fit
+2. Rank candidates from best to worst match
+3. Provide specific reasoning for each candidate
 
-Return ONLY a valid JSON object with these fields:
-{{
-    "llm_score": <number between 0-100>,
-    "llm_reasoning": "<detailed explanation of the match quality>",
-    "is_valid": <true if score >= 70, false otherwise>
-}}
+Return ONLY a valid JSON object with this structure:
+{
+    "candidates": [
+        {
+            "candidate_id": "<resume_id>",
+            "rank": <number>,
+            "score": <0-100>,
+            "reasoning": "<detailed explanation>",
+            "is_valid": <true if score >= 70, false otherwise>
+        },
+        ...
+    ],
+    "best_match": "<resume_id of best candidate>",
+    "summary": "<brief comparison of why best candidate was chosen>"
+}
 
 Do not include any other text or formatting.
 """
         return prompt
     
-    def _parse_validation_response(self, response_text: str) -> Dict[str, Any]:
+    def _parse_multiple_validation_response(self, response_text: str) -> Dict[str, Any]:
         """
-        Parse the LLM validation response.
+        Parse the LLM validation response for multiple candidates.
         
         Args:
             response_text (str): Raw LLM response
             
         Returns:
-            Dict[str, Any]: Parsed validation result
+            Dict[str, Any]: Parsed validation results
         """
         try:
             # Clean the response
@@ -314,20 +320,26 @@ Do not include any other text or formatting.
                 logger.error(f"Raw response: {response_text}")
                 raise
             
-            # Validate required fields
-            required_fields = ["llm_score", "llm_reasoning", "is_valid"]
-            for field in required_fields:
-                if field not in result:
-                    raise ValueError(f"Missing required field: {field}")
+            # Validate structure
+            if "candidates" not in result or "best_match" not in result:
+                raise ValueError("Missing required fields in response")
+            
+            # Validate each candidate result
+            for candidate in result["candidates"]:
+                required_fields = ["candidate_id", "rank", "score", "reasoning", "is_valid"]
+                for field in required_fields:
+                    if field not in candidate:
+                        raise ValueError(f"Missing required field in candidate: {field}")
             
             return result
             
         except Exception as e:
             logger.error(f"Error parsing LLM response: {e}")
             return {
-                "llm_score": 0.0,
-                "llm_reasoning": f"Error parsing response: {str(e)}",
-                "is_valid": False
+                "error": str(e),
+                "candidates": [],
+                "best_match": None,
+                "summary": f"Error parsing response: {str(e)}"
             }
     
     def store_test_match(self, job_doc: Dict[str, Any], resume_doc: Dict[str, Any], match_result: Dict[str, Any]):
@@ -394,36 +406,109 @@ Do not include any other text or formatting.
                 logger.warning(f"No resumes found for job {job_doc.get('_id')}")
                 return {"status": "no_resumes_found", "matches_created": 0}
             
-            # Stage 2: LLM validation of each match
-            validated_matches = []
-            rejected_matches = []
+            # Filter resumes by similarity threshold
+            valid_resumes = [r for r in top_resumes if r.get("similarity_score", 0.0) >= 0.3]
             
-            for resume in top_resumes:
-                similarity_score = resume.get("similarity_score", 0.0)
-                logger.info(f"Resume {resume.get('_id')} similarity: {similarity_score:.3f}")
+            if not valid_resumes:
+                logger.warning("No resumes met similarity threshold")
+                return {"status": "no_valid_resumes", "matches_created": 0}
+            
+            # Stage 2: Batch LLM validation
+            validation_results = self.llm_validate_matches(job_doc, valid_resumes)
+            
+            if "error" in validation_results:
+                logger.error(f"Error in batch validation: {validation_results['error']}")
+                return {"status": "error", "error": validation_results["error"]}
+            
+            # Find the best match
+            best_match_result = next(
+                (c for c in validation_results["candidates"] 
+                 if str(c["candidate_id"]) == str(validation_results["best_match"])),
+                None
+            )
+            
+            if not best_match_result:
+                logger.error("Best match not found in validation results")
+                return {"status": "error", "error": "Best match not found"}
+            
+            # Find the best match resume
+            best_match_resume = next(
+                (r for r in valid_resumes 
+                 if str(r["_id"]) == str(validation_results["best_match"])),
+                None
+            )
+            
+            if not best_match_resume:
+                logger.error("Best match resume not found")
+                return {"status": "error", "error": "Best match resume not found"}
+            
+            # Create a list of all matched resumes with their scores
+            matched_resumes = []
+            for resume in valid_resumes:
+                candidate_result = next(
+                    (c for c in validation_results["candidates"] 
+                     if str(c["candidate_id"]) == str(resume["_id"])),
+                    None
+                )
+                if candidate_result:
+                    matched_resumes.append({
+                        "file_id": resume.get("file_id"),
+                        "similarity_score": resume["similarity_score"],
+                        "llm_score": candidate_result["score"],
+                        "rank": candidate_result["rank"]
+                    })
+            
+            # Store single match result with best match and all matched resumes
+            match_doc = {
+                # References
+                "job_posting_id": job_doc["_id"],
+                "resume_id": best_match_resume["_id"],
                 
-                # Only validate if similarity is above threshold
-                if similarity_score >= 0.3:  # Adjustable threshold
-                    match_result = self.llm_validate_match(job_doc, resume)
-                    
-                    # Store the match result
-                    self.store_test_match(job_doc, resume, match_result)
-                    
-                    if match_result.get("is_valid", False):
-                        validated_matches.append((resume, match_result))
-                        logger.info(f"[VALID] Match score: {match_result.get('llm_score')}")
-                    else:
-                        rejected_matches.append((resume, match_result))
-                        logger.info(f"[REJECTED] Match score: {match_result.get('llm_score')}")
-                else:
-                    logger.info(f"[SKIPPED] Resume {resume.get('_id')} - similarity too low ({similarity_score:.3f})")
+                # Key job details
+                "job_url_direct": job_doc.get("job_url_direct"),
+                "title": job_doc.get("title"),  # Fixed field name
+                "company": job_doc.get("company"),  # Fixed field name
+                "description": job_doc.get("description"),  # Fixed field name
+                
+                # Best match resume details
+                "file_id": best_match_resume.get("file_id"),
+                "resume_data": best_match_resume.get("resume_data"),
+                "key_metrics": best_match_resume.get("key_metrics"),
+                
+                # Matching metrics
+                "semantic_similarity": best_match_resume["similarity_score"],
+                "match_score": best_match_result["score"],
+                "match_reasoning": best_match_result["reasoning"],
+                "match_summary": validation_results["summary"],
+                
+                # All matched resumes
+                "matched_resumes": matched_resumes,
+                
+                # Status
+                "match_status": "TEST_VALIDATED" if best_match_result["is_valid"] else "TEST_REJECTED",
+                "created_at": datetime.now(),
+                "validated_at": datetime.now(),
+                "test_run": True
+            }
             
-            logger.info(f"Job {job_doc.get('_id')} results: {len(validated_matches)} valid, {len(rejected_matches)} rejected")
+            # Store in MongoDB
+            self.matches_collection.insert_one(match_doc)
+            logger.info(f"Stored match result for job {job_doc.get('_id')} with best match resume {best_match_resume.get('_id')}")
+            
+            # Count valid and rejected matches
+            valid_matches = len([r for r in matched_resumes if r["llm_score"] >= 70])
+            rejected_matches = len([r for r in matched_resumes if r["llm_score"] < 70])
+            
+            logger.info(f"Job {job_doc.get('_id')} results: {valid_matches} valid, {rejected_matches} rejected")
+            logger.info(f"Best match summary: {validation_results.get('summary')}")
+            
             return {
                 "status": "success",
-                "valid_matches": len(validated_matches),
-                "rejected_matches": len(rejected_matches),
-                "total_processed": len(top_resumes)
+                "valid_matches": valid_matches,
+                "rejected_matches": rejected_matches,
+                "total_processed": len(valid_resumes),
+                "best_match": validation_results["best_match"],
+                "summary": validation_results["summary"]
             }
             
         except Exception as e:
