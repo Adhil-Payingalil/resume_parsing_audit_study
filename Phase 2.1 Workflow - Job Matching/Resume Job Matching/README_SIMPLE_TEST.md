@@ -1,113 +1,188 @@
 # Simple Resume-Job Matching Test Workflow
 
-This directory contains a simplified test workflow for resume-job matching using MongoDB's native vector search capabilities.
+This directory contains a test workflow for resume-job matching using MongoDB's vector search capabilities and Gemini Pro for validation.
 
 ## Overview
 
-The simple test workflow consists of three main components:
+The workflow implements a two-stage matching process:
+1. **Vector Search**: Find semantically similar resumes using MongoDB vector search
+2. **LLM Validation**: Batch validate matches using Gemini Pro with comparative ranking
 
-1. **`verify_vector_indexes.py`** - Verifies that MongoDB vector search indexes are properly set up
-2. **`test_simple_matching_workflow.py`** - Core workflow implementation using MongoDB vector search
-3. **`run_simple_test.py`** - Main script to run the test workflow with formatted output
+Results are stored in two collections:
+- `resume_job_matches`: Valid matches (score ≥ 70)
+- `unmatched_job_postings`: Rejected jobs with potential matches
 
 ## Prerequisites
 
 Before running the test workflow, ensure you have:
 
-1. **MongoDB with vector search indexes**:
-   - `resume_embedding_index` on the `Standardized_resume_data` collection
-   - `job_embedding_index` on the `job_postings` collection
+1. **MongoDB Atlas Setup**:
+   - Vector search enabled cluster
+   - Vector search indexes:
+     - `resume_embedding_index` on `Standardized_resume_data`
+     - `job_embedding_index` on `job_postings`
+   - Proper connection string in `.env`
 
 2. **Python Environment**:
    - Python 3.8+
-   - Required packages installed (see `requirements.txt`)
+   - Required packages installed
    - Virtual environment activated
 
-3. **Environment Variables**:
-   - MongoDB connection string in `.env` file
+3. **API Keys**:
    - Gemini API key configured
+   - MongoDB connection string in `.env`
 
 ## Running the Tests
 
-1. **Verify Setup**:
-   ```bash
-   python verify_vector_indexes.py
-   ```
-   This will check if the vector search indexes are properly configured.
+```bash
+python test_simple_matching_workflow.py
+```
 
-2. **Run Test Workflow**:
-   ```bash
-   python run_simple_test.py
-   ```
-   This will:
-   - Process 4-5 test jobs
-   - Find top 4 resume matches per job
-   - Validate matches using LLM
-   - Store results in MongoDB
-   - Generate a detailed test report
-
-## Test Output
-
-The test workflow generates:
-
-1. **Console Output**:
-   - Real-time progress updates
-   - Summary of results
-   - Individual job results
-   - Final statistics
-
-2. **JSON Results File**:
-   - Detailed test results saved to `test_results_TIMESTAMP.json`
-   - Includes all matches, scores, and validation results
-
-3. **MongoDB Collections**:
-   - Successful matches in `resume_job_matches`
-   - Unmatched jobs in `unmatched_job_postings`
-   - All test entries marked with `test_run: true`
+This will:
+1. Load test jobs with embeddings
+2. Find top 4 similar resumes per job
+3. Perform batch LLM validation
+4. Store results based on match quality
 
 ## Understanding Results
 
-The test workflow reports:
+### 1. Vector Search Results
+For each job, the system finds the top 4 similar resumes using:
+- Cosine similarity on embeddings
+- Initial filter: similarity score ≥ 0.3
+- Normalized scores (0-1 range)
 
-1. **Vector Search Performance**:
-   - Number of jobs processed
-   - Number of resumes found per job
-   - Similarity scores for matches
+### 2. LLM Validation
+The system sends all candidates to Gemini Pro for:
+- Individual scoring (0-100)
+- Comparative ranking
+- Match quality summaries
+- Best match selection
 
-2. **LLM Validation**:
-   - Validation scores (0-100)
-   - Detailed reasoning for each match
-   - Best match selection
+### 3. Storage Model
 
-3. **Overall Statistics**:
-   - Total matches attempted
-   - Successful vs rejected matches
-   - Success rate percentage
+**Valid Matches** (score ≥ 70):
+```json
+{
+    "job_posting_id": "...",
+    "resume_id": "...",
+    "title": "Senior Business Analyst",
+    "company": "Amanst Inc",
+    "description": "...",
+    
+    "file_id": "resume_123.pdf",
+    "resume_data": {...},
+    "key_metrics": {...},
+    
+    "semantic_similarity": 0.85,
+    "match_score": 85,
+    "match_summary": "Strong experience...",
+    
+    "matched_resumes": [
+        {
+            "file_id": "resume_123.pdf",
+            "similarity_score": 0.85,
+            "llm_score": 85,
+            "rank": 1,
+            "summary": "Strong match..."
+        }
+    ],
+    
+    "match_status": "TEST_VALIDATED"
+}
+```
+
+**Unmatched Jobs** (score < 70):
+```json
+{
+    "job_posting_id": "...",
+    "title": "Senior SQL DBA",
+    "company": "Realign",
+    "description": "...",
+    
+    "matched_resumes": [
+        {
+            "file_id": "resume_456.pdf",
+            "similarity_score": 0.75,
+            "llm_score": 65,
+            "rank": 1,
+            "summary": "Lacks senior experience..."
+        }
+    ],
+    
+    "match_status": "TEST_REJECTED"
+}
+```
 
 ## Troubleshooting
 
-Common issues and solutions:
+### Vector Search Issues
+1. **Index Missing**:
+   ```bash
+   # Check indexes
+   db.Standardized_resume_data.getIndexes()
+   db.job_postings.getIndexes()
+   ```
 
-1. **Vector Search Errors**:
-   - Verify indexes exist and are properly configured
-   - Check embedding field names match exactly
-   - Ensure embeddings are present in documents
+2. **Embedding Issues**:
+   - Verify embedding field names match exactly
+   - Check embedding dimensions (should be 768)
+   - Ensure embeddings are arrays of floats
 
-2. **LLM Validation Issues**:
-   - Check Gemini API key is configured
-   - Verify prompt format in workflow
-   - Check response parsing logic
+### LLM Validation Issues
+1. **API Errors**:
+   - Check Gemini API key
+   - Verify API quota/limits
+   - Check response format
 
-3. **MongoDB Connection**:
-   - Verify connection string in `.env`
-   - Check database and collection names
-   - Ensure proper permissions
+2. **Validation Logic**:
+   - Review prompt structure
+   - Check score thresholds
+   - Verify JSON parsing
+
+### MongoDB Connection
+1. **Connection String**:
+   - Check `.env` file
+   - Verify cluster access
+   - Check network connectivity
+
+2. **Permissions**:
+   - Verify read/write access
+   - Check collection permissions
+   - Verify vector search enabled
+
+## Monitoring Results
+
+1. **Console Output**:
+   - Real-time progress
+   - Match statistics
+   - Error reporting
+
+2. **MongoDB Queries**:
+   ```javascript
+   // Check valid matches
+   db.resume_job_matches.find({"test_run": true})
+   
+   // Check unmatched jobs
+   db.unmatched_job_postings.find({"test_run": true})
+   
+   // Get statistics
+   db.resume_job_matches.countDocuments({"test_run": true})
+   ```
 
 ## Next Steps
 
-After successful testing:
+1. **Fine-tuning**:
+   - Adjust similarity threshold
+   - Tune LLM scoring criteria
+   - Optimize batch sizes
 
-1. Review test results and adjust parameters if needed
-2. Move to production workflow implementation
-3. Set up monitoring and logging
-4. Implement error handling and retries
+2. **Production Setup**:
+   - Set up monitoring
+   - Implement error handling
+   - Add cleanup procedures
+
+3. **Enhancements**:
+   - Add more validation criteria
+   - Implement caching
+   - Add statistical reporting
