@@ -25,6 +25,35 @@ from config import Config, default_config
 
 logger = get_logger(__name__)
 
+class ResumeCache:
+    """Cache for industry-filtered resumes to avoid repeated database queries."""
+    
+    def __init__(self, ttl: int = 3600):
+        self.cache = {}
+        self.timestamps = {}
+        self.ttl = ttl
+    
+    def get(self, key: str) -> Optional[List[Dict[str, Any]]]:
+        """Get cached resumes if not expired."""
+        if key in self.cache:
+            if time.time() - self.timestamps[key] < self.ttl:
+                return self.cache[key]
+            else:
+                # Expired, remove from cache
+                del self.cache[key]
+                del self.timestamps[key]
+        return None
+    
+    def set(self, key: str, resumes: List[Dict[str, Any]]) -> None:
+        """Cache resumes with timestamp."""
+        self.cache[key] = resumes
+        self.timestamps[key] = time.time()
+    
+    def clear(self) -> None:
+        """Clear all cached data."""
+        self.cache.clear()
+        self.timestamps.clear()
+
 class ResumeJobMatchingWorkflow:
     """
     Workflow for resume-job matching using MongoDB vector search.
@@ -63,6 +92,17 @@ class ResumeJobMatchingWorkflow:
             enable_google_search=False
         )
         
+        # Initialize resume cache for performance
+        self.resume_cache = ResumeCache(ttl=self.config.cache_ttl)
+        
+        # Initialize performance tracking
+        self.performance_metrics = {
+            "vector_search_times": [],
+            "llm_validation_times": [],
+            "cache_hits": 0,
+            "cache_misses": 0
+        }
+        
         # Initialize counters and state
         self.stats = {
             "jobs_processed": 0,
@@ -91,15 +131,21 @@ class ResumeJobMatchingWorkflow:
             # Build query based on configuration
             query = self.config.get_job_query()
             
-            # Add filter for jobs that haven't been processed yet
-            query["_id"] = {
-                "$nin": self.matches_collection.distinct("job_posting_id")
-            }
-            
-            # Add filter for jobs that aren't in unmatched collection
-            query["_id"]["$nin"].extend(
-                self.unmatched_collection.distinct("job_posting_id")
-            )
+            # Handle duplicate processing based on configuration
+            if self.config.force_reprocess:
+                logger.info("Force reprocessing enabled - will process all jobs including previously processed ones")
+            elif self.config.skip_processed_jobs:
+                # Add filter for jobs that haven't been processed yet
+                processed_job_ids = self.matches_collection.distinct("job_posting_id")
+                unmatched_job_ids = self.unmatched_collection.distinct("job_posting_id")
+                
+                if processed_job_ids or unmatched_job_ids:
+                    query["_id"] = {"$nin": processed_job_ids + unmatched_job_ids}
+                    logger.info(f"Skipping {len(processed_job_ids)} already matched jobs and {len(unmatched_job_ids)} already unmatched jobs")
+                else:
+                    logger.info("No previously processed jobs found - processing all available jobs")
+            else:
+                logger.info("Duplicate processing enabled - will process all jobs including previously processed ones")
             
             # Add filter for jobs that have embeddings (required for vector search)
             query["jd_embedding"] = {"$exists": True, "$ne": None}
@@ -155,6 +201,7 @@ class ResumeJobMatchingWorkflow:
         """
         Get resumes that match industry criteria BEFORE vector search.
         This is the first stage of two-stage filtering for performance optimization.
+        Uses caching to avoid repeated database queries.
         
         Args:
             job_doc: Job document
@@ -163,11 +210,26 @@ class ResumeJobMatchingWorkflow:
             List of resume documents matching industry criteria
         """
         try:
+            # Create cache key based on industry prefixes
+            cache_key = "_".join(sorted(self.config.industry_prefixes)) if self.config.industry_prefixes else "all_industries"
+            
+            # Check cache first
+            cached_resumes = self.resume_cache.get(cache_key)
+            if cached_resumes is not None:
+                self.performance_metrics["cache_hits"] += 1
+                logger.info(f"Cache hit: Using {len(cached_resumes)} cached resumes for industries: {self.config.industry_prefixes}")
+                return cached_resumes
+            
+            self.performance_metrics["cache_misses"] += 1
+            
             # Stage 1: Fast industry prefix filtering using the new index
             if self.config.industry_prefixes:
                 industry_query = {"industry_prefix": {"$in": self.config.industry_prefixes}}
                 industry_resumes = list(self.resume_collection.find(industry_query))
                 logger.info(f"Industry filter: {len(industry_resumes)} resumes match industry criteria for job {job_doc.get('_id')}")
+                
+                # Cache the results
+                self.resume_cache.set(cache_key, industry_resumes)
                 
                 # Early exit if no industry matches
                 if len(industry_resumes) == 0:
@@ -184,6 +246,9 @@ class ResumeJobMatchingWorkflow:
                 # No industry filter - get all resumes
                 all_resumes = list(self.resume_collection.find({}))
                 logger.info(f"No industry filter: {len(all_resumes)} resumes available for job {job_doc.get('_id')}")
+                
+                # Cache the results
+                self.resume_cache.set(cache_key, all_resumes)
                 return all_resumes
                 
         except Exception as e:
@@ -202,6 +267,9 @@ class ResumeJobMatchingWorkflow:
             List of resume documents with similarity scores
         """
         try:
+            # Track performance
+            start_time = time.time()
+            
             # Stage 1: Get pre-filtered resumes by industry
             candidate_resumes = self.get_filtered_resumes_for_job(job_doc)
             
@@ -275,7 +343,11 @@ class ResumeJobMatchingWorkflow:
             threshold = self.config.similarity_threshold
             valid_resumes = [r for r in industry_filtered_results if r["similarity_score"] >= threshold]
             
-            logger.info(f"Found {len(valid_resumes)} resumes above threshold {threshold} for job {job_doc.get('_id')}")
+            # Track performance metrics
+            search_time = time.time() - start_time
+            self.performance_metrics["vector_search_times"].append(search_time)
+            
+            logger.info(f"Found {len(valid_resumes)} resumes above threshold {threshold} for job {job_doc.get('_id')} in {search_time:.2f}s")
             return valid_resumes
             
         except Exception as e:
@@ -294,10 +366,13 @@ class ResumeJobMatchingWorkflow:
             Validation results for all resumes with rankings
         """
         try:
-            # Limit number of resumes for validation
-            max_resumes = 5  # Fixed value for simplicity
+            # Track performance
+            start_time = time.time()
+            
+            # Limit number of resumes for validation (optimized for performance)
+            max_resumes = min(3, len(resume_docs))  # Reduced from 5 to 3 for better performance
             if len(resume_docs) > max_resumes:
-                logger.info(f"Limiting validation to top {max_resumes} resumes")
+                logger.info(f"Limiting validation to top {max_resumes} resumes for performance")
                 resume_docs = resume_docs[:max_resumes]
             
             # Create validation prompt
@@ -309,7 +384,11 @@ class ResumeJobMatchingWorkflow:
             # Parse response
             validation_results = self._parse_multiple_validation_response(response.text)
             
-            logger.info(f"LLM validation completed for job {job_doc.get('_id')} with {len(resume_docs)} resumes")
+            # Track performance metrics
+            validation_time = time.time() - start_time
+            self.performance_metrics["llm_validation_times"].append(validation_time)
+            
+            logger.info(f"LLM validation completed for job {job_doc.get('_id')} with {len(resume_docs)} resumes in {validation_time:.2f}s")
             return validation_results
             
         except Exception as e:
@@ -634,7 +713,7 @@ Do not include any other text or formatting.
     
     def run_workflow(self, max_jobs: Optional[int] = None) -> Dict[str, Any]:
         """
-        Run the complete matching workflow.
+        Run the complete matching workflow with optimized batch processing.
         
         Args:
             max_jobs: Maximum number of jobs to process. Uses config default if None.
@@ -644,7 +723,7 @@ Do not include any other text or formatting.
         """
         try:
             self.stats["start_time"] = datetime.now()
-            logger.info("Starting resume-job matching workflow")
+            logger.info("Starting resume-job matching workflow with optimizations")
             
             # Get jobs to process
             if max_jobs is None:
@@ -656,10 +735,10 @@ Do not include any other text or formatting.
                 logger.info("No jobs found to process")
                 return {"status": "no_jobs", "message": "No jobs found matching criteria"}
             
-            logger.info(f"Processing {len(jobs)} jobs")
+            logger.info(f"Processing {len(jobs)} jobs with batch size {self.config.batch_size}")
             
-            # Process jobs sequentially for simplicity
-            results = self._process_jobs_sequential(jobs)
+            # Process jobs in optimized batches
+            results = self._process_jobs_optimized(jobs)
             
             # Update final statistics
             self.stats["end_time"] = datetime.now()
@@ -675,8 +754,277 @@ Do not include any other text or formatting.
             logger.error(f"Error in workflow: {e}")
             return {"status": "error", "error": str(e)}
     
+    def _process_jobs_optimized(self, jobs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Process jobs in optimized batches with parallel processing and checkpointing."""
+        results = []
+        processed_job_ids = []
+        
+        # Process jobs in batches
+        for i in range(0, len(jobs), self.config.batch_size):
+            batch = jobs[i:i + self.config.batch_size]
+            batch_num = (i // self.config.batch_size) + 1
+            total_batches = (len(jobs) + self.config.batch_size - 1) // self.config.batch_size
+            
+            logger.info(f"Processing batch {batch_num}/{total_batches} ({len(batch)} jobs)")
+            
+            # Process batch with parallel processing
+            batch_results = self._process_job_batch(batch)
+            results.extend(batch_results)
+            
+            # Update progress
+            processed_job_ids.extend([str(job.get("_id")) for job in batch])
+            logger.info(f"Completed batch {batch_num}/{total_batches}. Total processed: {len(results)}/{len(jobs)}")
+            
+            # Save checkpoint periodically
+            if len(results) % self.config.checkpoint_interval == 0:
+                self._save_checkpoint(processed_job_ids)
+                logger.info(f"Checkpoint saved at {len(results)} jobs")
+            
+            # Memory management - clear cache if needed
+            if len(results) % (self.config.checkpoint_interval * 2) == 0:
+                self._manage_memory()
+        
+        return results
+    
+    def _process_job_batch(self, batch: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Process a batch of jobs with parallel processing."""
+        try:
+            with ThreadPoolExecutor(max_workers=self.config.max_workers) as executor:
+                # Submit all jobs in the batch
+                future_to_job = {executor.submit(self.process_job, job): job for job in batch}
+                
+                # Collect results as they complete
+                batch_results = []
+                for future in as_completed(future_to_job):
+                    job = future_to_job[future]
+                    try:
+                        result = future.result()
+                        batch_results.append(result)
+                    except Exception as e:
+                        logger.error(f"Error processing job {job.get('_id')}: {e}")
+                        batch_results.append({
+                            "status": "error",
+                            "job_id": str(job.get("_id")),
+                            "error": str(e)
+                        })
+                
+                return batch_results
+                
+        except Exception as e:
+            logger.error(f"Error in batch processing: {e}")
+            # Fallback to sequential processing
+            return [self.process_job(job) for job in batch]
+    
+    def _save_checkpoint(self, processed_job_ids: List[str]) -> None:
+        """Save checkpoint for resumability."""
+        try:
+            checkpoint = {
+                "processed_jobs": processed_job_ids,
+                "timestamp": datetime.now(),
+                "workflow_status": "in_progress",
+                "performance_metrics": self.performance_metrics
+            }
+            
+            # Remove old checkpoints
+            self.db.checkpoints.delete_many({})
+            
+            # Save new checkpoint
+            self.db.checkpoints.insert_one(checkpoint)
+            logger.info(f"Checkpoint saved with {len(processed_job_ids)} processed jobs")
+            
+        except Exception as e:
+            logger.warning(f"Failed to save checkpoint: {e}")
+    
+    def _manage_memory(self) -> None:
+        """Manage memory usage for large-scale processing."""
+        try:
+            # Clear resume cache if memory usage is high
+            import psutil
+            memory_usage = psutil.Process().memory_info().rss / 1024 / 1024  # MB
+            
+            if memory_usage > self.config.memory_limit_mb:
+                logger.info(f"Memory usage {memory_usage:.1f}MB exceeds limit {self.config.memory_limit_mb}MB, clearing cache")
+                self.resume_cache.clear()
+                
+        except ImportError:
+            # psutil not available, skip memory management
+            pass
+        except Exception as e:
+            logger.warning(f"Memory management failed: {e}")
+    
+    def resume_from_checkpoint(self) -> Optional[List[str]]:
+        """Resume workflow from the last checkpoint."""
+        try:
+            checkpoint = self.db.checkpoints.find_one({}, sort=[("timestamp", -1)])
+            if checkpoint:
+                processed_jobs = checkpoint.get("processed_jobs", [])
+                logger.info(f"Found checkpoint with {len(processed_jobs)} processed jobs")
+                return processed_jobs
+            else:
+                logger.info("No checkpoint found - starting fresh")
+                return None
+                
+        except Exception as e:
+            logger.warning(f"Failed to load checkpoint: {e}")
+            return None
+    
+    def get_performance_recommendations(self) -> Dict[str, Any]:
+        """Get performance optimization recommendations based on current metrics."""
+        recommendations = []
+        
+        # Cache performance recommendations
+        cache_hit_rate = self.performance_metrics.get("cache_hit_rate", 0)
+        if cache_hit_rate < 50:
+            recommendations.append({
+                "type": "cache_optimization",
+                "priority": "high",
+                "message": f"Cache hit rate is {cache_hit_rate:.1f}%. Consider increasing cache TTL or optimizing industry filtering."
+            })
+        
+        # Vector search performance
+        avg_vector_time = 0
+        if self.performance_metrics["vector_search_times"]:
+            avg_vector_time = sum(self.performance_metrics["vector_search_times"]) / len(self.performance_metrics["vector_search_times"])
+        
+        if avg_vector_time > 2.0:  # More than 2 seconds
+            recommendations.append({
+                "type": "vector_search_optimization",
+                "priority": "medium",
+                "message": f"Average vector search time is {avg_vector_time:.2f}s. Consider reducing top_k or similarity threshold."
+            })
+        
+        # LLM validation performance
+        avg_llm_time = 0
+        if self.performance_metrics["llm_validation_times"]:
+            avg_llm_time = sum(self.performance_metrics["llm_validation_times"]) / len(self.performance_metrics["llm_validation_times"])
+        
+        if avg_llm_time > 10.0:  # More than 10 seconds
+            recommendations.append({
+                "type": "llm_optimization",
+                "priority": "medium",
+                "message": f"Average LLM validation time is {avg_llm_time:.2f}s. Consider reducing max_resumes for validation."
+            })
+        
+        # Memory usage recommendations
+        if self.config.memory_limit_mb < 4096:
+            recommendations.append({
+                "type": "memory_optimization",
+                "priority": "low",
+                "message": f"Memory limit is {self.config.memory_limit_mb}MB. Consider increasing for better cache performance."
+            })
+        
+        return {
+            "recommendations": recommendations,
+            "total_recommendations": len(recommendations),
+            "performance_summary": {
+                "cache_hit_rate": cache_hit_rate,
+                "avg_vector_search_time": avg_vector_time,
+                "avg_llm_validation_time": avg_llm_time
+            }
+        }
+    
+    def is_job_processed(self, job_id: str) -> Dict[str, Any]:
+        """
+        Check if a specific job has already been processed.
+        
+        Args:
+            job_id: Job ID to check
+            
+        Returns:
+            Dictionary with processing status and details
+        """
+        try:
+            # Check if job exists in matches collection
+            match_doc = self.matches_collection.find_one({"job_posting_id": job_id})
+            if match_doc:
+                return {
+                    "processed": True,
+                    "status": "matched",
+                    "collection": "matches",
+                    "match_id": str(match_doc["_id"]),
+                    "timestamp": match_doc.get("timestamp"),
+                    "details": {
+                        "resume_count": len(match_doc.get("resumes", [])),
+                        "best_match_score": match_doc.get("best_match_score"),
+                        "validation_score": match_doc.get("validation_score")
+                    }
+                }
+            
+            # Check if job exists in unmatched collection
+            unmatched_doc = self.unmatched_collection.find_one({"job_posting_id": job_id})
+            if unmatched_doc:
+                return {
+                    "processed": True,
+                    "status": "unmatched",
+                    "collection": "unmatched",
+                    "unmatched_id": str(unmatched_doc["_id"]),
+                    "timestamp": unmatched_doc.get("timestamp"),
+                    "reason": unmatched_doc.get("reason", "No specific reason recorded")
+                }
+            
+            # Job not processed yet
+            return {
+                "processed": False,
+                "status": "not_processed",
+                "message": "Job has not been processed yet"
+            }
+            
+        except Exception as e:
+            logger.error(f"Error checking job processing status: {e}")
+            return {
+                "processed": False,
+                "status": "error",
+                "error": str(e)
+            }
+    
+    def get_processing_statistics(self) -> Dict[str, Any]:
+        """
+        Get comprehensive statistics about job processing status.
+        
+        Returns:
+            Dictionary with processing statistics
+        """
+        try:
+            # Count total jobs
+            total_jobs = self.job_collection.count_documents({})
+            jobs_with_embeddings = self.job_collection.count_documents({"jd_embedding": {"$exists": True, "$ne": None}})
+            
+            # Count processed jobs
+            processed_jobs = self.matches_collection.count_documents({})
+            unmatched_jobs = self.unmatched_collection.count_documents({})
+            total_processed = processed_jobs + unmatched_jobs
+            
+            # Count remaining jobs
+            remaining_jobs = jobs_with_embeddings - total_processed
+            
+            # Calculate percentages
+            processing_progress = (total_processed / jobs_with_embeddings * 100) if jobs_with_embeddings > 0 else 0
+            
+            return {
+                "total_jobs": total_jobs,
+                "jobs_with_embeddings": jobs_with_embeddings,
+                "processed_jobs": {
+                    "matched": processed_jobs,
+                    "unmatched": unmatched_jobs,
+                    "total": total_processed
+                },
+                "remaining_jobs": remaining_jobs,
+                "processing_progress": {
+                    "percentage": processing_progress,
+                    "fraction": f"{total_processed}/{jobs_with_embeddings}"
+                },
+                "duplicate_processing": {
+                    "skip_processed_jobs": self.config.skip_processed_jobs,
+                    "force_reprocess": self.config.force_reprocess
+                }
+            }
+            
+        except Exception as e:
+            logger.error(f"Error getting processing statistics: {e}")
+            return {"error": str(e)}
+    
     def _process_jobs_sequential(self, jobs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Process jobs sequentially with rate limiting."""
+        """Process jobs sequentially with rate limiting (fallback method)."""
         results = []
         
         for job in jobs:
@@ -737,7 +1085,7 @@ Do not include any other text or formatting.
         }
     
     def get_workflow_statistics(self) -> Dict[str, Any]:
-        """Get comprehensive workflow statistics."""
+        """Get comprehensive workflow statistics including performance metrics."""
         try:
             # Database statistics
             total_matches = self.matches_collection.count_documents({"workflow_run": True})
@@ -747,6 +1095,14 @@ Do not include any other text or formatting.
             # Collection counts
             total_jobs = self.job_collection.count_documents({})
             total_resumes = self.resume_collection.count_documents({})
+            
+            # Performance metrics
+            avg_vector_search_time = 0
+            avg_llm_time = 0
+            if self.performance_metrics["vector_search_times"]:
+                avg_vector_search_time = sum(self.performance_metrics["vector_search_times"]) / len(self.performance_metrics["vector_search_times"])
+            if self.performance_metrics["llm_validation_times"]:
+                avg_llm_time = sum(self.performance_metrics["llm_validation_times"]) / len(self.performance_metrics["llm_validation_times"])
             
             return {
                 "workflow_stats": {
@@ -761,6 +1117,16 @@ Do not include any other text or formatting.
                     "jobs_with_embeddings": self.job_collection.count_documents({"jd_embedding": {"$exists": True}}),
                     "resumes_with_embeddings": self.resume_collection.count_documents({"text_embedding": {"$exists": True}})
                 },
+                "performance_metrics": {
+                    "cache_hits": self.performance_metrics["cache_hits"],
+                    "cache_misses": self.performance_metrics["cache_misses"],
+                    "cache_hit_rate": (self.performance_metrics["cache_hits"] / (self.performance_metrics["cache_hits"] + self.performance_metrics["cache_misses"])) * 100 if (self.performance_metrics["cache_hits"] + self.performance_metrics["cache_misses"]) > 0 else 0,
+                    "avg_vector_search_time": avg_vector_search_time,
+                    "avg_llm_validation_time": avg_llm_time,
+                    "total_vector_searches": len(self.performance_metrics["vector_search_times"]),
+                    "total_llm_validations": len(self.performance_metrics["llm_validation_times"])
+                },
+                "processing_status": self.get_processing_statistics(),
                 "current_run": self.stats,
                 "configuration": self.config.get_summary()
             }
@@ -772,8 +1138,13 @@ Do not include any other text or formatting.
     def cleanup(self) -> None:
         """Clean up resources."""
         try:
+            # Clear cache
+            self.resume_cache.clear()
+            
+            # Close MongoDB connection
             if self.mongo_client:
                 self.mongo_client.close()
+                
             logger.info("Workflow cleanup completed")
         except Exception as e:
             logger.error(f"Error during cleanup: {e}")

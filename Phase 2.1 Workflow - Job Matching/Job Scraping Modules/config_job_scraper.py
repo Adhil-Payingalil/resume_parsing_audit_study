@@ -6,14 +6,35 @@ CONFIG = {
     "SITE_NAME": ["indeed"],
 
     # List of job titles or keywords to search for
-    "SEARCH_TERMS": ["Software Developer"],
+    "SEARCH_TERMS": ["Software Engineer",
+            "Full Stack Developer",
+            "Java Developer",
+            "Backend Developer",
+            "QA Engineer / Tester",
+            "IT Project Manager",
+            "Cybersecurity Specialist",
+            "Network Engineer",
+            "Systems Administrator",
+            "Cloud Engineer / Consultant",
+            "IT Support Specialist",
+            "Database Administrator / ETL Developer",
+            "Data Analyst",
+            "Data Scientist",
+            "Business Analyst",
+            "Business Intelligence Analyst"],
 
     # List of locations to search in (e.g., city, state/province, country)
-    "LOCATIONS": ["Toronto, ON"],
+    "LOCATIONS": ["Toronto, ON", "Vancouver, BC", "Montreal, QC", "Calgary, AB", "Edmonton, AB", 
+                 "Ottawa, ON", "Mississauga, ON", "Brampton, ON", "Hamilton, ON", "Markham, ON",
+                 "Waterloo, ON", "Kitchener, ON", "London, ON", "Burlington, ON", "Oakville, ON",
+                 "Richmond Hill, ON", "Vaughan, ON", "Victoria, BC", "Burnaby, BC", "Richmond, BC",
+                 "Surrey, BC", "Laval, QC", "Quebec City, QC", "Gatineau, QC", "Longueuil, QC",
+                 "Winnipeg, MB", "Halifax, NS", "St. John's, NL", "Regina, SK", "Saskatoon, SK",
+                 "Fredericton, NB", "Saint John, NB", "Charlottetown, PE"],
 
     # Number of job results to retrieve per search term per platform
     # Max ~1000, recommended 50-100 for LinkedIn
-    "RESULTS_WANTED":2,
+    "RESULTS_WANTED":50,
 
     # Filter by job type. Options: 'fulltime', 'parttime', 'internship', 'contract', or None for no filter
     "JOB_TYPE": None,
