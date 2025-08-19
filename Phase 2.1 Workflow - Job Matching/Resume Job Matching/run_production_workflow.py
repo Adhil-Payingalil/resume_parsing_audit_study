@@ -65,7 +65,21 @@ def main():
                 print(f"• Jobs processed: {results['jobs_processed']}")
                 print(f"• Valid matches: {results['total_valid_matches']}")
                 print(f"• Rejected matches: {results['total_rejected_matches']}")
+                print(f"• No resumes found: {results.get('total_no_resumes_found', 0)}")
+                print(f"• Errors: {results.get('total_errors', 0)}")
                 print(f"• Success rate: {results['success_rate']:.1f}%")
+                
+                # Show the complete breakdown
+                total_accounted = (results['total_valid_matches'] + 
+                                 results['total_rejected_matches'] + 
+                                 results.get('total_no_resumes_found', 0) + 
+                                 results.get('total_errors', 0))
+                
+                if total_accounted != results['jobs_processed']:
+                    print(f"• Total accounted: {total_accounted}")
+                    print(f"• Missing: {results['jobs_processed'] - total_accounted}")
+                else:
+                    print(f"• Total accounted: {total_accounted} ✅")
                 
                 # Save results
                 output_file = f"workflow_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"

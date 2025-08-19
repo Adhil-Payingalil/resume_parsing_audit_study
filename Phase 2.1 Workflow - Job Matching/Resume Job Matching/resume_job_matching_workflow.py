@@ -1059,6 +1059,7 @@ Do not include any other text or formatting.
         total_valid_matches = 0
         total_rejected_matches = 0
         total_errors = 0
+        total_no_resumes = 0
         
         for result in results:
             if result.get("status") == "success":
@@ -1066,11 +1067,17 @@ Do not include any other text or formatting.
                 total_rejected_matches += result.get("rejected_matches", 0)
             elif result.get("status") == "error":
                 total_errors += 1
+            elif result.get("status") == "no_resumes_found":
+                total_no_resumes += 1
         
         # Update stats
         self.stats["valid_matches"] = total_valid_matches
         self.stats["rejected_matches"] = total_rejected_matches
         self.stats["errors"] = total_errors
+        self.stats["no_resumes_found"] = total_no_resumes
+        
+        # Calculate total jobs that had some form of result
+        total_jobs_with_results = total_valid_matches + total_rejected_matches + total_errors + total_no_resumes
         
         return {
             "status": "completed",
@@ -1078,10 +1085,21 @@ Do not include any other text or formatting.
             "total_valid_matches": total_valid_matches,
             "total_rejected_matches": total_rejected_matches,
             "total_errors": total_errors,
+            "total_no_resumes_found": total_no_resumes,
+            "total_jobs_with_results": total_jobs_with_results,
             "success_rate": (total_valid_matches / len(results)) * 100 if results else 0,
+            "match_rate": (total_valid_matches / total_jobs_with_results * 100) if total_jobs_with_results > 0 else 0,
             "job_results": results,
             "statistics": self.stats,
-            "configuration": self.config.get_summary()
+            "configuration": self.config.get_summary(),
+            "summary_breakdown": {
+                "valid_matches": total_valid_matches,
+                "rejected_matches": total_rejected_matches,
+                "no_resumes_found": total_no_resumes,
+                "errors": total_errors,
+                "total_accounted": total_jobs_with_results,
+                "missing": len(results) - total_jobs_with_results
+            }
         }
     
     def get_workflow_statistics(self) -> Dict[str, Any]:
