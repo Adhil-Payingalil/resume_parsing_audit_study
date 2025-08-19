@@ -1,16 +1,36 @@
-dotenv==0.9.9
-google-cloud-storage==3.1.0
-google-genai==1.16.1
-google-generativeai==0.8.5
-grpcio-status==1.71.0
-ipykernel==6.29.5
+# Core Dependencies
+python-dotenv>=1.0.0
+requests>=2.31.0
+numpy>=1.24.0
+
+# Data Processing
 pandas==2.2.3
-pip==25.1.1
-pymongo==4.13.0
-docx2pdf==0.1.8
-sentence-transformers==5.0.0
 openpyxl==3.1.5
 scikit-learn==1.7.0
 scipy==1.16.0
+
+# Machine Learning & AI
 torch==2.7.1
+sentence-transformers==5.0.0
+
+# MongoDB and Database
+pymongo[srv]>=4.13.0
+
+# Google AI Services
+google-genai==1.16.1
+google-generativeai>=0.8.5
+google-cloud-storage==3.1.0
+grpcio-status==1.71.0
+
+# Development Tools
+ipykernel==6.29.5
+pip==25.1.1
+
+# Document Processing
+docx2pdf==0.1.8
+
+# Job Scraping
 python-jobspy==0.0.1
+
+# Performance and Monitoring
+psutil>=5.9.0
