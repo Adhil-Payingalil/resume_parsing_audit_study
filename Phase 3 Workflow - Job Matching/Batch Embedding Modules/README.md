@@ -1,6 +1,6 @@
 # Batch Embedding Modules
 
-Simple scripts to generate vector embeddings for resumes and job postings stored in MongoDB.
+Scripts to generate vector embeddings for resumes and job postings stored in MongoDB.
 
 ## What These Modules Do
 
