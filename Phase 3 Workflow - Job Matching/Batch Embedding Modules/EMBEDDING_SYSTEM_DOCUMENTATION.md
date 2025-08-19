@@ -134,14 +134,14 @@ python setup_embedding_cache.py
 ### 2. Process Existing Resumes
 
 ```bash
-cd "Phase 2.1 Workflow - Job Matching"
+cd "Phase 3 Workflow - Job Matching"
 python batch_resume_embedding.py
 ```
 
 ### 3. Process Existing Jobs
 
 ```bash
-cd "Phase 2.1 Workflow - Job Matching"
+cd "Phase 3 Workflow - Job Matching"
 python batch_job_embedding.py
 ```
 

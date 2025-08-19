@@ -1,4 +1,4 @@
-# Phase 2.1: Job Scraping and MongoDB Integration
+# Phase 3: Job Scraping and MongoDB Integration
 
 This module handles job data scraping from multiple platforms and stores the data in MongoDB for the resume audit study.
 
@@ -83,7 +83,7 @@ print(f"Saved {saved_count} jobs to MongoDB")
 Run the test script to verify everything works:
 
 ```bash
-cd "Phase 2.1 Workflow - Job Matching"
+cd "Phase 3 Workflow - Job Matching"
 python test_job_scraping.py
 ```
 
