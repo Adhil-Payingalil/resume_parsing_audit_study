@@ -14,7 +14,12 @@ Based on the provided Base Resume JSON and Treatment Instructions, perform the f
 2.  **Integrate Treatment, and Company names:** Add the new information from the Treatment Instructions into the resume. Also replace the company names with the given list
   * Treatments: Add the new information from the Treatment Instructions into the resume.
     * If adding education, place it at the top of the `education` array. Not under the `certifications` array.
-    * If adding experience, place it at the top of the `work_experience` array.
+    * If adding experience, place it at the top of the `work_experience` array as an *Internship*.
+    
+    **Notes about dates**
+    * For work experience, first find the last active job of the person and its end date. Keep one month buffer, and start the treatment experience from there. For example, if last entry `work experience.endDate` was 01-2025, the treated experience would start from 03-2025, and would last 4 weeks, meaning it would end in 04-2025.
+    * For education end date, just provide a year, i.e. 2025 or 2024 based on the candidate's last work experience.
+
 
 3.  **Refine for Anonymity:** To prevent the resume from being an exact duplicate of the control, you will subtly rephrase some descriptive text. Follow these rules precisely:
     * **DO:** Rephrase the `summary` in the `basics` section and the `highlights` (bullet points) within the `work_experience` section.

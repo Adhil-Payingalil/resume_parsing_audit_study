@@ -20,6 +20,8 @@ The output should be a JSON object with the following structure:
 
 Ensure that all companies in the list are distinct from each other.
 
+Lastly, if the original company is a placeholder i.e. XYZ holdings limited, Return "Place holder company found" as a string.
+
 ## Example
 
 - If the original company is "Deloitte", similar companies could be "PwC", "EY", and "KPMG".

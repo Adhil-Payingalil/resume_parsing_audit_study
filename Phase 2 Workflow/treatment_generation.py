@@ -15,14 +15,13 @@
 #    - Treatment II (rephrased + CWE)
 #    - Treatment III (rephrased + CEC + CWE)
 # 4. For each generation, validate the rephrasing with a focused cosine similarity score.
+# 5. For each generation, generate a list of similar companies to the original resume's work experience.
 # 5. Save the 4 generated documents as separate entries in the 'Treated_resumes' collection as seperate documents with the same metadata.
 
 # TODO:
-# [ ] Add another agent that can create 4 company name lists for each resume to reduce the risk of experiment detection or flags by ATS systems. This can introduce confounding variables, caution
-
-
 # [ ] Do some QA on Focused similarity score to see whether it is helpful or not. 
         # [ ] Remove Debugging things after QA
+# [*] Add another agent that can create 4 company name lists for each resume to reduce the risk of experiment detection or flags by ATS systems. This can introduce confounding variables, caution
 # [*] Functionality to do a single file 
 # [*] Implement retry logic for low similarity scores.
 # [*] Add logging, and error handling.
@@ -38,6 +37,11 @@ import sys
 import os
 sys.path.append('..')
 sys.path.append('../libs')
+
+
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from libs.mongodb import get_all_file_ids,_get_mongo_client ,get_document_by_fileid, _clean_raw_llm_response
 from libs.gemini_processor import GeminiProcessor
@@ -71,9 +75,12 @@ SOURCE_COLLECTION_NAME = "Standardized_resume_data"
 TARGET_COLLECTION_NAME = "Treated_resumes"
 
 # Gemini model configuration
-GEMINI_MODEL_NAME = "gemini-2.5-flash"
+REFINER_GEMINI_MODEL_NAME = "gemini-2.5-flash"
+RESEARCH_GEMINI_MODEL_NAME = "gemini-2.5-pro"
+TREATMENT_GEMINI_MODEL_NAME = "gemini-2.5-pro"
 GEMINI_TEMPERATURE = 0.6
-ENABLE_GOOGLE_SEARCH = False
+
+
 BASE_PROMPT_TEMPLATE_PATH = os.path.join(SCRIPT_DIR, "Prompts", "prompt_treatment_generation.md")
 COMPANY_RESEARCH_PROMPT_TEMPLATE_PATH = os.path.join(SCRIPT_DIR, "Prompts", "prompt_similar_company_generation.md")
 CONTROL_REFINER_PROMPT_TEMPLATE_PATH = os.path.join(SCRIPT_DIR, "Prompts", "prompt_control_refiner.md")
@@ -88,21 +95,21 @@ STYLE_MODIFIERS = [
 
 # 2. Initialize the GeminiProcessor
 control_refiner_model = GeminiProcessor(
-    model_name=GEMINI_MODEL_NAME,
+    model_name=REFINER_GEMINI_MODEL_NAME,
     temperature=GEMINI_TEMPERATURE,
-    enable_google_search=ENABLE_GOOGLE_SEARCH
+    enable_google_search=False
 )
 control_refiner_prompt = control_refiner_model.load_prompt_template(prompt_file_path=CONTROL_REFINER_PROMPT_TEMPLATE_PATH)
 
 treatment_model = GeminiProcessor(
-    model_name=GEMINI_MODEL_NAME,
+    model_name=TREATMENT_GEMINI_MODEL_NAME,
     temperature=GEMINI_TEMPERATURE,
-    enable_google_search=ENABLE_GOOGLE_SEARCH
+    enable_google_search=False
 )
 treatment_prompt = treatment_model.load_prompt_template(prompt_file_path=BASE_PROMPT_TEMPLATE_PATH)
 
 company_research_model = GeminiProcessor(
-    model_name=GEMINI_MODEL_NAME,
+    model_name=RESEARCH_GEMINI_MODEL_NAME,
     temperature=GEMINI_TEMPERATURE,
     enable_google_search=True
 )
@@ -110,8 +117,8 @@ company_research_prompt = company_research_model.load_prompt_template(prompt_fil
 
 # Treatment file paths
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-TREATMENT_CEC_FILE = os.path.join(SCRIPT_DIR, "Education_treatment_dummy.xlsx")
-TREATMENT_CWE_FILE = os.path.join(SCRIPT_DIR, "WE_treatment_dummy.xlsx")
+TREATMENT_CEC_FILE = os.path.join(SCRIPT_DIR, "Education_treatment_final.xlsx")
+TREATMENT_CWE_FILE = os.path.join(SCRIPT_DIR, "Work_experience_final.xlsx")
 # Load treatment data from Excel files in pandas DataFrames
 cec_treatment_df = pd.read_excel(TREATMENT_CEC_FILE)
 cec_treatment_df = cec_treatment_df[cec_treatment_df['sector'] == SECTOR].reset_index(drop=True)
@@ -511,6 +518,16 @@ for file in sector_files[0:5]:
         company_mappings = company_research_with_ui(
             source_resume_data=source_resume_data
         )
+        if not company_mappings or not isinstance(company_mappings, list):
+            # Check for placeholder company names even if it's a string or malformed input
+            if "place holder" in str(company_mappings).lower():
+                logger.error(f"Company mappings for file {file} contain company place holders (fake names). Please check the file and try again.")
+                placeholder_file = "CONTAINS FAKE COMPANY NAMES: " + str(file)
+                error_files.append(placeholder_file)
+                continue
+            logger.error(f"Invalid company mappings for file {file}. Skipping.")
+            error_files.append(file)
+            continue
 
     except Exception as e:
         logger.error(f"Error in the control generation, or prompt generation for {file}: {e}")
