@@ -19,6 +19,9 @@ Adhoc analysis/industry_label_analysis/output/*
 Phase 3 Workflow - Job Matching/data/*
 Phase 3 Workflow - Job Matching/Job Scraping Modules/data
 Phase 3 Workflow - Job Matching/Resume Job Matching/data
+Phase 3 Workflow - Job Matching/Resume Job Matching/test_results/*
+Phase 3 Workflow - Job Matching/Batch Embedding Modules/testing 
+Phase 4 Workflow - PDF generation/data
 data
 
 
