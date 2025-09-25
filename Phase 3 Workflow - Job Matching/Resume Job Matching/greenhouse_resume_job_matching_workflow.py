@@ -627,6 +627,7 @@ Do not include any other text or formatting.
             # Prepare base job document for Greenhouse format
             job_doc_base = {
                 "job_posting_id": job_doc["_id"],
+                "job_link": job_doc.get("job_link"),
                 "title": job_doc.get("title"),
                 "company": job_doc.get("company"),
                 "location": job_doc.get("location"),
@@ -671,6 +672,7 @@ Do not include any other text or formatting.
             # Prepare base job document for Greenhouse format
             job_doc_base = {
                 "job_posting_id": job_doc["_id"],
+                "job_link": job_doc.get("job_link"),
                 "title": job_doc.get("title"),
                 "company": job_doc.get("company"),
                 "location": job_doc.get("location"),

@@ -30,12 +30,12 @@ class GreenhouseConfig:
     max_jobs: Optional[int] = None                             # Limit jobs to process (None = all)
     
     # Vector search settings
-    top_k: int = 3
+    top_k: int = 4
     similarity_threshold: float = 0.30
     vector_search_index: str = "resume_embedding_index"  # MongoDB vector search index name
     
     # LLM settings  
-    llm_model: str = "gemini-2.5-flash"
+    llm_model: str = "gemini-2.5-pro"
     validation_threshold: int = 70
     
     # Retry settings for LLM calls

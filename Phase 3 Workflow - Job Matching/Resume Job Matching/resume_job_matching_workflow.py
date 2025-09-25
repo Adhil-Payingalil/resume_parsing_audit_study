@@ -637,6 +637,7 @@ Do not include any other text or formatting.
             job_doc_base = {
                 "job_posting_id": job_doc["_id"],
                 "job_url_direct": job_doc.get("job_url_direct"),
+                "job_link": job_doc.get("job_url_direct") or job_doc.get("job_url"),
                 "title": job_doc.get("title"),
                 "company": job_doc.get("company"),
                 "description": job_doc.get("description"),
@@ -681,6 +682,7 @@ Do not include any other text or formatting.
             job_doc_base = {
                 "job_posting_id": job_doc["_id"],
                 "job_url_direct": job_doc.get("job_url_direct"),
+                "job_link": job_doc.get("job_url_direct") or job_doc.get("job_url"),
                 "title": job_doc.get("title"),
                 "company": job_doc.get("company"),
                 "description": job_doc.get("description"),

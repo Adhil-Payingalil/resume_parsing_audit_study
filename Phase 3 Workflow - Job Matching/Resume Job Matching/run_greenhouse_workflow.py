@@ -22,9 +22,11 @@ def run_workflow():
     try:
         # Create configuration
         config = GreenhouseConfig( 
-            max_jobs= None,  # Process 10 jobs for testing
+            max_jobs=None,  # Process ALL jobs
             similarity_threshold=0.30,  # Lower threshold for more matches
-            validation_threshold=70  # Lower validation threshold
+            validation_threshold=60,  # Lower validation threshold
+            batch_size=20,  # Process in batches of 20
+            max_workers=4  # Use 4 parallel workers
         )
         
         logger.info("Starting Greenhouse workflow...")
