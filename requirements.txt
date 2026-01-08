@@ -16,6 +16,9 @@ sentence-transformers==5.0.0
 # MongoDB and Database
 pymongo[srv]>=4.13.0
 
+# UI (for Phase 2 company mapping dialog)
+PySide6==6.7.3
+
 # Google AI Services
 google-genai==1.16.1
 google-generativeai>=0.8.5
@@ -34,3 +37,6 @@ python-jobspy==0.0.1
 
 # Performance and Monitoring
 psutil>=5.9.0
+
+openpyxl>=3.0.0
+

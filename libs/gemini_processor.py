@@ -2,13 +2,19 @@ import os
 import re
 import hashlib
 from datetime import datetime
-import sys 
+import sys
+import time
 
 sys.path.append(".")
 from utils import get_logger
 from typing import Optional, List, Dict, Any
 from google import genai
 from google.genai import types
+try:
+    from google.genai.errors import ServerError
+except ImportError:
+    # Fallback if ServerError is not available
+    ServerError = Exception
 from dotenv import load_dotenv
 
 # Testing
@@ -127,12 +133,21 @@ class GeminiProcessor:
                 raise
 
     
-    def generate_content(self, prompt: Optional[str] = None) -> types.GenerateContentResponse:
+    def generate_content(
+        self, 
+        prompt: Optional[str] = None,
+        max_retries: int = 5,
+        initial_retry_delay: float = 2.0,
+        max_retry_delay: float = 60.0
+    ) -> types.GenerateContentResponse:
         """
-        Generate content using the Gemini model.
+        Generate content using the Gemini model with automatic retry and exponential backoff.
         
         Args:
             prompt (Optional[str]): Custom prompt to use. If None, uses loaded template
+            max_retries (int): Maximum number of retry attempts for transient errors
+            initial_retry_delay (float): Initial delay in seconds before first retry
+            max_retry_delay (float): Maximum delay in seconds between retries
             
         Returns:
             types.GenerateContentResponse: The generated content
@@ -156,28 +171,115 @@ class GeminiProcessor:
             contents.append(prompt)
             contents.append(self.mongo_document)
         
-        try:
-            response = self.client.models.generate_content(
-                model=self.model_name,
-                contents=contents,
-                config=types.GenerateContentConfig(
-                    temperature=self.temperature,
-                    tools=self.tools,
+        response = None
+        last_exception = None
+        
+        for attempt in range(max_retries):
+            try:
+                response = self.client.models.generate_content(
+                    model=self.model_name,
+                    contents=contents,
+                    config=types.GenerateContentConfig(
+                        temperature=self.temperature,
+                        tools=self.tools,
+                    )
                 )
-            )
-            
-            if response.text:
-                logger.info("Content generation successful")
-                return response
-            else:
-                raise ValueError("Gemini returned no text")
                 
-        except Exception as e:
-            logger.error(f"Error during content generation: {e}")
-            if hasattr(response, 'promptFeedback') and response.promptFeedback:
-                logger.error(f"Prompt Feedback: {response.promptFeedback}")
-                if hasattr(response, 'promptFeedback') and hasattr(response.promptFeedback, 'blockReason') and response.promptFeedback.blockReason:
-                    logger.error(f"Block Reason: {response.promptFeedback.blockReason}")
+                if response.text:
+                    if attempt > 0:
+                        logger.info(f"Content generation successful after {attempt} retry(ies)")
+                    else:
+                        logger.info("Content generation successful")
+                    return response
+                else:
+                    # Log detailed information about why there's no text
+                    logger.error("Gemini returned no text. Checking for blocks or filters...")
+                    if hasattr(response, 'promptFeedback') and response.promptFeedback:
+                        logger.error(f"Prompt Feedback: {response.promptFeedback}")
+                        if hasattr(response.promptFeedback, 'blockReason') and response.promptFeedback.blockReason:
+                            logger.error(f"Block Reason: {response.promptFeedback.blockReason}")
+                    if hasattr(response, 'candidates') and response.candidates:
+                        for idx, candidate in enumerate(response.candidates):
+                            logger.error(f"Candidate {idx}: {candidate}")
+                            if hasattr(candidate, 'finishReason'):
+                                logger.error(f"  Finish Reason: {candidate.finishReason}")
+                            if hasattr(candidate, 'safetyRatings'):
+                                logger.error(f"  Safety Ratings: {candidate.safetyRatings}")
+                    # No text response is usually a blocking issue, not retryable
+                    raise ValueError("Gemini returned no text - check logs above for block/safety reasons")
+                    
+            except (ServerError, ConnectionError, TimeoutError) as e:
+                last_exception = e
+                error_str = str(e)
+                error_code = None
+                
+                # Extract error code if it's a ServerError
+                if isinstance(e, ServerError) and hasattr(e, 'status_code'):
+                    error_code = e.status_code
+                elif '503' in error_str:
+                    error_code = 503
+                elif '429' in error_str or 'RESOURCE_EXHAUSTED' in error_str:
+                    error_code = 429
+                
+                # Determine if this is a retryable error
+                is_retryable = (
+                    error_code in [503, 429, 500, 502, 504] or  # Service errors
+                    'overloaded' in error_str.lower() or
+                    'rate limit' in error_str.lower() or
+                    'unavailable' in error_str.lower() or
+                    'timeout' in error_str.lower()
+                )
+                
+                if is_retryable and attempt < max_retries - 1:
+                    # Calculate exponential backoff delay
+                    delay = min(initial_retry_delay * (2 ** attempt), max_retry_delay)
+                    logger.warning(
+                        f"Transient error (code: {error_code}, attempt {attempt + 1}/{max_retries}): {error_str}. "
+                        f"Retrying in {delay:.2f}s..."
+                    )
+                    time.sleep(delay)
+                    continue
+                else:
+                    # Not retryable or max retries reached
+                    logger.error(f"Error during content generation (attempt {attempt + 1}/{max_retries}): {e}")
+                    if response and hasattr(response, 'promptFeedback') and response.promptFeedback:
+                        logger.error(f"Prompt Feedback: {response.promptFeedback}")
+                        if hasattr(response.promptFeedback, 'blockReason') and response.promptFeedback.blockReason:
+                            logger.error(f"Block Reason: {response.promptFeedback.blockReason}")
+                    raise
+                    
+            except Exception as e:
+                last_exception = e
+                # For non-retryable errors (like ValueError for no text), don't retry
+                if isinstance(e, ValueError) and "no text" in str(e).lower():
+                    logger.error(f"Non-retryable error: {e}")
+                    raise
+                    
+                # For other errors, log and potentially retry based on error type
+                if attempt < max_retries - 1:
+                    error_str = str(e).lower()
+                    if any(keyword in error_str for keyword in ['timeout', 'connection', 'network']):
+                        delay = min(initial_retry_delay * (2 ** attempt), max_retry_delay)
+                        logger.warning(
+                            f"Network/connection error (attempt {attempt + 1}/{max_retries}): {e}. "
+                            f"Retrying in {delay:.2f}s..."
+                        )
+                        time.sleep(delay)
+                        continue
+                
+                logger.error(f"Error during content generation (attempt {attempt + 1}/{max_retries}): {e}")
+                if response and hasattr(response, 'promptFeedback') and response.promptFeedback:
+                    logger.error(f"Prompt Feedback: {response.promptFeedback}")
+                    if hasattr(response.promptFeedback, 'blockReason') and response.promptFeedback.blockReason:
+                        logger.error(f"Block Reason: {response.promptFeedback.blockReason}")
+                raise
+        
+        # If we exhausted all retries
+        if last_exception:
+            logger.error(f"Failed after {max_retries} attempts. Last error: {last_exception}")
+            raise last_exception
+        else:
+            raise RuntimeError(f"Failed after {max_retries} attempts for unknown reason")
     
     def save_generated_content(self, response: types.GenerateContentResponse, output_dir: str = "text_output") -> None:
         """

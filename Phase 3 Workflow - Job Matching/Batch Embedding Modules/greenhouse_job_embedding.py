@@ -69,6 +69,7 @@ class GreenhouseJobEmbeddingProcessor:
         try:
             # Find documents with jd_extraction=True that don't have embeddings
             query = {
+                "cycle": 8.1,
                 "jd_extraction": True,
                 "$or": [
                     {"jd_embedding": {"$exists": False}},

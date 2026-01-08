@@ -1,0 +1,25 @@
+{
+  "matches": {
+    "total_documents": 637,
+    "updated_documents": 620,
+    "skipped_no_mapping": 17,
+    "skipped_null_link": 0,
+    "errors": 0
+  },
+  "unmatched": {
+    "total_documents": 243,
+    "updated_documents": 237,
+    "skipped_no_mapping": 6,
+    "skipped_null_link": 0,
+    "errors": 0
+  },
+  "totals": {
+    "total_documents": 880,
+    "updated_documents": 857,
+    "skipped_no_mapping": 23,
+    "skipped_null_link": 0,
+    "errors": 0
+  },
+  "duration": "0:00:39.562260",
+  "dry_run": false
+}

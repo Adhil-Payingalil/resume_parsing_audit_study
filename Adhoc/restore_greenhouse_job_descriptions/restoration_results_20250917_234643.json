@@ -1,0 +1,10 @@
+{
+  "total_documents": 900,
+  "updated_documents": 857,
+  "skipped_no_mapping": 43,
+  "skipped_already_has_description": 0,
+  "errors": 0,
+  "duration": "0:00:44.671643",
+  "dry_run": false,
+  "available_descriptions": 880
+}

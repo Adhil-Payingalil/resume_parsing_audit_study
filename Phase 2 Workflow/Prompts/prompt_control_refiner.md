@@ -33,6 +33,7 @@ OUTPUT CONSTRAINTS
 
 * Handle Empty Lists: If filtering removes all items from a list (e.g., all work_experience entries are treatments), the final output must include the original key with an empty list as its value (e.g., "work_experience": []).
 
+* No Elements to Filter: If the input JSON contains NO North American treatment elements, you must still return the complete original JSON object unchanged. Even when there is nothing to filter, you must output the full resume_data object.
 
 ## Output Schema
 ```json

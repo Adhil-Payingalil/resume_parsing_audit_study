@@ -11,14 +11,28 @@ Based on the provided Base Resume JSON and Treatment Instructions, perform the f
 
 1.  **Analyze:** Carefully read the entire Base Resume to understand its structure, tone, and the candidate's professional profile.
 
-2.  **Integrate Treatment, and Company names:** Add the new information from the Treatment Instructions into the resume. Also replace the company names with the given list
-  * Treatments: Add the new information from the Treatment Instructions into the resume.
-    * If adding education, place it at the top of the `education` array. Not under the `certifications` array.
-    * If adding experience, place it at the top of the `work_experience` array as an *Internship*.
+2.  **Integrate Treatment Based on Treatment Type:**
     
-    **Notes about dates**
-    * For work experience, first find the last active job of the person and its end date. Keep one month buffer, and start the treatment experience from there. For example, if last entry `work experience.endDate` was 01-2025, the treated experience would start from 03-2025, and would last 4 weeks, meaning it would end in 04-2025.
-    * For education end date, just provide a year, i.e. 2025 or 2024 based on the candidate's last work experience.
+    **CRITICAL: The treatment type determines what you add:**
+    
+    * **Type_I (Education ONLY):**
+      - Add ONLY the education credential from the Treatment Instructions
+      - Place it at the top of the `education` array (NOT under `certifications`)
+      - DO NOT add any work experience
+      - DO NOT create internships or work entries from the education data
+      - Education `endDate` should be a year (2025 or 2024) based on candidate's last work experience. Leave the `startDate` empty.
+      - 
+    
+    * **Type_II (Work Experience ONLY):**
+      - Add ONLY the work experience from the Treatment Instructions
+      - Place it at the top of the `work_experience` array as an *Internship*
+      - DO NOT add any education credentials
+      - Find the last active job's end date, keep 3 month buffer, and start the treatment experience from there and keep 2 months duration.
+      - Example: If last `work_experience.endDate` was 01-2025, start from 04-2025, lasting 4 weeks, ending 0-2025
+    
+    * **Type_III (Both Education AND Work Experience):**
+      - Add BOTH the education credential AND work experience from the Treatment Instructions
+      - Follow the placement rules from Type_I and Type_II above
 
 
 3.  **Refine for Anonymity:** To prevent the resume from being an exact duplicate of the control, you will subtly rephrase some descriptive text. Follow these rules precisely:

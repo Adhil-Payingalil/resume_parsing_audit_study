@@ -1,0 +1,15 @@
+{
+  "total_jobs": 2606,
+  "updated_matched": 1069,
+  "updated_unmatched": 524,
+  "skipped_no_status": 1013,
+  "skipped_already_updated": 0,
+  "errors": 0,
+  "duration": "0:00:09.872622",
+  "dry_run": true,
+  "processed_ids_count": {
+    "matched": 1392,
+    "unmatched": 622,
+    "total": 2014
+  }
+}

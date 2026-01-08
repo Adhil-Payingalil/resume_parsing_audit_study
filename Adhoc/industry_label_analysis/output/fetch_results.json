@@ -1,0 +1,1281 @@
+{
+  "pairs": [
+    {
+      "file_id": "ITC resume 01.pdf",
+      "industry": "ITC",
+      "label": "Product Designer"
+    },
+    {
+      "file_id": "ITC resume 03.pdf",
+      "industry": "ITC",
+      "label": "Certified Project Manager"
+    },
+    {
+      "file_id": "ITC resume 04.pdf",
+      "industry": "ITC",
+      "label": "IT Project Manager"
+    },
+    {
+      "file_id": "ITC resume 05.pdf",
+      "industry": "ITC",
+      "label": "Project Manager"
+    },
+    {
+      "file_id": "ITC resume 06.pdf",
+      "industry": "ITC",
+      "label": "Senior Scrum Master"
+    },
+    {
+      "file_id": "ITC resume 07.pdf",
+      "industry": "ITC",
+      "label": "Senior Software Developer"
+    },
+    {
+      "file_id": "ITC resume 09.pdf",
+      "industry": "ITC",
+      "label": "Software Test Automation Engineer"
+    },
+    {
+      "file_id": "ITC resume 10.pdf",
+      "industry": "ITC",
+      "label": "Junior Scrum Master"
+    },
+    {
+      "file_id": "ITC resume 11.pdf",
+      "industry": "ITC",
+      "label": "Scrum Master"
+    },
+    {
+      "file_id": "ITC resume 12.pdf",
+      "industry": "ITC",
+      "label": "PMP Certified IT Project Manager"
+    },
+    {
+      "file_id": "ITC resume 13.pdf",
+      "industry": "ITC",
+      "label": "Senior Business Analyst"
+    },
+    {
+      "file_id": "ITC resume 14.pdf",
+      "industry": "ITC",
+      "label": "Senior Developer/Designer"
+    },
+    {
+      "file_id": "ITC resume 16.pdf",
+      "industry": "ITC",
+      "label": "Data Analytics Professional"
+    },
+    {
+      "file_id": "ITC resume 17.pdf",
+      "industry": "ITC",
+      "label": "Business Analyst"
+    },
+    {
+      "file_id": "ITC resume 18.pdf",
+      "industry": "ITC",
+      "label": "AWS Engineer"
+    },
+    {
+      "file_id": "ITC resume 19.pdf",
+      "industry": "ITC",
+      "label": "IT and Engineering professional"
+    },
+    {
+      "file_id": "ITC resume 20.pdf",
+      "industry": "ITC",
+      "label": "Application Developer"
+    },
+    {
+      "file_id": "ITC resume 02.pdf",
+      "industry": "ITC",
+      "label": "Product Manager"
+    },
+    {
+      "file_id": "ITC resume 08.pdf",
+      "industry": "ITC",
+      "label": "Senior Business Analyst"
+    },
+    {
+      "file_id": "ITC resume 15.pdf",
+      "industry": "ITC",
+      "label": "Senior Salesforce Business Analyst & Administrator"
+    },
+    {
+      "file_id": "CCC resume 01.pdf",
+      "industry": "CCC",
+      "label": "Cybersecurity Specialist"
+    },
+    {
+      "file_id": "CCC resume 02.pdf",
+      "industry": "CCC",
+      "label": "Network Engineer"
+    },
+    {
+      "file_id": "CCC resume 04.pdf",
+      "industry": "CCC",
+      "label": "Project Manager"
+    },
+    {
+      "file_id": "CCC resume 05.pdf",
+      "industry": "CCC",
+      "label": "Senior Salesforce CPQ Developer"
+    },
+    {
+      "file_id": "CCC resume 06.pdf",
+      "industry": "CCC",
+      "label": "IT Technical Support Specialist"
+    },
+    {
+      "file_id": "CCC resume 03.pdf",
+      "industry": "CCC",
+      "label": "Oracle ETL Developer"
+    },
+    {
+      "file_id": "CCC resume 07.pdf",
+      "industry": "CCC",
+      "label": "Senior System Engineer"
+    },
+    {
+      "file_id": "CCC resume 08.pdf",
+      "industry": "CCC",
+      "label": "Administrative Professional"
+    },
+    {
+      "file_id": "CCC resume 10.pdf",
+      "industry": "CCC",
+      "label": "Senior Java Developer"
+    },
+    {
+      "file_id": "CCC resume 12.pdf",
+      "industry": "CCC",
+      "label": "MIS Manager / Cloud Consultant"
+    },
+    {
+      "file_id": "CCC resume 13.pdf",
+      "industry": "CCC",
+      "label": "IT Project Manager"
+    },
+    {
+      "file_id": "CCC resume 14.pdf",
+      "industry": "CCC",
+      "label": "Product Professional"
+    },
+    {
+      "file_id": "CCC resume 15.pdf",
+      "industry": "CCC",
+      "label": "Data Scientist"
+    },
+    {
+      "file_id": "CCC resume 16.pdf",
+      "industry": "CCC",
+      "label": "Senior Network Engineer"
+    },
+    {
+      "file_id": "CCC resume 17.pdf",
+      "industry": "CCC",
+      "label": "Java Developer"
+    },
+    {
+      "file_id": "CCC resume 18.pdf",
+      "industry": "CCC",
+      "label": "Full Stack Developer"
+    },
+    {
+      "file_id": "CCC resume 19.pdf",
+      "industry": "CCC",
+      "label": "Telecommunications Technician"
+    },
+    {
+      "file_id": "CCC resume 20.pdf",
+      "industry": "CCC",
+      "label": "IT Professional"
+    },
+    {
+      "file_id": "CHC Resume 01.pdf",
+      "industry": "CHC",
+      "label": "Public Health and Health & Safety Professional"
+    },
+    {
+      "file_id": "CHC Resume 02.pdf",
+      "industry": "CHC",
+      "label": "Clinical Research Associate"
+    },
+    {
+      "file_id": "CHC Resume 03.pdf",
+      "industry": "CHC",
+      "label": "Healthcare Industry Professional"
+    },
+    {
+      "file_id": "CHC Resume 06.pdf",
+      "industry": "CHC",
+      "label": "Healthcare Professional"
+    },
+    {
+      "file_id": "CPNW resume 06.pdf",
+      "industry": "CPNW",
+      "label": "Insurance Agent"
+    },
+    {
+      "file_id": "DMC Resume 01.pdf",
+      "industry": "DMC",
+      "label": "Digital Marketing Manager"
+    },
+    {
+      "file_id": "DMC Resume 02.pdf",
+      "industry": "DMC",
+      "label": "Marketing and Communications Professional"
+    },
+    {
+      "file_id": "DMC Resume 03.pdf",
+      "industry": "DMC",
+      "label": "Account Management Professional"
+    },
+    {
+      "file_id": "DMC Resume 04.pdf",
+      "industry": "DMC",
+      "label": "Marketing and Communications Manager"
+    },
+    {
+      "file_id": "DMC Resume 05.pdf",
+      "industry": "DMC",
+      "label": "Digital Marketer"
+    },
+    {
+      "file_id": "DMC Resume 06.pdf",
+      "industry": "DMC",
+      "label": "Marketing Professional"
+    },
+    {
+      "file_id": "FSC Resume 08.pdf",
+      "industry": "FSC",
+      "label": "Accounting | FP&A | Compliance"
+    },
+    {
+      "file_id": "FSC Resume 16.pdf",
+      "industry": "FSC",
+      "label": "Credit Professional"
+    },
+    {
+      "file_id": "FSC Resume 17.pdf",
+      "industry": "FSC",
+      "label": "International Banking Professional"
+    },
+    {
+      "file_id": "FSC Resume 18.pdf",
+      "industry": "FSC",
+      "label": "Corporate Credit Risk Analyst"
+    },
+    {
+      "file_id": "FSC Resume 19.pdf",
+      "industry": "FSC",
+      "label": "Account Executive-Private Client"
+    },
+    {
+      "file_id": "FSC Resume 20.pdf",
+      "industry": "FSC",
+      "label": "Financial Analyst"
+    },
+    {
+      "file_id": "HRC resume 01.pdf",
+      "industry": "HRC",
+      "label": "Human Resource Specialist"
+    },
+    {
+      "file_id": "HRC resume 02.pdf",
+      "industry": "HRC",
+      "label": "HR Professional"
+    },
+    {
+      "file_id": "HRC resume 03.pdf",
+      "industry": "HRC",
+      "label": "Human Resource and Senior Talent Acquisition Partner"
+    },
+    {
+      "file_id": "HRC resume 04.pdf",
+      "industry": "HRC",
+      "label": "Human Resources Leader"
+    },
+    {
+      "file_id": "HRC resume 05.pdf",
+      "industry": "HRC",
+      "label": "HR Partner, HR Generalist, DEI advocate"
+    },
+    {
+      "file_id": "HRC resume 06.pdf",
+      "industry": "HRC",
+      "label": "Human Resources (HR) Leader"
+    },
+    {
+      "file_id": "LC resume 03.pdf",
+      "industry": "LC",
+      "label": "Business Banking Credit Manager"
+    },
+    {
+      "file_id": "LC Resume 08.pdf",
+      "industry": "LC",
+      "label": "Real estate professional"
+    },
+    {
+      "file_id": "LC Resume 09.pdf",
+      "industry": "LC",
+      "label": "Group Head, Legal & Compliance"
+    },
+    {
+      "file_id": "LC Resume 11.pdf",
+      "industry": "LC",
+      "label": "Business System Analyst"
+    },
+    {
+      "file_id": "LC Resume 12.pdf",
+      "industry": "LC",
+      "label": "Certified Internal Auditor"
+    },
+    {
+      "file_id": "LC Resume 13.pdf",
+      "industry": "LC",
+      "label": "Credit Risk Professional"
+    },
+    {
+      "file_id": "LC Resume 14.pdf",
+      "industry": "LC",
+      "label": "Finance Professional"
+    },
+    {
+      "file_id": "LC Resume 15.pdf",
+      "industry": "LC",
+      "label": "Strategy and Program Manager"
+    },
+    {
+      "file_id": "MSfE resume 07.pdf",
+      "industry": "MSfE",
+      "label": "Data Analytics Professional"
+    },
+    {
+      "file_id": "MSfE resume 08.pdf",
+      "industry": "MSfE",
+      "label": "Scrum Master | Business Analyst"
+    },
+    {
+      "file_id": "MSfE resume 10.pdf",
+      "industry": "MSfE",
+      "label": "Account Executive"
+    },
+    {
+      "file_id": "MSfE resume 13.pdf",
+      "industry": "MSfE",
+      "label": "Full stack software developer"
+    },
+    {
+      "file_id": "MSfE resume 15.pdf",
+      "industry": "MSfE",
+      "label": "Big Data Engineer"
+    },
+    {
+      "file_id": "MSfE resume 16.pdf",
+      "industry": "MSfE",
+      "label": "Quality Process Specialist"
+    },
+    {
+      "file_id": "MSfE resume 19.pdf",
+      "industry": "MSfE",
+      "label": "Business Consulting Manager"
+    },
+    {
+      "file_id": "PME resume 01.pdf",
+      "industry": "PME",
+      "label": "B.Sc. Civil Engineering"
+    },
+    {
+      "file_id": "PME resume 02.pdf",
+      "industry": "PME",
+      "label": "Project Management Professional"
+    },
+    {
+      "file_id": "PME resume 03.pdf",
+      "industry": "PME",
+      "label": "Project Manager, IT"
+    },
+    {
+      "file_id": "PME resume 04.pdf",
+      "industry": "PME",
+      "label": "Project Management Professional | PMO Leader"
+    },
+    {
+      "file_id": "PME resume 05.pdf",
+      "industry": "PME",
+      "label": "Technical/Commercial Manager"
+    },
+    {
+      "file_id": "PME resume 06.pdf",
+      "industry": "PME",
+      "label": "Site Representative"
+    },
+    {
+      "file_id": "PME resume 07.pdf",
+      "industry": "PME",
+      "label": "Project Planner and Scheduler"
+    },
+    {
+      "file_id": "PME resume 08.pdf",
+      "industry": "PME",
+      "label": "Construction Project Manager"
+    },
+    {
+      "file_id": "PME resume 09.pdf",
+      "industry": "PME",
+      "label": "HVAC Project Coordinator / Estimator"
+    },
+    {
+      "file_id": "PME resume 10.pdf",
+      "industry": "PME",
+      "label": "Reporting Coordinator"
+    },
+    {
+      "file_id": "PME resume 11.pdf",
+      "industry": "PME",
+      "label": "Project Manager"
+    },
+    {
+      "file_id": "PME resume 12.pdf",
+      "industry": "PME",
+      "label": "Bilingual Customer Service Management"
+    },
+    {
+      "file_id": "PME resume 13.pdf",
+      "industry": "PME",
+      "label": "PMP-Certified Project Manager"
+    },
+    {
+      "file_id": "PME resume 15.pdf",
+      "industry": "PME",
+      "label": "Senior R&D Engineer"
+    },
+    {
+      "file_id": "PME resume 17.pdf",
+      "industry": "PME",
+      "label": "Senior Rebar Estimator"
+    },
+    {
+      "file_id": "PME resume 18.pdf",
+      "industry": "PME",
+      "label": "Industrial Engineer"
+    },
+    {
+      "file_id": "PME resume 19.pdf",
+      "industry": "PME",
+      "label": "Principal Quality Assurance Engineer"
+    },
+    {
+      "file_id": "PME resume 20.pdf",
+      "industry": "PME",
+      "label": "RF Design Engineer"
+    },
+    {
+      "file_id": "SCC resume 01.pdf",
+      "industry": "SCC",
+      "label": "Senior Analyst"
+    },
+    {
+      "file_id": "SCC resume 02.pdf",
+      "industry": "SCC",
+      "label": "Logistics Coordinator"
+    },
+    {
+      "file_id": "SCC resume 03.pdf",
+      "industry": "SCC",
+      "label": "Procurement Professional"
+    },
+    {
+      "file_id": "SCC resume 04.pdf",
+      "industry": "SCC",
+      "label": "Certified Supply Chain Professional"
+    },
+    {
+      "file_id": "SCC resume 05.pdf",
+      "industry": "SCC",
+      "label": "Supply Chain and Continuous Improvement Projects Manager"
+    },
+    {
+      "file_id": "SCC resume 06.pdf",
+      "industry": "SCC",
+      "label": "Supply Chain Professional/Internal Auditor"
+    },
+    {
+      "file_id": "SCC resume 07.pdf",
+      "industry": "SCC",
+      "label": "Category Manager"
+    },
+    {
+      "file_id": "SCC resume 08.pdf",
+      "industry": "SCC",
+      "label": "Procurement Specialist"
+    },
+    {
+      "file_id": "SCC resume 09.pdf",
+      "industry": "SCC",
+      "label": "Purchasing Professional"
+    },
+    {
+      "file_id": "SCC resume 10.pdf",
+      "industry": "SCC",
+      "label": "Supply Chain Professional"
+    },
+    {
+      "file_id": "SCC resume 11.pdf",
+      "industry": "SCC",
+      "label": "Marketing and Supply Chain Operations Specialist"
+    },
+    {
+      "file_id": "SCC resume 12.pdf",
+      "industry": "SCC",
+      "label": "Production Manager and Supply Chain Planner"
+    },
+    {
+      "file_id": "SCC resume 13.pdf",
+      "industry": "SCC",
+      "label": "Supply Chain | Medical Industry | Logistics & Transportation | Material Management"
+    },
+    {
+      "file_id": "SCC resume 14.pdf",
+      "industry": "SCC",
+      "label": "Logistics Professional"
+    },
+    {
+      "file_id": "SCC resume 15.pdf",
+      "industry": "SCC",
+      "label": "Procurement Specialist"
+    },
+    {
+      "file_id": "SCC resume 16.pdf",
+      "industry": "SCC",
+      "label": "Procurement Manager"
+    },
+    {
+      "file_id": "SCC resume 17.pdf",
+      "industry": "SCC",
+      "label": "Supply Chain Manager"
+    },
+    {
+      "file_id": "SCC resume 18.pdf",
+      "industry": "SCC",
+      "label": "Procurement Coordinator"
+    },
+    {
+      "file_id": "SCC resume 19.pdf",
+      "industry": "SCC",
+      "label": "Mechanical Engineer"
+    },
+    {
+      "file_id": "SCC resume 20.pdf",
+      "industry": "SCC",
+      "label": "Bilingual Supply and Demand Planner"
+    },
+    {
+      "file_id": "CCC resume 09.pdf",
+      "industry": "CCC",
+      "label": "Service Specialist"
+    },
+    {
+      "file_id": "CCC resume 11.pdf",
+      "industry": "CCC",
+      "label": "Software Engineer"
+    },
+    {
+      "file_id": "CHC Resume 04.pdf",
+      "industry": "CHC",
+      "label": "Manager, Healthy Living (Community Health & Wellbeing)"
+    },
+    {
+      "file_id": "CHC Resume 05.pdf",
+      "industry": "CHC",
+      "label": "Program Coordinator, Prevention and Promotion Initiatives"
+    },
+    {
+      "file_id": "CHC Resume 10.pdf",
+      "industry": "CHC",
+      "label": "Pharmacy Assistant"
+    },
+    {
+      "file_id": "CHC Resume 11.pdf",
+      "industry": "CHC",
+      "label": "Medical Doctor"
+    },
+    {
+      "file_id": "CHC Resume 12.pdf",
+      "industry": "CHC",
+      "label": "Medical Professional"
+    },
+    {
+      "file_id": "CHC Resume 13.pdf",
+      "industry": "CHC",
+      "label": "Counsellor"
+    },
+    {
+      "file_id": "CHC Resume 14.pdf",
+      "industry": "CHC",
+      "label": "Community Worker"
+    },
+    {
+      "file_id": "CHC Resume 15.pdf",
+      "industry": "CHC",
+      "label": "Program Coordinator, Prevention and Promotion Initiatives"
+    },
+    {
+      "file_id": "CHC Resume 16.pdf",
+      "industry": "CHC",
+      "label": "Detail-oriented professional"
+    },
+    {
+      "file_id": "CHC Resume 17.pdf",
+      "industry": "CHC",
+      "label": "Research Assistant"
+    },
+    {
+      "file_id": "CHC Resume 18.pdf",
+      "industry": "CHC",
+      "label": "Healthcare Professional"
+    },
+    {
+      "file_id": "CHC Resume 19.pdf",
+      "industry": "CHC",
+      "label": "Ophthalmic Assistant | Internationally Trained Optometrist"
+    },
+    {
+      "file_id": "CHC Resume 20.pdf",
+      "industry": "CHC",
+      "label": "Environmental Health & Knowledge Translation Scientist"
+    },
+    {
+      "file_id": "CPNW resume 01.pdf",
+      "industry": "CPNW",
+      "label": "Resident Physiotherapist"
+    },
+    {
+      "file_id": "CPNW resume 02.pdf",
+      "industry": "CPNW",
+      "label": "Human Resources Professional"
+    },
+    {
+      "file_id": "CPNW resume 03.pdf",
+      "industry": "CPNW",
+      "label": "Project Management Professional"
+    },
+    {
+      "file_id": "CPNW resume 05.pdf",
+      "industry": "CPNW",
+      "label": "Project Coordinator"
+    },
+    {
+      "file_id": "CPNW resume 07.pdf",
+      "industry": "CPNW",
+      "label": "QA Automation Engineer"
+    },
+    {
+      "file_id": "CPNW resume 08.pdf",
+      "industry": "CPNW",
+      "label": "Wealth Management Professional"
+    },
+    {
+      "file_id": "CPNW resume 09.pdf",
+      "industry": "CPNW",
+      "label": "Student Recruitment Professional"
+    },
+    {
+      "file_id": "CPNW resume 10.pdf",
+      "industry": "CPNW",
+      "label": "Accountant"
+    },
+    {
+      "file_id": "CPNW resume 11.pdf",
+      "industry": "CPNW",
+      "label": "Project Coordinator / IT Auditor"
+    },
+    {
+      "file_id": "CPNW resume 12.pdf",
+      "industry": "CPNW",
+      "label": "Health & Safety Professional"
+    },
+    {
+      "file_id": "CPNW resume 13.pdf",
+      "industry": "CPNW",
+      "label": "Communications Specialist"
+    },
+    {
+      "file_id": "CPNW resume 14.pdf",
+      "industry": "CPNW",
+      "label": "Corporate Banking Advisor and Credit Risk Analyst"
+    },
+    {
+      "file_id": "CPNW resume 15.pdf",
+      "industry": "CPNW",
+      "label": "Account Administrator"
+    },
+    {
+      "file_id": "CPNW resume 16.pdf",
+      "industry": "CPNW",
+      "label": "Bilingual Customer Service and Administration Professional"
+    },
+    {
+      "file_id": "CPNW resume 17.pdf",
+      "industry": "CPNW",
+      "label": "Accountant"
+    },
+    {
+      "file_id": "CPNW resume 18.pdf",
+      "industry": "CPNW",
+      "label": "Program Coordinator and Office Administrator"
+    },
+    {
+      "file_id": "CPNW resume 19.pdf",
+      "industry": "CPNW",
+      "label": "Chartered Accountant"
+    },
+    {
+      "file_id": "CPNW resume 20.pdf",
+      "industry": "CPNW",
+      "label": "Change Management Professional"
+    },
+    {
+      "file_id": "DMC Resume 07.pdf",
+      "industry": "DMC",
+      "label": "Digital Marketing Coordinator"
+    },
+    {
+      "file_id": "DMC Resume 08.pdf",
+      "industry": "DMC",
+      "label": "Senior Client Strategist"
+    },
+    {
+      "file_id": "DMC Resume 09.pdf",
+      "industry": "DMC",
+      "label": "Marketing Professional"
+    },
+    {
+      "file_id": "DMC Resume 10.pdf",
+      "industry": "DMC",
+      "label": "Customer Service Team Member"
+    },
+    {
+      "file_id": "DMC Resume 11.pdf",
+      "industry": "DMC",
+      "label": "Marketing Leader"
+    },
+    {
+      "file_id": "DMC Resume 12.pdf",
+      "industry": "DMC",
+      "label": "Marketing Specialist"
+    },
+    {
+      "file_id": "DMC Resume 13.pdf",
+      "industry": "DMC",
+      "label": "Film Permit Coordinator"
+    },
+    {
+      "file_id": "DMC Resume 14.pdf",
+      "industry": "DMC",
+      "label": "Sales Professional"
+    },
+    {
+      "file_id": "DMC Resume 15.pdf",
+      "industry": "DMC",
+      "label": "Sales Associate"
+    },
+    {
+      "file_id": "DMC Resume 16.pdf",
+      "industry": "DMC",
+      "label": "Marketing Professional"
+    },
+    {
+      "file_id": "DMC Resume 17.pdf",
+      "industry": "DMC",
+      "label": "Public Relations Professional"
+    },
+    {
+      "file_id": "DMC Resume 18.pdf",
+      "industry": "DMC",
+      "label": "Territory Account Executive"
+    },
+    {
+      "file_id": "DMC Resume 19.pdf",
+      "industry": "DMC",
+      "label": "Marketing and Communications Specialist"
+    },
+    {
+      "file_id": "DMC Resume 20.pdf",
+      "industry": "DMC",
+      "label": "Marketing Manager"
+    },
+    {
+      "file_id": "EEC resume 01.pdf",
+      "industry": "EEC",
+      "label": "Electrical Engineer"
+    },
+    {
+      "file_id": "EEC resume 02.pdf",
+      "industry": "EEC",
+      "label": "Electrical Engineer"
+    },
+    {
+      "file_id": "EEC resume 03.pdf",
+      "industry": "EEC",
+      "label": "Automation and Controls Engineer"
+    },
+    {
+      "file_id": "EEC resume 04.pdf",
+      "industry": "EEC",
+      "label": "Electrical Engineer"
+    },
+    {
+      "file_id": "EEC resume 05.pdf",
+      "industry": "EEC",
+      "label": "Telecommunications Project Engineer"
+    },
+    {
+      "file_id": "EEC resume 06.pdf",
+      "industry": "EEC",
+      "label": "Biomedical Engineering Technologist / Dialysis Technician"
+    },
+    {
+      "file_id": "EEC resume 07.pdf",
+      "industry": "EEC",
+      "label": "Entry-Level Electrical Design Role"
+    },
+    {
+      "file_id": "EEC resume 08.pdf",
+      "industry": "EEC",
+      "label": "Electrical and Computer Engineer"
+    },
+    {
+      "file_id": "EEC resume 09.pdf",
+      "industry": "EEC",
+      "label": "Electrical Engineer and Designer"
+    },
+    {
+      "file_id": "EEC resume 10.pdf",
+      "industry": "EEC",
+      "label": "Projects Manager"
+    },
+    {
+      "file_id": "EEC resume 12.pdf",
+      "industry": "EEC",
+      "label": "Specialist, Meter Data Management"
+    },
+    {
+      "file_id": "EEC resume 13.pdf",
+      "industry": "EEC",
+      "label": "Electrical Distribution Engineer"
+    },
+    {
+      "file_id": "EEC resume 14.pdf",
+      "industry": "EEC",
+      "label": "Electrical Engineer"
+    },
+    {
+      "file_id": "EEC resume 15.pdf",
+      "industry": "EEC",
+      "label": "PTL / Project Coordinator"
+    },
+    {
+      "file_id": "EEC resume 16.pdf",
+      "industry": "EEC",
+      "label": "Power Electronics Engineer"
+    },
+    {
+      "file_id": "EEC resume 18.pdf",
+      "industry": "EEC",
+      "label": "Project Coordination / Engineering / Renewable Energy"
+    },
+    {
+      "file_id": "EEC resume 20.pdf",
+      "industry": "EEC",
+      "label": "Electrical Technician"
+    },
+    {
+      "file_id": "EEC- resume 11.pdf",
+      "industry": "EEC-",
+      "label": "Electrical Engineer"
+    },
+    {
+      "file_id": "FSC Resume 01.pdf",
+      "industry": "FSC",
+      "label": "Financial Professional"
+    },
+    {
+      "file_id": "FSC Resume 02.pdf",
+      "industry": "FSC",
+      "label": "Financial Professional"
+    },
+    {
+      "file_id": "FSC Resume 03.pdf",
+      "industry": "FSC",
+      "label": "Payment Analyst"
+    },
+    {
+      "file_id": "FSC Resume 04.pdf",
+      "industry": "FSC",
+      "label": "Financial Services Professional"
+    },
+    {
+      "file_id": "FSC Resume 05.pdf",
+      "industry": "FSC",
+      "label": "Capital Markets/Quantitative Research/Financial Modeling/Quantitative Analysis"
+    },
+    {
+      "file_id": "FSC Resume 06.pdf",
+      "industry": "FSC",
+      "label": "Senior Risk Analyst, Portfolio Management & Credit Strategy"
+    },
+    {
+      "file_id": "FSC Resume 07.pdf",
+      "industry": "FSC",
+      "label": "Financial Advisor"
+    },
+    {
+      "file_id": "FSC Resume 09.pdf",
+      "industry": "FSC",
+      "label": "Client Relations Specialist"
+    },
+    {
+      "file_id": "FSC Resume 11.pdf",
+      "industry": "FSC",
+      "label": "Advisor / Account Manager in Small Business Banking / Commercial Banking"
+    },
+    {
+      "file_id": "FSC Resume 12.pdf",
+      "industry": "FSC",
+      "label": "Advisor / Account Manager in Small Business Banking / Commercial Banking"
+    },
+    {
+      "file_id": "FSC Resume 13.pdf",
+      "industry": "FSC",
+      "label": "Investment Analyst"
+    },
+    {
+      "file_id": "FSC Resume 14.pdf",
+      "industry": "FSC",
+      "label": "Financial Services Specialist"
+    },
+    {
+      "file_id": "FSC Resume 15.pdf",
+      "industry": "FSC",
+      "label": "Capital Markets/Quantitative Research/Financial Modeling/Quantitative Analysis"
+    },
+    {
+      "file_id": "FSCeF resume 01.pdf",
+      "industry": "FSCeF",
+      "label": "Information Technology Professional"
+    },
+    {
+      "file_id": "FSCeF resume 02.pdf",
+      "industry": "FSCeF",
+      "label": "Tax Controller and Academic Coordinator"
+    },
+    {
+      "file_id": "FSCeF resume 03.pdf",
+      "industry": "FSCeF",
+      "label": "Bilingual Administrative Executive"
+    },
+    {
+      "file_id": "FSCeF resume 04.pdf",
+      "industry": "FSCeF",
+      "label": "Project Management, Monitoring and Evaluation Professional"
+    },
+    {
+      "file_id": "FSCeF resume 05.pdf",
+      "industry": "FSCeF",
+      "label": "Advisor, Economic and Social Development"
+    },
+    {
+      "file_id": "FSCeF resume 06.pdf",
+      "industry": "FSCeF",
+      "label": "Banker"
+    },
+    {
+      "file_id": "FSCeF resume 07.pdf",
+      "industry": "FSCeF",
+      "label": "Results-driven bilingual banker"
+    },
+    {
+      "file_id": "FSCeF resume 08.pdf",
+      "industry": "FSCeF",
+      "label": "IT Network Security Professional"
+    },
+    {
+      "file_id": "FSCeF resume 09.pdf",
+      "industry": "FSCeF",
+      "label": "Human Resources, Finance and Administration Professional"
+    },
+    {
+      "file_id": "FSCeF resume 10.pdf",
+      "industry": "FSCeF",
+      "label": "Economic and Social Development Advisor"
+    },
+    {
+      "file_id": "FSCeF resume 11.pdf",
+      "industry": "FSCeF",
+      "label": "Bookkeeper"
+    },
+    {
+      "file_id": "FSCeF resume 12.pdf",
+      "industry": "FSCeF",
+      "label": "Financial Data Analyst / Data Scientist"
+    },
+    {
+      "file_id": "FSCeF resume 13.pdf",
+      "industry": "FSCeF",
+      "label": "Bilingual Customer Service Representative"
+    },
+    {
+      "file_id": "FSCeF resume 14.pdf",
+      "industry": "FSCeF",
+      "label": "Financial Analyst"
+    },
+    {
+      "file_id": "FSCeF resume 15.pdf",
+      "industry": "FSCeF",
+      "label": "Franchise Coordinator / Banking Professional"
+    },
+    {
+      "file_id": "FSCeF resume 16.pdf",
+      "industry": "FSCeF",
+      "label": "Technical Support, Administration, and Education Professional"
+    },
+    {
+      "file_id": "FSCeF resume 17.pdf",
+      "industry": "FSCeF",
+      "label": "Executive Director - Financial, Communications and Other Business Services"
+    },
+    {
+      "file_id": "FSCeF resume 19.pdf",
+      "industry": "FSCeF",
+      "label": "Account Management and Project Management Professional"
+    },
+    {
+      "file_id": "FSCeF resume 20.pdf",
+      "industry": "FSCeF",
+      "label": "Professional Accountant"
+    },
+    {
+      "file_id": "HRC resume 07.pdf",
+      "industry": "HRC",
+      "label": "Experienced Human Resources Business Partner & Talent Acquisition Leader"
+    },
+    {
+      "file_id": "HRC resume 08.pdf",
+      "industry": "HRC",
+      "label": "Talent Acquisition"
+    },
+    {
+      "file_id": "HRC resume 09.pdf",
+      "industry": "HRC",
+      "label": "Human Resources Manager"
+    },
+    {
+      "file_id": "HRC resume 10.pdf",
+      "industry": "HRC",
+      "label": "Human Resources Generalist"
+    },
+    {
+      "file_id": "HRC resume 11.pdf",
+      "industry": "HRC",
+      "label": "Human Resources Generalist"
+    },
+    {
+      "file_id": "HRC resume 12.pdf",
+      "industry": "HRC",
+      "label": "Human Resources Business Partner"
+    },
+    {
+      "file_id": "HRC resume 13.pdf",
+      "industry": "HRC",
+      "label": "Human Resource Professional"
+    },
+    {
+      "file_id": "HRC resume 15.pdf",
+      "industry": "HRC",
+      "label": "Vice President & Group Head, Human Resources"
+    },
+    {
+      "file_id": "HRC resume 16.pdf",
+      "industry": "HRC",
+      "label": "Public Management Expert"
+    },
+    {
+      "file_id": "HRC resume 17.pdf",
+      "industry": "HRC",
+      "label": "HR/Project Manager"
+    },
+    {
+      "file_id": "HRC resume 19.pdf",
+      "industry": "HRC",
+      "label": "Talent Acquisition Specialist"
+    },
+    {
+      "file_id": "HRC resume 20.pdf",
+      "industry": "HRC",
+      "label": "Human Resource Professional"
+    },
+    {
+      "file_id": "LC Resume 01.pdf",
+      "industry": "LC",
+      "label": "Strategic Finance Director"
+    },
+    {
+      "file_id": "LC Resume 02.pdf",
+      "industry": "LC",
+      "label": "Agile Project Manager"
+    },
+    {
+      "file_id": "LC Resume 04.pdf",
+      "industry": "LC",
+      "label": "Seasoned Finance Executive & Management Consultant"
+    },
+    {
+      "file_id": "LC Resume 07.pdf",
+      "industry": "LC",
+      "label": "Financial Manager"
+    },
+    {
+      "file_id": "EEC resume 17.pdf",
+      "industry": "EEC",
+      "label": "Project Management Coordinator"
+    },
+    {
+      "file_id": "EEC resume 19.pdf",
+      "industry": "EEC",
+      "label": "Electrical Engineer"
+    },
+    {
+      "file_id": "FSCeF resume 18.pdf",
+      "industry": "FSCeF",
+      "label": "Bilingual Logistics Specialist"
+    },
+    {
+      "file_id": "FSCeF resume 19.pdf",
+      "industry": "FSCeF",
+      "label": "Account Management and Project Management Professional"
+    },
+    {
+      "file_id": "FSCeF resume 20.pdf",
+      "industry": "FSCeF",
+      "label": "Professional Accountant"
+    },
+    {
+      "file_id": "HRC resume 14.pdf",
+      "industry": "HRC",
+      "label": "Human Resources Professional"
+    },
+    {
+      "file_id": "HRC resume 18.pdf",
+      "industry": "HRC",
+      "label": "Bi-lingual Senior HR Practitioner"
+    },
+    {
+      "file_id": "LC Resume 05.pdf",
+      "industry": "LC",
+      "label": "Finance and Accounting Professional"
+    },
+    {
+      "file_id": "LC Resume 06.pdf",
+      "industry": "LC",
+      "label": "IT Project Management Professional"
+    },
+    {
+      "file_id": "LC Resume 16.pdf",
+      "industry": "LC",
+      "label": "Certified Scrum Product Owner"
+    },
+    {
+      "file_id": "LC Resume 17.pdf",
+      "industry": "LC",
+      "label": "Project Finance and Credit Risk Management Professional"
+    },
+    {
+      "file_id": "LC Resume 18.pdf",
+      "industry": "LC",
+      "label": "Certified Scrum Product Owner"
+    },
+    {
+      "file_id": "LC Resume 19.pdf",
+      "industry": "LC",
+      "label": "Business Development Professional"
+    },
+    {
+      "file_id": "LC Resume 20.pdf",
+      "industry": "LC",
+      "label": "Business Development Professional"
+    },
+    {
+      "file_id": "MSfE resume 01.pdf",
+      "industry": "MSfE",
+      "label": "Senior QA Automation Engineer"
+    },
+    {
+      "file_id": "MSfE resume 02.pdf",
+      "industry": "MSfE",
+      "label": "Human Resources | People and Data Analytics | Customer Service Excellence"
+    },
+    {
+      "file_id": "MSfE resume 03.pdf",
+      "industry": "MSfE",
+      "label": "Junior HR Data Analyst"
+    },
+    {
+      "file_id": "MSfE resume 04.pdf",
+      "industry": "MSfE",
+      "label": "Senior Financial Advisor"
+    },
+    {
+      "file_id": "MSfE resume 05.pdf",
+      "industry": "MSfE",
+      "label": "Senior Test Lead"
+    },
+    {
+      "file_id": "MSfE resume 06.pdf",
+      "industry": "MSfE",
+      "label": "Data Analyst"
+    },
+    {
+      "file_id": "MSfE resume 09.pdf",
+      "industry": "MSfE",
+      "label": "Customer Service Representative"
+    },
+    {
+      "file_id": "MSfE resume 11.pdf",
+      "industry": "MSfE",
+      "label": "Project Manager"
+    },
+    {
+      "file_id": "MSfE resume 12.pdf",
+      "industry": "MSfE",
+      "label": "Data Analyst"
+    },
+    {
+      "file_id": "MSfE resume 14.pdf",
+      "industry": "MSfE",
+      "label": "Senior Test Lead"
+    },
+    {
+      "file_id": "MSfE resume 17.pdf",
+      "industry": "MSfE",
+      "label": "Database Engineer / ETL Developer"
+    },
+    {
+      "file_id": "MSfE resume 18.pdf",
+      "industry": "MSfE",
+      "label": "Data Analyst, Client and Market Research"
+    },
+    {
+      "file_id": "MSfE resume 20.pdf",
+      "industry": "MSfE",
+      "label": "QA Engineer"
+    }
+  ],
+  "summary": {
+    "total_documents": 254,
+    "successful_pairs": 254,
+    "docs_without_industry_prefix": 0,
+    "docs_without_resume_data": 0,
+    "docs_without_label": 0
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "total_documents": 637,
+  "updated_documents": 0,
+  "skipped_no_mapping": 0,
+  "skipped_already_has_company": 637,
+  "errors": 0,
+  "duration": "0:00:03.623893",
+  "dry_run": true,
+  "available_companies": 900
+}

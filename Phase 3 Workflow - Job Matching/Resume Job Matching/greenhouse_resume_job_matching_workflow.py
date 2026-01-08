@@ -118,6 +118,33 @@ class GreenhouseResumeJobMatchingWorkflow:
         logger.info(f"Database: {self.config.db_name}")
         logger.info(f"Active filters: {self.config.get_summary()['filters']}")
     
+    def _build_processed_jobs_filter(self, job_query: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Build a filter for matches/unmatched collections that matches the job query.
+        Only includes fields that exist in both job_postings and matches/unmatched collections.
+        
+        Currently, only 'cycle' is stored in matches/unmatched collections.
+        If you need to filter by other fields (e.g., search_term), you must first
+        store those fields when saving matches/unmatched jobs.
+        
+        Args:
+            job_query: The query used to filter jobs from Job_postings_greenhouse
+            
+        Returns:
+            Filter dictionary compatible with matches/unmatched collections
+        """
+        # Fields that exist in both job_postings and matches/unmatched collections
+        # Currently only 'cycle' is stored in matches/unmatched collections
+        # To add more fields, update _store_valid_match() and _store_unmatched_job() methods
+        compatible_fields = ["cycle"]  # Add more fields here after storing them in matches/unmatched
+        
+        processed_filter = {}
+        for field in compatible_fields:
+            if field in job_query:
+                processed_filter[field] = job_query[field]
+        
+        return processed_filter
+    
     def get_filtered_jobs(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
         """
         Get Greenhouse jobs based on current filtering configuration.
@@ -130,25 +157,43 @@ class GreenhouseResumeJobMatchingWorkflow:
             List of job documents matching the filters
         """
         try:
-            # Build query for Greenhouse jobs with jd_extraction=True and embeddings
-            query = {
-                "jd_extraction": True,
-                "jd_embedding": {"$exists": True, "$ne": None}
-            }
+            # Build query for Greenhouse jobs using configuration filters
+            query = self.config.get_job_query()
+
+            logger.info(f"Greenhouse job filters: {query}")
             
             # Handle duplicate processing based on configuration
             if self.config.force_reprocess:
                 logger.info("Force reprocessing enabled - will process all jobs including previously processed ones")
             elif self.config.skip_processed_jobs:
                 # Add filter for jobs that haven't been processed yet
-                processed_job_ids = self.matches_collection.distinct("job_posting_id")
-                unmatched_job_ids = self.unmatched_collection.distinct("job_posting_id")
+                # IMPORTANT: Only exclude jobs that match the current filter criteria
+                # This prevents excluding jobs from other cycles/filters that were processed before
+                processed_filter = self._build_processed_jobs_filter(query)
+                
+                if processed_filter:
+                    # Only get processed job IDs that match the current filter
+                    processed_job_ids = self.matches_collection.distinct(
+                        "job_posting_id",
+                        processed_filter
+                    )
+                    unmatched_job_ids = self.unmatched_collection.distinct(
+                        "job_posting_id",
+                        processed_filter
+                    )
+                    logger.info(f"Filtering processed jobs by: {processed_filter}")
+                else:
+                    # No compatible filter fields, get all processed job IDs
+                    # (This shouldn't happen in practice, but handle it gracefully)
+                    processed_job_ids = self.matches_collection.distinct("job_posting_id")
+                    unmatched_job_ids = self.unmatched_collection.distinct("job_posting_id")
+                    logger.warning("No compatible filter fields found - excluding all processed jobs (may exclude jobs from other filters)")
                 
                 if processed_job_ids or unmatched_job_ids:
                     query["_id"] = {"$nin": processed_job_ids + unmatched_job_ids}
-                    logger.info(f"Skipping {len(processed_job_ids)} already matched jobs and {len(unmatched_job_ids)} already unmatched jobs")
+                    logger.info(f"Skipping {len(processed_job_ids)} already matched jobs and {len(unmatched_job_ids)} already unmatched jobs (matching current filter)")
                 else:
-                    logger.info("No previously processed jobs found - processing all available jobs")
+                    logger.info("No previously processed jobs found matching current filter - processing all available jobs")
             else:
                 logger.info("Duplicate processing enabled - will process all jobs including previously processed ones")
             
@@ -165,7 +210,11 @@ class GreenhouseResumeJobMatchingWorkflow:
             if jobs_without_embeddings > 0:
                 logger.warning(f"Found {jobs_without_embeddings} jobs without embeddings - these will be skipped")
             
-            logger.info(f"Found {len(jobs)} Greenhouse jobs with jd_extraction=True ({len(jobs_with_embeddings)} with embeddings)")
+            logger.info(
+                "Found %d Greenhouse jobs matching filters (%d with embeddings)",
+                len(jobs),
+                len(jobs_with_embeddings),
+            )
             return jobs_with_embeddings
             
         except Exception as e:
@@ -406,7 +455,7 @@ class GreenhouseResumeJobMatchingWorkflow:
 
         # Create the base prompt
         prompt = f"""
-You are an expert technical recruiter evaluating multiple candidates for a Greenhouse job posting.
+You are an expert technical recruiter evaluating multiple candidates for a job posting.
 
 JOB DETAILS:
 Title: {job_title}
@@ -632,6 +681,7 @@ Do not include any other text or formatting.
                 "company": job_doc.get("company"),
                 "location": job_doc.get("location"),
                 "job_description": job_doc.get("job_description"),
+                "cycle": job_doc.get("cycle"),
                 "matched_resumes": [
                     {
                         "file_id": r.get("file_id"),
@@ -644,7 +694,8 @@ Do not include any other text or formatting.
                 ],
                 "created_at": datetime.now(),
                 "validated_at": datetime.now(),
-                "workflow_run": True
+                "workflow_run": True,
+                "posted_date": job_doc.get("posted_date")
             }
             
             # Create match document for Greenhouse collection
@@ -677,6 +728,7 @@ Do not include any other text or formatting.
                 "company": job_doc.get("company"),
                 "location": job_doc.get("location"),
                 "job_description": job_doc.get("job_description"),
+                "cycle": job_doc.get("cycle"),
                 "matched_resumes": [
                     {
                         "file_id": r.get("file_id"),
@@ -689,7 +741,8 @@ Do not include any other text or formatting.
                 ],
                 "created_at": datetime.now(),
                 "validated_at": datetime.now(),
-                "workflow_run": True
+                "workflow_run": True,
+                "posted_date": job_doc.get("posted_date")
             }
             
             # Create unmatched document for Greenhouse collection
@@ -898,33 +951,51 @@ Do not include any other text or formatting.
     def get_processing_statistics(self) -> Dict[str, Any]:
         """
         Get comprehensive statistics about Greenhouse job processing status.
+        Uses the same filter as get_filtered_jobs() for accurate statistics.
         
         Returns:
             Dictionary with processing statistics
         """
         try:
+            # Get the filter query to ensure statistics match what will actually be processed
+            filter_query = self.config.get_job_query()
+            
             # Count total Greenhouse jobs
             total_jobs = self.job_collection.count_documents({})
-            jobs_with_embeddings = self.job_collection.count_documents({
+            
+            # Count jobs matching the current filter (including cycle filter)
+            jobs_matching_filter = self.job_collection.count_documents(filter_query)
+            
+            # Also count jobs with embeddings (for reference, without cycle filter)
+            jobs_with_embeddings_all_cycles = self.job_collection.count_documents({
                 "jd_extraction": True,
                 "jd_embedding": {"$exists": True, "$ne": None}
             })
             
-            # Count processed jobs
-            processed_jobs = self.matches_collection.count_documents({})
-            unmatched_jobs = self.unmatched_collection.count_documents({})
+            # Count processed jobs that match the current filter
+            processed_filter = self._build_processed_jobs_filter(filter_query)
+            if processed_filter:
+                # Only count processed jobs matching the current filter
+                processed_jobs = self.matches_collection.count_documents(processed_filter)
+                unmatched_jobs = self.unmatched_collection.count_documents(processed_filter)
+            else:
+                # No compatible filter fields, count all processed jobs
+                processed_jobs = self.matches_collection.count_documents({})
+                unmatched_jobs = self.unmatched_collection.count_documents({})
+            
             total_processed = processed_jobs + unmatched_jobs
             
-            # Count remaining jobs
-            remaining_jobs = jobs_with_embeddings - total_processed
+            # Count remaining jobs (matching filter but not yet processed)
+            remaining_jobs = jobs_matching_filter - total_processed
             
             # Calculate percentages
-            processing_progress = (total_processed / jobs_with_embeddings * 100) if jobs_with_embeddings > 0 else 0
+            processing_progress = (total_processed / jobs_matching_filter * 100) if jobs_matching_filter > 0 else 0
             
             return {
                 "workflow_type": "greenhouse",
                 "total_jobs": total_jobs,
-                "jobs_with_embeddings": jobs_with_embeddings,
+                "jobs_matching_filter": jobs_matching_filter,  # Jobs matching current filter (e.g., cycle: 6)
+                "jobs_with_embeddings_all_cycles": jobs_with_embeddings_all_cycles,  # All jobs with embeddings (any cycle)
                 "processed_jobs": {
                     "matched": processed_jobs,
                     "unmatched": unmatched_jobs,
@@ -933,8 +1004,9 @@ Do not include any other text or formatting.
                 "remaining_jobs": remaining_jobs,
                 "processing_progress": {
                     "percentage": processing_progress,
-                    "fraction": f"{total_processed}/{jobs_with_embeddings}"
+                    "fraction": f"{total_processed}/{jobs_matching_filter}"
                 },
+                "filter_applied": filter_query,
                 "duplicate_processing": {
                     "skip_processed_jobs": self.config.skip_processed_jobs,
                     "force_reprocess": self.config.force_reprocess

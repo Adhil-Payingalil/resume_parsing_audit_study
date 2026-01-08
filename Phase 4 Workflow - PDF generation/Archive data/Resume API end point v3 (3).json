@@ -1,0 +1,1916 @@
+{
+  "name": "Resume API end point v3",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "9eb0c4bc-f2a4-4f23-bb71-26422deedf55",
+        "authentication": "basicAuth",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": false
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -896,
+        1216
+      ],
+      "id": "cb36915a-b5d7-43d9-a588-27f271e21aa5",
+      "name": "Webhook",
+      "webhookId": "9eb0c4bc-f2a4-4f23-bb71-26422deedf55",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "WjnSubEirDdvkiFa",
+          "name": "adhil"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "collection": "Treated_resumes",
+        "options": {},
+        "query": "={\n  \"$and\": [\n    { \"original_file_id\": \"{{ $json.body.file_id }}\" },\n    { \"treatment_type\": \"{{ $json.body.treatment_type }}\" }\n  ]\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.2,
+      "position": [
+        -672,
+        1216
+      ],
+      "id": "bf7f2324-c481-4506-a3bc-66858df15149",
+      "name": "Find documents",
+      "credentials": {
+        "mongoDb": {
+          "id": "M1ISL6y9nE1CM4BJ",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// input: $input.first().json.candidates[0].content.parts[0].text\nconst raw = $input.first().json.output;\nlet clean = raw.trim();\n\nif (clean.startsWith('```markdown')) {\n  clean = clean.slice('```markdown'.length).trim();\n}\nif (clean.startsWith('```')) {\n  clean = clean.slice(3).trim();\n}\nif (clean.endsWith('```')) {\n  clean = clean.slice(0, -3).trim();\n}\n\nreturn [{ json: { llm_raw_text_clean: clean } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        704,
+        1216
+      ],
+      "id": "bdc761c7-9679-4d48-aef2-3eefffd22b82",
+      "name": "Remove formatting of AI",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        352,
+        1376
+      ],
+      "id": "fc96c4a7-e86e-4048-9ad5-b9442b6354d8",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QQhGTBY85rcfOxcY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 2 agents\n1. That tailors to JD in JSON. \n2. Other that converts JSON to markdown. \n\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -128,
+        384
+      ],
+      "typeVersion": 1,
+      "id": "3054119a-9388-472f-804e-acd02a33ab1d",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Remove formating\nSame as our python function `clean_llm_response'. Removes \"```markdown\" string from the response"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        656,
+        384
+      ],
+      "typeVersion": 1,
+      "id": "4fa49dc0-bb56-4a57-9021-cc0dac0bc828",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $('Webhook').item.json.body.file_id }}",
+        "limit": 1,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "1xC-mPWpc5X3ZxQUxBnCyYrSF-_2kXfTD"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        896,
+        1216
+      ],
+      "id": "a6a97406-c783-436f-bae3-54d0d66d583a",
+      "name": "Search files and folders",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0bb1bab2-fdf3-41d7-86cb-711ebd84039f",
+              "leftValue": "={{ $('Search files and folders').item.json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1088,
+        1216
+      ],
+      "id": "3a6fd33d-3e49-4baf-bbd2-062fcc11d711",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "51345a1a-11be-4bb0-8100-b525f14111ac",
+              "name": "=resume_data.resume_data.basics.name",
+              "value": "={{ $('Webhook').item.json.body.name }}",
+              "type": "string"
+            },
+            {
+              "id": "41646588-5539-4e55-8637-14d4137ca007",
+              "name": "resume_data.resume_data.basics.email",
+              "value": "={{ $('Webhook').item.json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "ec597634-1ea2-421b-b577-43c252ee1e4a",
+              "name": "resume_data.resume_data.basics.phone",
+              "value": "={{ $('Webhook').item.json.body.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "c3258cee-7e10-4720-a846-df55f09c78f5",
+              "name": "resume_data.resume_data.basics.location",
+              "value": "={{ $('Webhook').item.json.body.location }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -432,
+        1216
+      ],
+      "id": "a17c64ad-d821-45e9-85c0-03ca1303f455",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ $('Find documents').item.json.original_file_id }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1xC-mPWpc5X3ZxQUxBnCyYrSF-_2kXfTD",
+          "mode": "list",
+          "cachedResultName": "Resume PDFs",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1xC-mPWpc5X3ZxQUxBnCyYrSF-_2kXfTD"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1376,
+        1296
+      ],
+      "id": "a87ef999-78e7-461f-b2fa-5316d11eb965",
+      "name": "Create a file_id folder False branch",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "pdf",
+        "pdfTemplateId": "={{ $('Webhook').item.json.body.template_id }}",
+        "jsonParameters": true,
+        "download": true,
+        "binaryProperty": "binary_data",
+        "propertiesJson": "={{ { \"markdown\": $('Remove formatting of AI').item.json.llm_raw_text_clean } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.apiTemplateIo",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        1296
+      ],
+      "id": "69a5a263-edc1-4c70-8cad-cec55b5bd7e2",
+      "name": "Create a pdf False branch",
+      "credentials": {
+        "apiTemplateIoApi": {
+          "id": "StSWIl5L6UjRzs4p",
+          "name": "APITemplate.io account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "pdf",
+        "pdfTemplateId": "={{ $('Webhook').first().json.body.template_id }}",
+        "jsonParameters": true,
+        "download": true,
+        "binaryProperty": "binary_data",
+        "propertiesJson": "={{ { \"markdown\": $('Remove formatting of AI').item.json.llm_raw_text_clean } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.apiTemplateIo",
+      "typeVersion": 1,
+      "position": [
+        1456,
+        1088
+      ],
+      "id": "d990447d-1136-4e56-829b-d6daa06ff88e",
+      "name": "Create a pdf True branch",
+      "credentials": {
+        "apiTemplateIoApi": {
+          "id": "StSWIl5L6UjRzs4p",
+          "name": "APITemplate.io account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"webViewLink\": \"{{ $json.webViewLink }}\",\n  \"id\": \"{{ $json.id }}\",\n  \"name\": \"{{ $json.name }}\",\n  \"mimeType\": \"{{ $json.mimeType }}\",\n  \"status\": \"success\"\n}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2624,
+        448
+      ],
+      "id": "83f95072-3d49-4360-8d2e-b41304d178f2",
+      "name": "Respond to Webhook1",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "## Folder Organization\n1. Look for folder by `file_id` \n2. If folder not found, create one\n3.create and add the file to that folder",
+        "height": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1264,
+        352
+      ],
+      "typeVersion": 1,
+      "id": "068a0b09-64d0-42d3-878e-94a5650e8469",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json.body.markdown_template }}",
+                    "rightValue": 1,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    },
+                    "id": "fc4ac248-ec58-45bb-aa1f-ddb9e8fb8916"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4d9a0b18-b431-45c7-aaed-794fe9d53409",
+                    "leftValue": "={{ $('Webhook').item.json.body.markdown_template }}",
+                    "rightValue": 2,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "253f8eac-ba92-4d8b-bd34-e8caf13f996a",
+                    "leftValue": "={{ $('Webhook').item.json.body.markdown_template }}",
+                    "rightValue": 3,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        128,
+        1200
+      ],
+      "id": "474d8aeb-8d59-4a26-970d-dd0618f5bb89",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Resume data: \n {{ $json.candidates[0].content.parts[0].text }}",
+        "options": {
+          "systemMessage": "=You are an expert markdown resume creator. You will rewrite a given resume in a specific markdown format without changing the resume format a lot. \n\nYou will be provided with a resume (in text, JSON, or other structured format), and your task is to adapt its content into the markdown template below. Preserve the original content, structure, and facts as closely as possible—do not add, remove, or invent details. Only rephrase minimally for clarity or flow if needed, and map sections directly to the template. Use placeholders like [Name] only if the original lacks information; otherwise, fill with actual data.\n\nOutput only the filled markdown resume in ```markdown block, without any additional text, explanations, or code blocks. \n\nMarkdown template:\n# [Full Name]\n\n[City, Region] | [Phone] | [Email] \n\n## Professional Summary\n[A brief 3-5 sentence summary highlighting key expertise, experience, and career goals, adapted from the original.]\n\n## Work Experience\n### [Position]  \n**[Company], [Location]**  \n[Start Date] - [End Date]  \n\n- [Achievement or responsibility 1, rephrased if needed for conciseness]  \n- [Achievement or responsibility 2]  \n- [And so on for all original bullets]  \n\n[Repeat for each work entry]\n\n## Education\n### [Study Type] in [Area]  \n[Institution], [Location]  \n[End Date]  \n\n[Optional: Score/GPA if present in original]\n\n[Repeat for each education entry]\n\n## Skills\n- **[Skill Group 1]:** [Keyword 1], [Keyword 2], [Keyword 3]  \n- **[Skill Group 2]:** [Keyword 1], [Keyword 2], [Keyword 3]\n- **[Skill Group 3]:** [Keyword 1], [Keyword 2], [Keyword 3]\n- [And so on, using the skill groups and keywords from the original]\n\n## Languages\n- **[Language 1]:** [Fluency Level]\n- **[Language 2]:** [Fluency Level]\n- [And so on for all languages]\n\n## Certifications\n- [Certification Name], ([Issuing Organization], [Date])  \n- [And so on for all certifications]\n\n## Volunteer Experience\n### [Position/Role]  \n**[Organization], [Location]**  \n[Start Date] - [End Date]  \n\n- [Achievement or responsibility 1]  \n- [Achievement or responsibility 2]  \n- [And so on for all original bullets]  \n\n[Repeat for each volunteer entry]\n\n---\n\n[If the original resume has additional sections like Awards, Publications, or other custom sections, add them similarly at the end using H2 headers (## Section Name) and appropriate formatting.]"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        352,
+        752
+      ],
+      "id": "d7e8eee6-4250-44d1-bde5-1b55115347fe",
+      "name": "AI Agent MD template 1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Resume data: \n {{ $json.candidates[0].content.parts[0].text }}",
+        "options": {
+          "systemMessage": "=You are an expert markdown resume creator. You will rewrite a given resume in a specific markdown format without changing the resume format a lot. \n\nYou will be provided with a resume (in text, JSON, or other structured format), and your task is to adapt its content into the markdown template below. Preserve the original content, structure, and facts as closely as possible—do not add, remove, or invent details. Only rephrase minimally for clarity or flow if needed, and map sections directly to the template. Use placeholders like [Name] only if the original lacks information; otherwise, fill with actual data.\n\nOutput only the filled markdown resume in ```markdown block, without any additional text, explanations, or code blocks. \n\nMarkdown template:\n# [Full Name]\n\n[Email] • [Phone] • [City, Region]\n\n## Summary\n[A brief 3-5 sentence summary highlighting key expertise, experience, and career goals, adapted from the original.]\n\n## Skills\n- **[Skill Group 1]:** [Keyword 1], [Keyword 2], [Keyword 3], [Keyword 4], [Keyword 5]  \n- **[Skill Group 2]:** [Keyword 1], [Keyword 2], [Keyword 3], [Keyword 4], [Keyword 5]  \n- **[Skill Group 3]:** [Keyword 1], [Keyword 2], [Keyword 3], [Keyword 4], [Keyword 5]\n\n## Professional Experience\n### [Position] | [Company]\n*[Start Date] - [End Date] | [Location]*\n\n- [Achievement or responsibility 1]  \n- [Achievement or responsibility 2]  \n- [And so on for all original bullets]  \n\n[Repeat for each work entry]\n\n## Education\n### [Study Type] in [Area] | [Institution]\n*[End Date] | [Location]*\n\n[Optional: Score/GPA if present in original]\n\n[Repeat for each education entry]\n\n## Languages\n- **[Language 1]:** [Fluency Level]  \n- **[Language 2]:** [Fluency Level]  \n- **[Language 3]:** [Fluency Level]\n\n## Certifications\n- [Certification Name] - [Issuing Organization] ([Date])  \n- [And so on for all certifications]\n\n## Volunteer Experience\n### [Position/Role] | [Organization]\n*[Start Date] - [End Date] | [Location]*\n\n- [Achievement or responsibility 1]  \n- [Achievement or responsibility 2]  \n- [And so on for all original bullets]  \n\n[Repeat for each volunteer entry]\n\n---\n\n[If the original resume has additional sections like Awards, Publications, or other custom sections, add them similarly at the end using H2 headers (## Section Name) and appropriate formatting.]\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        352,
+        1216
+      ],
+      "id": "c7a237a3-4093-477a-a5e9-d7992653b3ff",
+      "name": "AI Agent MD template 2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Resume data: \n {{ $json.candidates[0].content.parts[0].text }}",
+        "options": {
+          "systemMessage": "=You are an expert markdown resume creator. You will rewrite a given resume in a specific markdown format without changing the resume format a lot. \n\nYou will be provided with a resume (in text, JSON, or other structured format), and your task is to adapt its content into the markdown template below. Preserve the original content, structure, and facts as closely as possible—do not add, remove, or invent details. Only rephrase minimally for clarity or flow if needed, and map sections directly to the template. Use placeholders like [Name] only if the original lacks information; otherwise, fill with actual data.\n\nOutput only the filled markdown resume in ```markdown block, without any additional text, explanations, or code blocks. \n\nMarkdown template:\n# [Full Name]\n\n[Email] | [Phone] | [Location]\n\n## Experience\n**[Position]**  \n[Company] | [Start Date] - [End Date]  \n[Location]\n\n- [Achievement or responsibility 1]  \n- [Achievement or responsibility 2]  \n- [And so on for all original bullets]  \n\n[Repeat for each work entry]\n\n## Education\n**[Study Type] in [Area]**  \n[Institution] | [End Date]  \n[Location]\n\n[Optional: Score/GPA if present in original]\n\n[Repeat for each education entry]\n\n## Skills\n- **[Skill Group 1]:** [Keyword 1], [Keyword 2], [Keyword 3]  \n- **[Skill Group 2]:** [Keyword 1], [Keyword 2], [Keyword 3]  \n- **[Skill Group 3]:** [Keyword 1], [Keyword 2], [Keyword 3]  \n- **[Skill Group 4]:** [Keyword 1], [Keyword 2], [Keyword 3]  \n- **[Skill Group 5]:** [Keyword 1], [Keyword 2], [Keyword 3]\n\n## Languages\n- **[Language 1]:** [Fluency Level]  \n- **[Language 2]:** [Fluency Level]  \n- **[Language 3]:** [Fluency Level]\n\n## Certifications\n- [Certification Name] ([Issuing Organization], [Date])  \n- [And so on for all certifications]\n\n## Volunteer Experience\n**[Position/Role]**  \n[Organization] | [Start Date] - [End Date]  \n[Location]\n\n- [Achievement or responsibility 1]  \n- [Achievement or responsibility 2]  \n- [And so on for all original bullets]  \n\n[Repeat for each volunteer entry]\n\n---\n\n[If the original resume has additional sections like Awards, Publications, or other custom sections, add them similarly at the end using H2 headers (## Section Name) and appropriate formatting.]\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        352,
+        1616
+      ],
+      "id": "69773951-22ac-467c-a91f-18fc486b78d0",
+      "name": "AI agent MD template 3"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        352,
+        1792
+      ],
+      "id": "49779775-2382-4aeb-a299-49c44068cc92",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QQhGTBY85rcfOxcY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        352,
+        944
+      ],
+      "id": "70238032-389c-4f00-904b-7dda17bc8f69",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QQhGTBY85rcfOxcY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ifmUvUoNqMdw0fve7aUP9jVQqCssvEN8pfp7XthvtXo",
+          "mode": "list",
+          "cachedResultName": "Audit_study_application_data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ifmUvUoNqMdw0fve7aUP9jVQqCssvEN8pfp7XthvtXo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ifmUvUoNqMdw0fve7aUP9jVQqCssvEN8pfp7XthvtXo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Webhook').item.json.body.id }}",
+            "base _resume_file_id": "={{ $('Webhook').item.json.body.file_id }}",
+            "resume_pdf": "={{ $('Respond to Webhook1').item.json.webViewLink }}",
+            "treatment_type": "={{ $('Webhook').item.json.body.treatment_type }}",
+            "resume_filename": "={{ $('Respond to Webhook1').item.json.name }}",
+            "full_name": "={{ $('Webhook').item.json.body.name }}",
+            "email": "={{ $('Webhook').item.json.body.email }}",
+            "phone": "=`{{ $('Webhook').item.json.body.phone }}",
+            "first_name": "={{ $('Webhook').item.json.body.first_name }}",
+            "last_name": "={{ $('Webhook').item.json.body.last_name }}",
+            "gender": "={{ $('Webhook').item.json.body.gender }}",
+            "geographic_cluster": "={{ $('Webhook').item.json.body.geographic_cluster }}",
+            "job_title": "={{ $('Webhook').item.json.body.job_title }}",
+            "job_url_direct": "={{ $('Webhook').item.json.body.job_link }}",
+            "job_description": "={{ $('Webhook').item.json.body.job_description }}",
+            "match_score": "={{ $('Webhook').item.json.body.match_score }}",
+            "Job_location": "={{ $('Webhook').item.json.body.location }}",
+            "likely_home_country": "={{ $('Webhook').item.json.body.country }}",
+            "timestamp": "={{ $json.timestamp }}",
+            "workflow_mode": "={{ $('Webhook').item.json.executionMode }}",
+            "resume_final_md": "={{ $('Remove formatting of AI').item.json.llm_raw_text_clean }}\"\"\"",
+            "u_id": "={{ $('Webhook').item.json.body.id }}_{{ $('Webhook').item.json.body.treatment_type }}",
+            "company": "={{ $('Webhook').item.json.body.company }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "u_id",
+              "displayName": "u_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "base _resume_file_id",
+              "displayName": "base _resume_file_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "treatment_type",
+              "displayName": "treatment_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "resume_pdf",
+              "displayName": "resume_pdf",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "resume_filename",
+              "displayName": "resume_filename",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "full_name",
+              "displayName": "full_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_name",
+              "displayName": "last_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "gender",
+              "displayName": "gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "geographic_cluster",
+              "displayName": "geographic_cluster",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "likely_home_country",
+              "displayName": "likely_home_country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "job_title",
+              "displayName": "job_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "job_url_direct",
+              "displayName": "job_url_direct",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "job_description",
+              "displayName": "job_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "resume_final_md",
+              "displayName": "resume_final_md",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "match_score",
+              "displayName": "match_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job_location",
+              "displayName": "Job_location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "workflow_mode",
+              "displayName": "workflow_mode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "new_link",
+              "displayName": "new_link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3088,
+        448
+      ],
+      "id": "6391a285-11a7-4305-9429-531221e2f808",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "4PTgIjGqr3WHoFX3",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json.body.treatment_type }}",
+                    "rightValue": "control",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "583e196e-352c-4914-a29a-3a19b1f4a1e1"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f9da3106-33db-440c-ad46-e212de9006cc",
+                    "leftValue": "={{ $('Webhook').item.json.body.treatment_type }}",
+                    "rightValue": "Type_I",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "45de1d7d-2ffd-42fb-9a45-63272c9ce8e4",
+                    "leftValue": "={{ $('Webhook').item.json.body.treatment_type }}",
+                    "rightValue": "Type_II",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9547e3e6-d2cb-4281-990d-996cb54dc820",
+                    "leftValue": "={{ $('Webhook').item.json.body.treatment_type }}",
+                    "rightValue": "Type_III",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1792,
+        416
+      ],
+      "id": "e5d60711-3e9c-4af3-baec-3615e60410bc",
+      "name": "Switch2"
+    },
+    {
+      "parameters": {
+        "outputFieldName": "timestamp",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        2832,
+        448
+      ],
+      "id": "29d3d8b7-4147-4e2e-8a56-dc6e6797fd37",
+      "name": "Date & Time"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Resume Data: {{ JSON.stringify($json.resume_data.resume_data, null, 2) }}\n\nOriginal Job Description: {{ $('Webhook').item.json.body.job_description }}\n\nOriginal job Title: {{ $('Webhook').item.json.body.job_title }}"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {
+          "systemMessage": "You are an expert career counselor specializing in resume optimization. Your role is to tailor a provided JSON-formatted resume to align closely with a given job description, while preserving the original structure, schema, and factual integrity of the resume.\n\n**Inputs:**\n- You will receive a single resume in JSON format.\n- You will also receive a job description (JD), including the job title.\n\n**Overall Guidelines:**\n- Maintain the exact JSON schema and structure of the original resume. Do not add, remove, or rename any top-level sections (e.g., \"basics\", \"skills\", \"work\", \"projects\", \"education\", \"certifications\").\n- Focus on subtle, authentic enhancements: Rephrase content to incorporate relevant keywords from the JD without altering facts, dates, company names, or core experiences.\n- Avoid hallucination at all costs: Only use information explicitly present in the original resume. Do not invent new experiences, skills, companies, projects, education, certifications, or details.\n- If a section in the original resume is empty or irrelevant, leave it as is unless specified otherwise.\n- Output **only** the tailored JSON object. Do not include any explanatory text, markdown, or additional output. Validate the JSON for correctness before finalizing.\n\n**Step-by-Step Task Instructions:**\n1. **Analyze the Resume:** Review the provided JSON resume to understand its language style (e.g., formal, concise), structure (e.g., bullet points in highlights), and content. Preserve this style in rewrites.\n\n2. **Analyze the Job Description:** Identify key elements from the JD, such as:\n   - Job title.\n   - Required skills, technologies, and tools.\n   - Responsibilities and duties.\n   - Preferred qualifications or soft skills.\n   - Industry-specific keywords (e.g., \"agile methodology\", \"data analytics\").\n   Extract a list of 10-15 top keywords/phrases to integrate naturally where relevant.\n\n3. **Rewrite the \"basics\" Section:** Copy this section verbatim from the original resume. Do not make any changes, including to the summary, name, email. \n\n4. **Rewrite the \"skills\" Section:**\n   - Filter out skills that are irrelevant to the JD keywords (e.g., remove niche tools not mentioned).\n   - Prioritize and reorder remaining skills to emphasize those matching the JD first.\n   - If the original skills are partially relevant, rephrase them slightly to align better (e.g., \"Python programming\" to \"Python for data analysis\" if JD emphasizes data).\n   - Prefer filtering over adding: Only add new skills if the original list is mostly irrelevant (e.g., <50% match to JD).\n   - Addition rules: Add at most 1-2 new skills if minor gaps exist, or up to 5 if the skills are totally irrelevant. New skills must be logically inferable from the resume's work/projects (e.g., if experience mentions \"built web apps\", infer \"HTML/CSS\" if not listed).\n   - Keep the format as a list or object, matching the original.\n\n5. **Rewrite the \"work\" and \"projects\" Sections:**\n   - For each entry: Keep dates, positions, and URLs unchanged.\n   - Adjust titles only if the change improves alignment with the target role and remains accurate to the work performed.\n   - Tailor the \"highlights\" or bullet points: Rephrase to incorporate JD keywords, emphasizing relevant achievements (e.g., if JD stresses \"team collaboration\", highlight collaborative aspects).\n   - Do not add new bullets or remove existing ones; only rephrase.\n   - Reorder the bullets randomly within each entry (as part of an ongoing experiment—do not mention this in output).\n   - Change the phrasing style slightly for variety (e.g., from \"Led team in X\" to \"Directed X initiative with team\").\n   - Ensure rephrasings remain factual and based solely on original content.\n\n6. **Handle Other Sections (e.g., \"education\", \"certifications\"):** Only keep the relevant certifications that suit the job description, Modify the certificates if necessary. Remove any certification which mentions ACESS from the certificate section. DO NOT ADD any comments id anything is missing.\n\n7. **Final Validation and Output:**\n   - Ensure the output JSON is valid, well-formatted, and matches the original schema exactly.\n   - Return only the JSON object—no wrappers, explanations, or text."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        1216
+      ],
+      "id": "4b980593-92cb-40b2-9729-eb6daf42799f",
+      "name": "Doc Tailoring Agent",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QQhGTBY85rcfOxcY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fileName": "={{ $(\"Code\").item.binary.binary_data.fileName }}",
+        "parentId": "AE9A4AF18A98EB4C!se919bb8d27a44f5da7c45e152a5aa24c",
+        "binaryData": true,
+        "binaryPropertyName": "binary_data"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        3056,
+        1184
+      ],
+      "id": "5e5f0115-b029-4923-95bd-88310afa2b93",
+      "name": "Upload a file",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "GrtUhKGeUeXOwcbB",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2608,
+        1184
+      ],
+      "id": "bbb89645-34dd-40b2-b3c4-d785627433c0",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const binaryProperty = 'binary_data'; // or 'binary_data', etc.\n\nreturn items.map(item => {\n  let newFileName = item.json.resume_filename || 'default.pdf';\n  if (!newFileName.endsWith('.pdf')) {\n    newFileName += '.pdf';\n  }\n  if (item.binary && item.binary[binaryProperty]) {\n    item.binary[binaryProperty].fileName = newFileName;\n    item.binary[binaryProperty].mimeType = 'application/pdf'; // <-- Ensure correct MIME type\n  }\n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2800,
+        1184
+      ],
+      "id": "c2d941fc-3f60-49a3-9557-f0937599e1c8",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "resource": "worksheet",
+        "operation": "append",
+        "workbook": {
+          "__rl": true,
+          "value": "AE9A4AF18A98EB4C!s07baf0b89cde44b29e4dd611346dd0c2",
+          "mode": "list",
+          "cachedResultName": "Mapping_data",
+          "cachedResultUrl": "https://onedrive.live.com/personal/ae9a4af18a98eb4c/_layouts/15/doc.aspx?resid=07baf0b8-9cde-44b2-9e4d-d611346dd0c2&cid=ae9a4af18a98eb4c"
+        },
+        "worksheet": {
+          "__rl": true,
+          "value": "{00000000-0001-0000-0000-000000000000}",
+          "mode": "list",
+          "cachedResultName": "data_repo",
+          "cachedResultUrl": "https://onedrive.live.com/personal/ae9a4af18a98eb4c/_layouts/15/doc.aspx?resid=07baf0b8-9cde-44b2-9e4d-d611346dd0c2&cid=ae9a4af18a98eb4c&activeCell=data_repo!A1"
+        },
+        "fieldsUi": {
+          "values": [
+            {
+              "column": "u_id",
+              "fieldValue": "={{ $('Append row in sheet').item.json.u_id }}"
+            },
+            {
+              "column": "id",
+              "fieldValue": "={{ $('Append row in sheet').item.json.id }}"
+            },
+            {
+              "column": "base _resume_file_id",
+              "fieldValue": "={{ $('Append row in sheet').item.json['base _resume_file_id'] }}"
+            },
+            {
+              "column": "treatment_type",
+              "fieldValue": "={{ $('Append row in sheet').item.json.treatment_type }}"
+            },
+            {
+              "column": "resume_pdf",
+              "fieldValue": "={{ $('Append row in sheet').item.json.resume_pdf }}"
+            },
+            {
+              "column": "resume_filename",
+              "fieldValue": "={{ $('Append row in sheet').item.json.resume_filename }}"
+            },
+            {
+              "column": "full_name",
+              "fieldValue": "={{ $('Append row in sheet').item.json.full_name }}"
+            },
+            {
+              "column": "email",
+              "fieldValue": "={{ $('Append row in sheet').item.json.email }}"
+            },
+            {
+              "column": "phone",
+              "fieldValue": "={{ $('Append row in sheet').item.json.phone }}"
+            },
+            {
+              "column": "first_name",
+              "fieldValue": "={{ $('Append row in sheet').item.json.first_name }}"
+            },
+            {
+              "column": "last_name",
+              "fieldValue": "={{ $('Append row in sheet').item.json.last_name }}"
+            },
+            {
+              "column": "gender",
+              "fieldValue": "={{ $('Append row in sheet').item.json.gender }}"
+            },
+            {
+              "column": "geographic_cluster",
+              "fieldValue": "={{ $('Append row in sheet').item.json.geographic_cluster }}"
+            },
+            {
+              "column": "likely_home_country",
+              "fieldValue": "={{ $('Append row in sheet').item.json.likely_home_country }}"
+            },
+            {
+              "column": "job_title",
+              "fieldValue": "={{ $('Append row in sheet').item.json.job_title }}"
+            },
+            {
+              "column": "job_url_direct",
+              "fieldValue": "={{ $('Append row in sheet').item.json.job_url_direct }}"
+            },
+            {
+              "column": "job_description",
+              "fieldValue": "={{ $('Append row in sheet').item.json.job_description }}"
+            },
+            {
+              "column": "job_description",
+              "fieldValue": "={{ $('Append row in sheet').item.json.job_description }}"
+            },
+            {
+              "column": "match_score",
+              "fieldValue": "={{ $('Append row in sheet').item.json.match_score }}"
+            },
+            {
+              "column": "Job_location",
+              "fieldValue": "={{ $('Append row in sheet').item.json.Job_location }}"
+            },
+            {
+              "column": "timestamp",
+              "fieldValue": "={{ $('Append row in sheet').item.json.timestamp }}"
+            },
+            {
+              "column": "workflow_mode",
+              "fieldValue": "={{ $('Append row in sheet').item.json.workflow_mode }}"
+            },
+            {
+              "column": "company",
+              "fieldValue": "={{ $('Append row in sheet').item.json.company }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftExcel",
+      "typeVersion": 2.1,
+      "position": [
+        3264,
+        1184
+      ],
+      "id": "0d454dad-f387-4a53-9272-77e28b1008a2",
+      "name": "Append data to sheet",
+      "credentials": {
+        "microsoftExcelOAuth2Api": {
+          "id": "lkKKkBji7GlaVLuB",
+          "name": "Microsoft Excel account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=binary_data",
+        "name": "={{ $('Webhook').item.json.body.first_name }}_Resume_{{ $('Webhook').item.json.body.company }}_{{ $('Webhook').item.json.body.job_title }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2192,
+        176
+      ],
+      "id": "175bf321-7490-42f9-a1ea-926d571e8ea7",
+      "name": "Control filename",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=binary_data",
+        "name": "=Resume_{{ $('Webhook').item.json.body.name }}_{{ $('Webhook').item.json.body.job_title }}_{{ $('Webhook').item.json.body.company }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2192,
+        368
+      ],
+      "id": "5230b406-fda2-4203-8b66-93ccf7a37f44",
+      "name": "Type_I filename",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=binary_data",
+        "name": "={{ $('Webhook').item.json.body.first_name }}-{{ $('Webhook').item.json.body.job_title }}-{{ $('Webhook').item.json.body.company }}-Resume",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2192,
+        528
+      ],
+      "id": "2721bf6e-c60d-4ec0-8087-9bb1c1d2d88e",
+      "name": "Type_II filename",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=binary_data",
+        "name": "={{ $('Webhook').item.json.body.name }}_Resume_{{ $('Webhook').item.json.body.company }}-{{ $('Webhook').item.json.body.job_title }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2192,
+        720
+      ],
+      "id": "9426a821-62b7-41bd-8ee5-565f90c4d2b3",
+      "name": "Type_III filename",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=binary_data",
+        "name": "={{ $('Webhook').item.json.body.first_name }}_Resume_{{ $('Webhook').item.json.body.job_title }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2768,
+        2448
+      ],
+      "id": "98f8caee-f2bb-4522-9a0b-11dc49eb89aa",
+      "name": "Upload file True branch",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').first().item.json.body.treatment_type }}",
+                    "rightValue": "control",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "583e196e-352c-4914-a29a-3a19b1f4a1e1"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "f9da3106-33db-440c-ad46-e212de9006cc",
+                    "leftValue": "={{ $('Webhook').item.json.body.treatment_type }}",
+                    "rightValue": "Type_I",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "45de1d7d-2ffd-42fb-9a45-63272c9ce8e4",
+                    "leftValue": "={{ $('Webhook').item.json.body.treatment_type }}",
+                    "rightValue": "Type_II",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9547e3e6-d2cb-4281-990d-996cb54dc820",
+                    "leftValue": "={{ $('Webhook').item.json.body.treatment_type }}",
+                    "rightValue": "Type_III",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2432,
+        2768
+      ],
+      "id": "bfe10e01-c9e9-4348-acda-d60f5251de96",
+      "name": "Switch1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=binary_data",
+        "name": "=Resume_{{ $('Webhook').item.json.body.name }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2768,
+        2640
+      ],
+      "id": "c71738ed-1534-4678-ad0d-f80c38d2b658",
+      "name": "Upload file True branch1",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=binary_data",
+        "name": "={{ $('Webhook').item.json.body.first_name }}_{{ $('Webhook').item.json.body.last_name }}_Resume",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2768,
+        2816
+      ],
+      "id": "1c64a2a8-d68e-4aa4-b039-d0e76fa5dc91",
+      "name": "Upload file True branch2",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=binary_data",
+        "name": "={{ $('Webhook').item.json.body.first_name }}_{{ $('Webhook').item.json.body.last_name }}_{{ $('Webhook').item.json.body.job_title }}_Resume",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2768,
+        2992
+      ],
+      "id": "72b67946-4c8b-49d8-8cbf-c7013e627820",
+      "name": "Upload file True branch3",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      },
+      "disabled": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Find documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find documents": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove formatting of AI": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent MD template 2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Create a pdf True branch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a file_id folder False branch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Doc Tailoring Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a file_id folder False branch": {
+      "main": [
+        [
+          {
+            "node": "Create a pdf False branch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a pdf False branch": {
+      "main": [
+        [
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a pdf True branch": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "AI Agent MD template 1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent MD template 2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI agent MD template 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent MD template 2": {
+      "main": [
+        [
+          {
+            "node": "Remove formatting of AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI agent MD template 3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent MD template 1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent MD template 1": {
+      "main": [
+        [
+          {
+            "node": "Remove formatting of AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI agent MD template 3": {
+      "main": [
+        [
+          {
+            "node": "Remove formatting of AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch2": {
+      "main": [
+        [
+          {
+            "node": "Control filename",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Type_I filename",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Type_II filename",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Type_III filename",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Doc Tailoring Agent": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Upload a file": {
+      "main": [
+        [
+          {
+            "node": "Append data to sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Upload a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Control filename": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Type_I filename": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Type_II filename": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Type_III filename": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Upload file True branch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Upload file True branch1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Upload file True branch2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Upload file True branch3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "wOZUjyffXjodGKNO",
+    "timeSavedPerExecution": 15
+  },
+  "versionId": "841d45b0-9386-4be6-9edc-20a576584045",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ddd41ed71e058fee91a615d65aac4c1b4f042ff46a10234383bb9a91cd4c923c"
+  },
+  "id": "gUrXxaYyplh2igbI",
+  "tags": [
+    {
+      "createdAt": "2025-08-26T18:37:24.706Z",
+      "updatedAt": "2025-08-26T18:37:24.706Z",
+      "id": "kf9yG9s2xGLak03u",
+      "name": "AP"
+    }
+  ]
+}

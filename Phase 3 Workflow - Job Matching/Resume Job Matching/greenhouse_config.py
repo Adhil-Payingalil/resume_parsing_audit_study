@@ -31,16 +31,16 @@ class GreenhouseConfig:
     
     # Vector search settings
     top_k: int = 4
-    similarity_threshold: float = 0.30
+    similarity_threshold: float = 0.50
     vector_search_index: str = "resume_embedding_index"  # MongoDB vector search index name
     
     # LLM settings  
-    llm_model: str = "gemini-2.5-pro"
-    validation_threshold: int = 70
+    llm_model: str = "gemini-3-pro-preview"
+    validation_threshold: int = 60
     
     # Retry settings for LLM calls
-    retry_attempts: int = 2
-    retry_delay: float = 1.0
+    retry_attempts: int = 3
+    retry_delay: float = 1.5
     
     # Performance settings for large-scale processing
     batch_size: int = 20                    # Process jobs in batches
@@ -57,6 +57,7 @@ class GreenhouseConfig:
         """Build MongoDB query for Greenhouse job filtering."""
         query = {
             "jd_extraction": True,  # Only jobs with successful extraction
+            "cycle": 8.1, 
             "jd_embedding": {"$exists": True, "$ne": None}  # Only jobs with embeddings
         }
         
@@ -79,38 +80,43 @@ class GreenhouseConfig:
     
     def get_summary(self) -> Dict[str, Any]:
         """Get a summary of current Greenhouse configuration."""
+        active_job_filters = {
+            "jd_extraction": True,
+            "cycle": 8.1
+        }
+
         return {
             "workflow_type": "greenhouse",
             "database": self.db_name,
             "collections": self.collections,
             "filters": {
+                "job_filters": active_job_filters,
                 "industry_prefixes": self.industry_prefixes,
                 "search_terms": self.search_terms,
                 "max_jobs": self.max_jobs,
-                "jd_extraction_required": True
             },
             "matching": {
                 "top_k": self.top_k,
                 "similarity_threshold": self.similarity_threshold,
                 "validation_threshold": self.validation_threshold,
-                "vector_search_index": self.vector_search_index
+                "vector_search_index": self.vector_search_index,
             },
             "llm": {
                 "model": self.llm_model,
                 "retry_attempts": self.retry_attempts,
-                "retry_delay": self.retry_delay
+                "retry_delay": self.retry_delay,
             },
             "performance": {
                 "batch_size": self.batch_size,
                 "max_workers": self.max_workers,
                 "cache_ttl": self.cache_ttl,
                 "checkpoint_interval": self.checkpoint_interval,
-                "memory_limit_mb": self.memory_limit_mb
+                "memory_limit_mb": self.memory_limit_mb,
             },
             "duplicate_processing": {
                 "skip_processed_jobs": self.skip_processed_jobs,
-                "force_reprocess": self.force_reprocess
-            }
+                "force_reprocess": self.force_reprocess,
+            },
         }
 
 

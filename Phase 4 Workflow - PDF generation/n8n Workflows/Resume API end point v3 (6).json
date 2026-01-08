@@ -1,0 +1,1646 @@
+{
+  "name": "Resume API end point v3",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "9eb0c4bc-f2a4-4f23-bb71-26422deedf55",
+        "authentication": "basicAuth",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": false
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1168,
+        1264
+      ],
+      "id": "cb36915a-b5d7-43d9-a588-27f271e21aa5",
+      "name": "Webhook",
+      "webhookId": "9eb0c4bc-f2a4-4f23-bb71-26422deedf55",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "WjnSubEirDdvkiFa",
+          "name": "adhil"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "collection": "Treated_resumes",
+        "options": {},
+        "query": "={\n  \"$and\": [\n    { \"original_file_id\": \"{{ $json.body.file_id }}\" },\n    { \"treatment_type\": \"{{ $json.body.treatment_type }}\" }\n  ]\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.2,
+      "position": [
+        -944,
+        1264
+      ],
+      "id": "bf7f2324-c481-4506-a3bc-66858df15149",
+      "name": "Find documents",
+      "credentials": {
+        "mongoDb": {
+          "id": "M1ISL6y9nE1CM4BJ",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// input: $input.first().json.candidates[0].content.parts[0].text\nconst raw = $input.first().json.output;\nlet clean = raw.trim();\n\nif (clean.startsWith('```markdown')) {\n  clean = clean.slice('```markdown'.length).trim();\n}\nif (clean.startsWith('```')) {\n  clean = clean.slice(3).trim();\n}\nif (clean.endsWith('```')) {\n  clean = clean.slice(0, -3).trim();\n}\n\nreturn [{ json: { llm_raw_text_clean: clean } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        1264
+      ],
+      "id": "bdc761c7-9679-4d48-aef2-3eefffd22b82",
+      "name": "Remove formatting of AI",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        848,
+        1376
+      ],
+      "id": "fc96c4a7-e86e-4048-9ad5-b9442b6354d8",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QQhGTBY85rcfOxcY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 2 agents\n1. That tailors to JD in JSON. \n2. Other that converts JSON to markdown. \n\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -128,
+        384
+      ],
+      "typeVersion": 1,
+      "id": "3054119a-9388-472f-804e-acd02a33ab1d",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Remove formating\nSame as our python function `clean_llm_response'. Removes \"```markdown\" string from the response"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        656,
+        384
+      ],
+      "typeVersion": 1,
+      "id": "4fa49dc0-bb56-4a57-9021-cc0dac0bc828",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $('Webhook').item.json.body.file_id }}",
+        "limit": 1,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "1xC-mPWpc5X3ZxQUxBnCyYrSF-_2kXfTD"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2160,
+        1280
+      ],
+      "id": "a6a97406-c783-436f-bae3-54d0d66d583a",
+      "name": "Search files and folders",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0bb1bab2-fdf3-41d7-86cb-711ebd84039f",
+              "leftValue": "={{ $('Search files and folders').item.json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2384,
+        1280
+      ],
+      "id": "3a6fd33d-3e49-4baf-bbd2-062fcc11d711",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "51345a1a-11be-4bb0-8100-b525f14111ac",
+              "name": "=resume_data.resume_data.basics.name",
+              "value": "={{ $('Webhook').item.json.body.name }}",
+              "type": "string"
+            },
+            {
+              "id": "41646588-5539-4e55-8637-14d4137ca007",
+              "name": "resume_data.resume_data.basics.email",
+              "value": "={{ $('Webhook').item.json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "ec597634-1ea2-421b-b577-43c252ee1e4a",
+              "name": "resume_data.resume_data.basics.phone",
+              "value": "={{ $('Webhook').item.json.body.phone }}",
+              "type": "string"
+            },
+            {
+              "id": "c3258cee-7e10-4720-a846-df55f09c78f5",
+              "name": "resume_data.resume_data.basics.location",
+              "value": "={{ $('Webhook').item.json.body.location }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -720,
+        1264
+      ],
+      "id": "a17c64ad-d821-45e9-85c0-03ca1303f455",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ $('Find documents').item.json.original_file_id }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1xC-mPWpc5X3ZxQUxBnCyYrSF-_2kXfTD",
+          "mode": "list",
+          "cachedResultName": "Resume PDFs",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1xC-mPWpc5X3ZxQUxBnCyYrSF-_2kXfTD"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2608,
+        1392
+      ],
+      "id": "a87ef999-78e7-461f-b2fa-5316d11eb965",
+      "name": "Create a file_id folder False branch",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "pdf",
+        "pdfTemplateId": "={{ $('Webhook').item.json.body.template_id }}",
+        "jsonParameters": true,
+        "download": true,
+        "binaryProperty": "binary_data",
+        "propertiesJson": "={{ { \"markdown\": $('Remove formatting of AI').item.json.llm_raw_text_clean } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.apiTemplateIo",
+      "typeVersion": 1,
+      "position": [
+        2832,
+        1392
+      ],
+      "id": "69a5a263-edc1-4c70-8cad-cec55b5bd7e2",
+      "name": "Create a pdf False branch",
+      "credentials": {
+        "apiTemplateIoApi": {
+          "id": "StSWIl5L6UjRzs4p",
+          "name": "APITemplate.io account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "pdf",
+        "pdfTemplateId": "={{ $('Webhook').first().json.body.template_id }}",
+        "jsonParameters": true,
+        "download": true,
+        "binaryProperty": "binary_data",
+        "propertiesJson": "={{ { \"markdown\": $('Remove formatting of AI').item.json.llm_raw_text_clean } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.apiTemplateIo",
+      "typeVersion": 1,
+      "position": [
+        2832,
+        1184
+      ],
+      "id": "d990447d-1136-4e56-829b-d6daa06ff88e",
+      "name": "Create a pdf True branch",
+      "credentials": {
+        "apiTemplateIoApi": {
+          "id": "StSWIl5L6UjRzs4p",
+          "name": "APITemplate.io account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Folder Organization\n1. Look for folder by `file_id` \n2. If folder not found, create one\n3.create and add the file to that folder",
+        "height": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1600,
+        384
+      ],
+      "typeVersion": 1,
+      "id": "068a0b09-64d0-42d3-878e-94a5650e8469",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json.body.markdown_template }}",
+                    "rightValue": 1,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    },
+                    "id": "fc4ac248-ec58-45bb-aa1f-ddb9e8fb8916"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4d9a0b18-b431-45c7-aaed-794fe9d53409",
+                    "leftValue": "={{ $('Webhook').item.json.body.markdown_template }}",
+                    "rightValue": 2,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "253f8eac-ba92-4d8b-bd34-e8caf13f996a",
+                    "leftValue": "={{ $('Webhook').item.json.body.markdown_template }}",
+                    "rightValue": 3,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        544,
+        1248
+      ],
+      "id": "474d8aeb-8d59-4a26-970d-dd0618f5bb89",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Resume data: \n {{ $json.candidates[0].content.parts[0].text }}",
+        "options": {
+          "systemMessage": "=You are an expert markdown resume creator. You will rewrite a given resume in a specific markdown format without changing the resume format a lot. \n\nYou will be provided with a resume (in text, JSON, or other structured format), and your task is to adapt its content into the markdown template below. Preserve the original content, structure, and facts as closely as possible—do not add, remove, or invent details. Only rephrase minimally for clarity or flow if needed, and map sections directly to the template. \n\nOutput only the filled markdown resume in ```markdown block, without any additional text, explanations, or code blocks. \n\nIMPORTANT: DO NOT add any comments or placeholderes if anything is missing (Make sure of this before output).\n\nMarkdown template:\n# [Full Name]\n\n[City, Region] | [Phone] | [Email] \n\n## Professional Summary\n[A brief 3-5 sentence summary highlighting key expertise, experience, and career goals, adapted from the original.]\n\n## Work Experience\n### [Position]  \n**[Company], [Location]**  \n[Start Date] - [End Date]  \n\n- [Achievement or responsibility 1, rephrased if needed for conciseness]  \n- [Achievement or responsibility 2]  \n- [And so on for all original bullets]  \n\n[Repeat for each work entry]\n\n## Education\n### [Study Type] in [Area]  \n[Institution], [Location]  \n[End Date]  \n\n[Optional: Score/GPA if present in original]\n\n[Repeat for each education entry]\n\n## Skills\n- **[Skill Group 1]:** [Keyword 1], [Keyword 2], [Keyword 3]  \n- **[Skill Group 2]:** [Keyword 1], [Keyword 2], [Keyword 3]\n- **[Skill Group 3]:** [Keyword 1], [Keyword 2], [Keyword 3]\n- [And so on, using the skill groups and keywords from the original]\n\n## Languages\n- **[Language 1]:** [Fluency Level]\n- **[Language 2]:** [Fluency Level]\n- [And so on for all languages]\n\n## Certifications\n- [Certification Name], ([Issuing Organization], [Date])  \n- [And so on for all certifications]\n\n## Volunteer Experience\n### [Position/Role]  \n**[Organization], [Location]**  \n[Start Date] - [End Date]  \n\n- [Achievement or responsibility 1]  \n- [Achievement or responsibility 2]  \n- [And so on for all original bullets]  \n\n[Repeat for each volunteer entry]\n\n---\n\n[If the original resume has additional sections like Awards, Publications, or other custom sections, add them similarly at the end using H2 headers (## Section Name) and appropriate formatting.]"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        768,
+        752
+      ],
+      "id": "d7e8eee6-4250-44d1-bde5-1b55115347fe",
+      "name": "AI Agent MD template 1",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Resume data: \n {{ $json.candidates[0].content.parts[0].text }}",
+        "options": {
+          "systemMessage": "=You are an expert markdown resume creator. You will rewrite a given resume in a specific markdown format without changing the resume format a lot. \n\nYou will be provided with a resume (in text, JSON, or other structured format), and your task is to adapt its content into the markdown template below. Preserve the original content, structure, and facts as closely as possible—do not add, remove, or invent details. Only rephrase minimally for clarity or flow if needed, and map sections directly to the template. \n\nOutput only the filled markdown resume in ```markdown block, without any additional text, explanations, or code blocks. \n\nIMPORTANT: DO NOT add any comments or placeholderes if anything is missing (Make sure of this before output).\n\nMarkdown template:\n# [Full Name]\n\n[Email] • [Phone] • [City, Region]\n\n## Summary\n[A brief 3-5 sentence summary highlighting key expertise, experience, and career goals, adapted from the original.]\n\n## Skills\n- **[Skill Group 1]:** [Keyword 1], [Keyword 2], [Keyword 3], [Keyword 4], [Keyword 5]  \n- **[Skill Group 2]:** [Keyword 1], [Keyword 2], [Keyword 3], [Keyword 4], [Keyword 5]  \n- **[Skill Group 3]:** [Keyword 1], [Keyword 2], [Keyword 3], [Keyword 4], [Keyword 5]\n\n## Professional Experience\n### [Position] | [Company]\n*[Start Date] - [End Date] | [Location]*\n\n- [Achievement or responsibility 1]  \n- [Achievement or responsibility 2]  \n- [And so on for all original bullets]  \n\n[Repeat for each work entry]\n\n## Education\n### [Study Type] in [Area] | [Institution]\n*[End Date] | [Location]*\n\n[Optional: Score/GPA if present in original]\n\n[Repeat for each education entry]\n\n## Languages\n- **[Language 1]:** [Fluency Level]  \n- **[Language 2]:** [Fluency Level]  \n- **[Language 3]:** [Fluency Level]\n\n## Certifications\n- [Certification Name] - [Issuing Organization] ([Date])  \n- [And so on for all certifications]\n\n## Volunteer Experience\n### [Position/Role] | [Organization]\n*[Start Date] - [End Date] | [Location]*\n\n- [Achievement or responsibility 1]  \n- [Achievement or responsibility 2]  \n- [And so on for all original bullets]  \n\n[Repeat for each volunteer entry]\n\n---\n\n[If the original resume has additional sections like Awards, Publications, or other custom sections, add them similarly at the end using H2 headers (## Section Name) and appropriate formatting.]\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        768,
+        1152
+      ],
+      "id": "c7a237a3-4093-477a-a5e9-d7992653b3ff",
+      "name": "AI Agent MD template 2",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Resume data: \n {{ $json.candidates[0].content.parts[0].text }}",
+        "options": {
+          "systemMessage": "=You are an expert markdown resume creator. You will rewrite a given resume in a specific markdown format without changing the resume format a lot. \n\nYou will be provided with a resume (in text, JSON, or other structured format), and your task is to adapt its content into the markdown template below. Preserve the original content, structure, and facts as closely as possible—do not add, remove, or invent details. Only rephrase minimally for clarity or flow if needed, and map sections directly to the template. \n\nOutput only the filled markdown resume in ```markdown block, without any additional text, explanations, or code blocks. \n\nIMPORTANT: DO NOT add any comments or placeholderes if anything is missing (Make sure of this before output).\n\nMarkdown template:\n# [Full Name]\n\n[Email] | [Phone] | [Location]\n\n## Experience\n**[Position]**  \n[Company] | [Start Date] - [End Date]  \n[Location]\n\n- [Achievement or responsibility 1]  \n- [Achievement or responsibility 2]  \n- [And so on for all original bullets]  \n\n[Repeat for each work entry]\n\n## Education\n**[Study Type] in [Area]**  \n[Institution] | [End Date]  \n[Location]\n\n[Optional: Score/GPA if present in original]\n\n[Repeat for each education entry]\n\n## Skills\n- **[Skill Group 1]:** [Keyword 1], [Keyword 2], [Keyword 3]  \n- **[Skill Group 2]:** [Keyword 1], [Keyword 2], [Keyword 3]  \n- **[Skill Group 3]:** [Keyword 1], [Keyword 2], [Keyword 3]  \n- **[Skill Group 4]:** [Keyword 1], [Keyword 2], [Keyword 3]  \n- **[Skill Group 5]:** [Keyword 1], [Keyword 2], [Keyword 3]\n\n## Languages\n- **[Language 1]:** [Fluency Level]  \n- **[Language 2]:** [Fluency Level]  \n- **[Language 3]:** [Fluency Level]\n\n## Certifications\n- [Certification Name] ([Issuing Organization], [Date])  \n- [And so on for all certifications]\n\n## Volunteer Experience\n**[Position/Role]**  \n[Organization] | [Start Date] - [End Date]  \n[Location]\n\n- [Achievement or responsibility 1]  \n- [Achievement or responsibility 2]  \n- [And so on for all original bullets]  \n\n[Repeat for each volunteer entry]\n\n---\n\n[If the original resume has additional sections like Awards, Publications, or other custom sections, add them similarly at the end using H2 headers (## Section Name) and appropriate formatting.]\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        768,
+        1664
+      ],
+      "id": "69773951-22ac-467c-a91f-18fc486b78d0",
+      "name": "AI agent MD template 3",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        848,
+        1888
+      ],
+      "id": "49779775-2382-4aeb-a299-49c44068cc92",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QQhGTBY85rcfOxcY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        848,
+        976
+      ],
+      "id": "70238032-389c-4f00-904b-7dda17bc8f69",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QQhGTBY85rcfOxcY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ifmUvUoNqMdw0fve7aUP9jVQqCssvEN8pfp7XthvtXo",
+          "mode": "list",
+          "cachedResultName": "Audit_study_application_data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ifmUvUoNqMdw0fve7aUP9jVQqCssvEN8pfp7XthvtXo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ifmUvUoNqMdw0fve7aUP9jVQqCssvEN8pfp7XthvtXo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Webhook').item.json.body.id }}",
+            "base _resume_file_id": "={{ $('Webhook').item.json.body.file_id }}",
+            "resume_pdf": "={{ $('Google Drive Upload').item.json.webContentLink }}",
+            "treatment_type": "={{ $('Webhook').item.json.body.treatment_type }}",
+            "resume_filename": "={{ $('Google Drive Upload').item.json.name }}",
+            "full_name": "={{ $('Webhook').item.json.body.name }}",
+            "email": "={{ $('Webhook').item.json.body.email }}",
+            "phone": "=`{{ $('Webhook').item.json.body.phone }}",
+            "first_name": "={{ $('Webhook').item.json.body.first_name }}",
+            "last_name": "={{ $('Webhook').item.json.body.last_name }}",
+            "gender": "={{ $('Webhook').item.json.body.gender }}",
+            "geographic_cluster": "={{ $('Webhook').item.json.body.geographic_cluster }}",
+            "job_title": "={{ $('Webhook').item.json.body.job_title }}",
+            "job_url_direct": "={{ $('Webhook').item.json.body.job_link }}",
+            "job_description": "={{ $('Webhook').item.json.body.job_description }}",
+            "match_score": "={{ $('Webhook').item.json.body.match_score }}",
+            "Job_location": "={{ $('Webhook').item.json.body.location }}",
+            "likely_home_country": "={{ $('Webhook').item.json.body.country }}",
+            "timestamp": "={{ $json.timestamp }}",
+            "workflow_mode": "={{ $('Webhook').item.json.executionMode }}",
+            "resume_final_md": "={{ $('Remove formatting of AI').item.json.llm_raw_text_clean }}\"\"\"",
+            "u_id": "={{ $('Webhook').item.json.body.id }}_{{ $('Webhook').item.json.body.treatment_type }}",
+            "company": "={{ $('Webhook').item.json.body.company }}",
+            "validation_score": "={{ $('Set Validation Output').item.json.final_validation_score }}",
+            "validation_json": "={{ $('Set Validation Output').item.json.validation_json }}",
+            "job_id": "={{ $('Webhook').item.json.body.job_posting_id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "u_id",
+              "displayName": "u_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "base _resume_file_id",
+              "displayName": "base _resume_file_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "treatment_type",
+              "displayName": "treatment_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "resume_pdf",
+              "displayName": "resume_pdf",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "resume_filename",
+              "displayName": "resume_filename",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "full_name",
+              "displayName": "full_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_name",
+              "displayName": "last_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "gender",
+              "displayName": "gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "geographic_cluster",
+              "displayName": "geographic_cluster",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "likely_home_country",
+              "displayName": "likely_home_country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "job_title",
+              "displayName": "job_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "job_url_direct",
+              "displayName": "job_url_direct",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "job_description",
+              "displayName": "job_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "resume_final_md",
+              "displayName": "resume_final_md",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "match_score",
+              "displayName": "match_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job_location",
+              "displayName": "Job_location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "validation_score",
+              "displayName": "validation_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "validation_json",
+              "displayName": "validation_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "workflow_mode",
+              "displayName": "workflow_mode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "job_id",
+              "displayName": "job_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        3504,
+        1104
+      ],
+      "id": "6391a285-11a7-4305-9429-531221e2f808",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "4PTgIjGqr3WHoFX3",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "outputFieldName": "timestamp",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        3280,
+        1104
+      ],
+      "id": "29d3d8b7-4147-4e2e-8a56-dc6e6797fd37",
+      "name": "Date & Time"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Resume Data (JSON):\n{{ JSON.stringify($('Edit Fields').item.json.resume_data.resume_data) }}\n\nJob Description (JD):\n{{ $('Webhook').item.json.body.job_description }}\n\nJD Title:\n{{ $('Webhook').item.json.body.job_title }}\n\nTreatment Type:\n{{ $('Webhook').item.json.body.treatment_type }}\n\nJD Keywords And Buckets:\n{{ $('Keyword Extractor').item.json.candidates[0].content.parts[0].text }}\n\nStyle Guide:\n{{ $('Find documents').item.json.style_guide || \"using a direct, concise, and professional tone, prioritizing clarity and brevity\" }}"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {
+          "systemMessage": "You are an expert resume optimizer focused on ATS alignment and human readability. Tailor the provided JSON resume to the given Job Description (JD) so it reads naturally, mirrors the JD's priorities, and ranks highly in ATS—without altering core identity or chronology.\n\n**Inputs:**\n- resume_json: original resume JSON to tailor\n- jd_text: full job description\n- jd_title: job title\n- treatment_type: one of [\"control\",\"Type_I\",\"Type_II\",\"Type_III\"]\n- jd_keywords (optional): prioritized JD keywords/phrases (may be provided as JSON string from extractor)\n- style_guide (optional): style modifier  (guides how to rephrase)\n\n**Non‑negotiables (identity integrity):**\n- Keep the person's identity, employers, job titles, locations, and date ranges as-is. Do not add new employers or change dates/locations.\n- Keep education institutions and degrees accurate (no new institutions or degrees).\n- Do not fabricate hard metrics if none exist; use qualitative outcomes instead.\n- Do NOT change section order or layout here (that is handled downstream).\n- Preserve the JSON schema exactly (same top‑level sections/fields). Only enrich existing sections.\n\n**Allowed, context‑consistent enhancements (to maximize JD fit):**\n- Professional Summary: rewrite (2–4 sentences) to reflect the JD's themes (core skills, responsibilities, domain) in a natural, non‑robotic tone.\n- Skills: expand/refine to include JD‑relevant skills or tools that are reasonably consistent with the work history. You may add up to 6–10 closely related skills (e.g., categories like analytics, collaboration tools, advertising platforms, testing frameworks, CRMs, design/engineering tooling, domain‑specific software) if plausible from the roles. Prefer precise JD terms. Avoid keyword stuffing; group logically.\n- Certifications: you may lightly rename or consolidate titles for clarity (keep issuer and dates plausible if Cloud‑present). Do not invent new issuing bodies or dates. Remove only items explicitly instructed upstream (if any).\".any certificates are not relevant to the JD, remove them.\n- Experience bullets: rewrite to integrate JD language (responsibilities, collaboration, measurement/optimization, client‑facing) and improve clarity/impact. You may add up to 1 new responsibility‑level bullet per role if it is a plausible, non‑metric statement consistent with the role and industry. Do not move responsibilities to an employer where it would be implausible.\n- Within each position, randomly reorder the bullets. Do not mention or allude to this reordering in the output.\n- If a work bullet mentions a specific employer or client by name, replace that name with a generic reference (e.g., \"the company\" or \"the client\") while preserving the factual responsibility and outcome. Do not disclose identifiable brand names in bullets.\n\n**Dynamic JD alignment:**\n1) If jd_keywords/buckets are provided as a JSON string, parse it first to extract the jd_key.zeros array and buckets object. If they are absent or not parseable, extract 15–25 high‑value keywords/phrases from jd_text (skills, responsibilities, tools, domain concepts, collaboration patterns, measurement/optimization, client interaction).\n2) Thread these terms naturally into Skills and relevant bullets—only when consistent with resume_json and role context.\n3) Ensure at least one bullet (where applicable) reflects one of these universal themes when present in the JD:\n   - Strategy/Planning (e.g., roadmaps, frameworks, structured approaches)\n   - Measurement/Optimization/Experimentation (e.g., KPIs, testing, iteration)\n   - Cross‑functional collaboration (e.g., with adjacent teams or stakeholders)\n   - External collaboration (e.g., partners, vendors, clients, agencies)\n   - Client‑facing presentation and sell‑through (if the JD implies stakeholder communication)\n   - Platform/Tool fluency (domain‑appropriate systems or software referenced in the JD)\n\n**Style modifier :**\n- If style_guide is provided, follow its instructions for HOW to rephrase (verb choice, tone, emphasis) while optimizing to the JD.\n- Apply style_guide consistently across summary and experience bullets; affects writing style, not content facts.\n- If no style_guide, use standard professional tone with varied action verbs.\n\n**Uniform length controls (apply to all cases):**\n- Summary: 2–4 sentences.\n- Skills: 10–16 total (grouped and most relevant to JD), ≤5–6 per group.\n- Experience: 3–5 bullets per role; one idea per bullet; similar sentence length across treatments.\n- No new roles; max 1 added bullet per role (plausible responsibility).\n\n**Tone and readability:**\n- Human, concise, and varied. Strong action verbs; avoid repetitive openings.\n- Blend JD terms naturally; avoid robotic keyword stuffing.\n- One idea per bullet; avoid superlatives; prefer concrete responsibilities.\n\n**Output rules:**\n- Return ONLY the tailored resume JSON (valid JSON), preserving the exact schema of resume_json.\n- Do NOT include explanations, markdown, or any extra fields outside the existing schema."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        176,
+        1264
+      ],
+      "id": "4b980593-92cb-40b2-9729-eb6daf42799f",
+      "name": "Doc Tailoring Agent",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QQhGTBY85rcfOxcY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fileName": "={{ $(\"Code\").item.binary.binary_data.fileName }}",
+        "parentId": "=AE9A4AF18A98EB4C!s30e396fbd57346ecbf9acb24bf85345b",
+        "binaryData": true,
+        "binaryPropertyName": "binary_data"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        4176,
+        1248
+      ],
+      "id": "5e5f0115-b029-4923-95bd-88310afa2b93",
+      "name": "Upload a file",
+      "retryOnFail": true,
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "GrtUhKGeUeXOwcbB",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        3728,
+        1248
+      ],
+      "id": "bbb89645-34dd-40b2-b3c4-d785627433c0",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const binaryProperty = 'binary_data'; // or 'binary_data', etc.\n\nreturn items.map(item => {\n  let newFileName = item.json.resume_filename || 'default.pdf';\n  if (!newFileName.endsWith('.pdf')) {\n    newFileName += '.pdf';\n  }\n  if (item.binary && item.binary[binaryProperty]) {\n    item.binary[binaryProperty].fileName = newFileName;\n    item.binary[binaryProperty].mimeType = 'application/pdf'; // <-- Ensure correct MIME type\n  }\n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3952,
+        1248
+      ],
+      "id": "c2d941fc-3f60-49a3-9557-f0937599e1c8",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "resource": "worksheet",
+        "operation": "append",
+        "workbook": {
+          "__rl": true,
+          "value": "AE9A4AF18A98EB4C!s07baf0b89cde44b29e4dd611346dd0c2",
+          "mode": "list",
+          "cachedResultName": "Mapping_data",
+          "cachedResultUrl": "https://onedrive.live.com/personal/ae9a4af18a98eb4c/_layouts/15/doc.aspx?resid=07baf0b8-9cde-44b2-9e4d-d611346dd0c2&cid=ae9a4af18a98eb4c"
+        },
+        "worksheet": {
+          "__rl": true,
+          "value": "{00000000-0001-0000-0000-000000000000}",
+          "mode": "list",
+          "cachedResultName": "data_repo",
+          "cachedResultUrl": "https://onedrive.live.com/personal/ae9a4af18a98eb4c/_layouts/15/doc.aspx?resid=07baf0b8-9cde-44b2-9e4d-d611346dd0c2&cid=ae9a4af18a98eb4c&activeCell=data_repo!A1"
+        },
+        "fieldsUi": {
+          "values": [
+            {
+              "column": "u_id",
+              "fieldValue": "={{ $('Append row in sheet').item.json.u_id }}"
+            },
+            {
+              "column": "id",
+              "fieldValue": "={{ $('Append row in sheet').item.json.id }}"
+            },
+            {
+              "column": "base _resume_file_id",
+              "fieldValue": "={{ $('Append row in sheet').item.json['base _resume_file_id'] }}"
+            },
+            {
+              "column": "treatment_type",
+              "fieldValue": "={{ $('Append row in sheet').item.json.treatment_type }}"
+            },
+            {
+              "column": "resume_pdf",
+              "fieldValue": "={{ $('Append row in sheet').item.json.resume_pdf }}"
+            },
+            {
+              "column": "resume_filename",
+              "fieldValue": "={{ $json.name }}"
+            },
+            {
+              "column": "full_name",
+              "fieldValue": "={{ $('Append row in sheet').item.json.full_name }}"
+            },
+            {
+              "column": "email",
+              "fieldValue": "={{ $('Append row in sheet').item.json.email }}"
+            },
+            {
+              "column": "phone",
+              "fieldValue": "={{ $('Append row in sheet').item.json.phone }}"
+            },
+            {
+              "column": "first_name",
+              "fieldValue": "={{ $('Append row in sheet').item.json.first_name }}"
+            },
+            {
+              "column": "last_name",
+              "fieldValue": "={{ $('Append row in sheet').item.json.last_name }}"
+            },
+            {
+              "column": "gender",
+              "fieldValue": "={{ $('Append row in sheet').item.json.gender }}"
+            },
+            {
+              "column": "geographic_cluster",
+              "fieldValue": "={{ $('Append row in sheet').item.json.geographic_cluster }}"
+            },
+            {
+              "column": "likely_home_country",
+              "fieldValue": "={{ $('Append row in sheet').item.json.likely_home_country }}"
+            },
+            {
+              "column": "job_title",
+              "fieldValue": "={{ $('Append row in sheet').item.json.job_title }}"
+            },
+            {
+              "column": "job_url_direct",
+              "fieldValue": "={{ $('Append row in sheet').item.json.job_url_direct }}"
+            },
+            {
+              "column": "job_description",
+              "fieldValue": "={{ $('Append row in sheet').item.json.job_description }}"
+            },
+            {
+              "column": "match_score",
+              "fieldValue": "={{ $('Append row in sheet').item.json.match_score }}"
+            },
+            {
+              "column": "Job_location",
+              "fieldValue": "={{ $('Append row in sheet').item.json.Job_location }}"
+            },
+            {
+              "column": "timestamp",
+              "fieldValue": "={{ $('Append row in sheet').item.json.timestamp }}"
+            },
+            {
+              "column": "workflow_mode",
+              "fieldValue": "={{ $('Append row in sheet').item.json.workflow_mode }}"
+            },
+            {
+              "column": "company",
+              "fieldValue": "={{ $('Append row in sheet').item.json.company }}"
+            },
+            {
+              "column": "resume_final_md",
+              "fieldValue": "={{ $('Remove formatting of AI').item.json.llm_raw_text_clean }}"
+            },
+            {
+              "column": "validation_score",
+              "fieldValue": "={{ $('Set Validation Output').item.json.final_validation_score }}"
+            },
+            {
+              "column": "validation_json",
+              "fieldValue": "={{ $('Set Validation Output').item.json.validation_json }}"
+            },
+            {
+              "column": "=job_id",
+              "fieldValue": "={{ $('Append row in sheet').item.json.job_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftExcel",
+      "typeVersion": 2.1,
+      "position": [
+        4400,
+        1248
+      ],
+      "id": "0d454dad-f387-4a53-9272-77e28b1008a2",
+      "name": "Append data to sheet",
+      "credentials": {
+        "microsoftExcelOAuth2Api": {
+          "id": "lkKKkBji7GlaVLuB",
+          "name": "Microsoft Excel account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"Google_Drive_Link\": \"{{ $json.resume_pdf }}\",\n  \"id\": \"{{ $json.u_id }}\",\n  \"file_name\": \"{{ $json.resume_filename }}\",\n  \"timestamp\": \"{{ $json.timestamp }}\",\n  \"status\": \"success\"\n}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        4656,
+        1248
+      ],
+      "id": "6db80e4c-8a72-4a67-90db-c5bba49138f2",
+      "name": "Respond to Webhook",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=binary_data",
+        "name": "={{ $('Sanitize filename').item.json.sanitized_filename }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3056,
+        1104
+      ],
+      "id": "175bf321-7490-42f9-a1ea-926d571e8ea7",
+      "name": "Google Drive Upload",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "operation": "search",
+        "query": "_PDF Repo"
+      },
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        3968,
+        752
+      ],
+      "id": "51702c7d-2ad0-4994-b23e-2dd2664cb8ac",
+      "name": "Search a folder",
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "GrtUhKGeUeXOwcbB",
+          "name": "Microsoft Drive account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Job Description:\n{{ $('Webhook').item.json.body.job_description }}"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {
+          "systemMessage": "Extract ATS-relevant terms from the job description and return ONLY a compact JSON object with this shape: {   \"jd_keywords\": [string],              // 20–30 unique, prioritized keywords/phrases   \"buckets\": {     \"planning_strategy\": [string],      // frameworks, strategy/roadmaps, structured approaches     \"measurement_optimization\": [string], // KPIs, testing, analytics, iteration     \"cross_functional\": [string],       // collaboration with adjacent teams/stakeholders     \"external_collab\": [string],        // clients, partners, vendors, agencies     \"stakeholder_comms\": [string],      // presentation, sell-through, executive comms     \"platforms_tools\": [string]         // domain-appropriate systems/tools (ads, analytics, CRM, etc.)   } }  Rules: - Use only terms that appear in or are obvious synonyms of the JD. - Deduplicate, normalize case, keep phrases (2–4 words) when meaningful. - No explanations, no extra fields, just the JSON object above."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        1264
+      ],
+      "id": "edbc3ac1-9c36-4863-9355-cc2901e7f2c1",
+      "name": "Keyword Extractor",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QQhGTBY85rcfOxcY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Resume (final text):\n{{ $('Remove formatting of AI').item.json.llm_raw_text_clean }}\n\nJD Text:\n{{ $('Webhook').item.json.body.job_description }}\n\nJD Keywords:\n{{ JSON.stringify($('Keyword Extractor').item.json.jd_keywords || []) }}\n\n"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {
+          "systemMessage": "You are a strict resume QA validator. Review the resume text and return ONLY this compact JSON (no extra text):\n\n{\n  \"quality_score\": 0-100,\n  \"critical\": {\n    \"placeholders\": true|false,\n    \"ai_filler\": true|false,\n    \"section_integrity_fail\": true|false\n  },\n  \"jd_alignment\": {\n    \"jd_resume_match\": 0-100,\n    \"keyword_hits\": number\n  },\n  \"notes\": [string]\n}\n\nRules:\n- Compute jd_resume_match from JD keyword coverage: let min_required=12; if keyword_hits >= 12 → 100; else 100 − 5 × (12 − keyword_hits); clamp 0–100.\n- Score: start quality_score = 100, subtract 50 if placeholders, 25 if ai_filler, 10 if section_integrity_fail, then subtract (100 − jd_resume_match) capped at 40. Clamp 0–100.\n- Only evaluate these fields; do not add others.\n- Current date is 2025; do not flag dates on/before 2025.\n- Notes: include up to 2 brief items only when a critical flag is true; otherwise return [].\n- Be precise; prefer no false positives. Do not rewrite content. Return the JSON only."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        1584,
+        1280
+      ],
+      "id": "6ca196f5-e368-433c-8c68-5129001e28d5",
+      "name": "Resume Validation",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QQhGTBY85rcfOxcY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cfb51035-7a35-4138-b864-59e068928cc2",
+              "name": "final_validation_score",
+              "value": "={{ JSON.parse($('Resume Validation').item.json.content.parts[0].text).quality_score }}",
+              "type": "string"
+            },
+            {
+              "id": "72192866-7792-4367-8eb6-f875fa2d8249",
+              "name": "validation_json",
+              "value": "={{ $('Resume Validation').item.json.content.parts[0].text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1920,
+        1280
+      ],
+      "id": "5e916be3-a3f8-4633-ab40-e3de2b44f958",
+      "name": "Set Validation Output"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  // Get data from the Webhook node (since that's where your original data comes from)\n  const webhookData = $('Webhook').first().json.body;\n  \n  console.log('Webhook data:', JSON.stringify(webhookData, null, 2));\n  \n  const treatmentType = webhookData.treatment_type;\n  const firstName = webhookData.first_name;\n  const fullName = webhookData.name;\n  const jobTitle = webhookData.job_title;\n  const company = webhookData.company;\n  \n  console.log('Extracted values:');\n  console.log('Treatment Type:', treatmentType);\n  console.log('First Name:', firstName);\n  console.log('Full Name:', fullName);\n  console.log('Job Title:', jobTitle);\n  console.log('Company:', company);\n  \n  // Create filename based on treatment type\n  let filename = '';\n  if (treatmentType === 'control') {\n    filename = `${firstName}_Resume_${company}_${jobTitle}`;\n  } else if (treatmentType === 'Type_I') {\n    filename = `Resume_${fullName}_${jobTitle}_${company}`;\n  } else if (treatmentType === 'Type_II') {\n    filename = `${firstName}_${jobTitle}_${company}_Resume`;\n  } else if (treatmentType === 'Type_III') {\n    filename = `${fullName}_Resume_${company}_${jobTitle}`;\n  } else {\n    filename = `${firstName}_Resume_${company}_${jobTitle}`;\n  }\n  \n  // Sanitize the filename\n  filename = filename\n    .replace(/[:<>\"|?*]/g, '')\n    .replace(/[()]/g, '')\n    .replace(/\\s+/g, '_')\n    .replace(/_{2,}/g, '_')\n    .trim();\n  \n  item.json.sanitized_filename = filename;\n  \n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1376,
+        1264
+      ],
+      "id": "4f513a81-e638-4f26-92a7-e8136711cf87",
+      "name": "Sanitize filename"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n     \"status\": \"accepted\",\n     \"id\": \"{{ $('Webhook').item.json.body.id }}\",\n     \"treatment_type\": \"{{ $('Webhook').item.json.body.treatment_type }}\",\n     \"message\": \"Processing started - resume will be processed asynchronously\"\n   }",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -464,
+        1264
+      ],
+      "id": "944f4e81-a0e8-4b9f-8698-3ce8f6feb3c5",
+      "name": "Early Response"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Find documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find documents": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove formatting of AI": {
+      "main": [
+        [
+          {
+            "node": "Sanitize filename",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent MD template 2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Create a pdf True branch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a file_id folder False branch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Early Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a file_id folder False branch": {
+      "main": [
+        [
+          {
+            "node": "Create a pdf False branch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a pdf False branch": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Google Drive Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a pdf True branch": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Google Drive Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "AI Agent MD template 1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent MD template 2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI agent MD template 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent MD template 2": {
+      "main": [
+        [
+          {
+            "node": "Remove formatting of AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI agent MD template 3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent MD template 1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent MD template 1": {
+      "main": [
+        [
+          {
+            "node": "Remove formatting of AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI agent MD template 3": {
+      "main": [
+        [
+          {
+            "node": "Remove formatting of AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Doc Tailoring Agent": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Upload a file": {
+      "main": [
+        [
+          {
+            "node": "Append data to sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Upload a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append data to sheet": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive Upload": {
+      "main": [
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search a folder": {
+      "main": [
+        []
+      ]
+    },
+    "Keyword Extractor": {
+      "main": [
+        [
+          {
+            "node": "Doc Tailoring Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resume Validation": {
+      "main": [
+        [
+          {
+            "node": "Set Validation Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Validation Output": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sanitize filename": {
+      "main": [
+        [
+          {
+            "node": "Resume Validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Early Response": {
+      "main": [
+        [
+          {
+            "node": "Keyword Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "wOZUjyffXjodGKNO",
+    "timeSavedPerExecution": 15,
+    "saveDataSuccessExecution": "none",
+    "executionTimeout": -1,
+    "availableInMCP": false
+  },
+  "versionId": "e715af82-e6c8-435a-bd9f-c2a9d0730e58",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ddd41ed71e058fee91a615d65aac4c1b4f042ff46a10234383bb9a91cd4c923c"
+  },
+  "id": "gUrXxaYyplh2igbI",
+  "tags": [
+    {
+      "updatedAt": "2025-08-26T18:37:24.706Z",
+      "createdAt": "2025-08-26T18:37:24.706Z",
+      "id": "kf9yG9s2xGLak03u",
+      "name": "AP"
+    }
+  ]
+}
