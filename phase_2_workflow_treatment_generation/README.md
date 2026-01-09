@@ -49,3 +49,24 @@ python "Phase 2 Workflow/run_phase_2.py" --sector ITC --skip-ui
     *   **Type II**: Adds Canadian Work Experience.
     *   **Type III**: Adds Both.
 6.  **Save**: Stores all 4 versions in `Treated_resumes` collection.
+
+## Local Models (`all-MiniLM-L6-v2`)
+
+This workflow uses a **Semantic Similarity** check to ensure the rephrased resumes haven't drifted too far from the original meaning.
+
+*   **Model**: `all-MiniLM-L6-v2` (SentenceTransformer).
+*   **Location**: `models/all-MiniLM-L6-v2/` (Inside this directory).
+
+### Best Practices
+1.  **Keep the Local Copy**: The script is configured to look for the model in the `models/` folder first. This prevents the script from downloading the model (approx 100MB) every time on a new machine or empty cache.
+2.  **Versioning**: The local folder ensures everyone uses the exact same model version.
+3.  **Missing Model**: If the `models` folder is deleted, the script *will* attempt to download the model from HuggingFace automatically. This  will be slower on the first run.
+
+### Installation (If deleted)
+If you need to restore the local model manually:
+```bash
+# In a python shell
+from sentence_transformers import SentenceTransformer
+model = SentenceTransformer('all-MiniLM-L6-v2')
+model.save('models/all-MiniLM-L6-v2')
+```

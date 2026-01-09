@@ -58,12 +58,41 @@ STYLE_MODIFIERS = [
 ]
 
 class TreatmentGenerator:
-    """Core logic for generating treated resumes."""
+    """
+    Core logic for generation of treated resumes.
+
+    This class orchestrates the interaction between the local data files (CSVs),
+    the Google Gemini API (for text rephrasing and generation), and the local 
+    SentenceTransformer model (for semantic similarity validation).
+
+    Attributes:
+        sector (str): The industry sector code (e.g., 'ITC').
+        data_dir (str): Path to the directory containing 'models', 'education_credentials.csv', etc.
+                        If None, tries to find 'Phase 2 Workflow' relative to project root.
+    """
     
-    def __init__(self, sector: str):
+    def __init__(self, sector: str, data_dir: str = None):
+        """
+        Initialize the Treatment Generator.
+
+        Args:
+            sector (str): The target sector (e.g., "ITC").
+            data_dir (str, optional): The absolute path to the directory containing 
+                                      the 'models' folder and treatment CSVs.
+                                      If not provided, defaults to finding 'Phase 2 Workflow'.
+        """
         self.sector = sector.upper().strip()
         self.mongo_client = _get_mongo_client()
         self.db = self.mongo_client["Resume_study"]
+        
+        # Determine Data Directory (Dynamic to support folder renaming)
+        if data_dir:
+            self.data_dir = data_dir
+        else:
+            # Fallback for manual/legacy usage
+            self.data_dir = os.path.join(PROJECT_ROOT, "Phase 2 Workflow")
+            
+        logger.info(f"Initialized TreatmentGenerator for sector {self.sector} using resources in: {self.data_dir}")
         
         # Treatment Dataframes
         self.cec_df = None
@@ -81,7 +110,7 @@ class TreatmentGenerator:
 
     def _load_prompts(self):
         """Initialize Gemini models and load prompts."""
-        prompts_dir = os.path.join(PHASE_2_DIR, "Prompts")
+        prompts_dir = os.path.join(self.data_dir, "Prompts")
         
         # 1. Control Refiner
         self.control_refiner_model = GeminiProcessor(
@@ -116,8 +145,8 @@ class TreatmentGenerator:
     def _load_csv_data(self):
         """Load and filter CEC/CWE CSV files."""
         try:
-            cec_path = os.path.join(PHASE_2_DIR, "education_credentials.csv")
-            cwe_path = os.path.join(PHASE_2_DIR, "work_experience_credentials.csv")
+            cec_path = os.path.join(self.data_dir, "education_credentials.csv")
+            cwe_path = os.path.join(self.data_dir, "work_experience_credentials.csv")
             
             cec_df = pd.read_csv(cec_path)
             cwe_df = pd.read_csv(cwe_path)
@@ -133,16 +162,33 @@ class TreatmentGenerator:
             raise
 
     def get_similarity_model(self):
-        """Lazy load SentenceTransformer."""
+        """
+        Lazy loads the SentenceTransformer model for semantic similarity.
+
+        Logic:
+        1. Checks for a local model in `{data_dir}/models/all-MiniLM-L6-v2`.
+        2. If found, loads from disk (fast, offline, consistent).
+        3. If not found, downloads from HuggingFace (internet required) 
+           but does NOT save it locally to the models folder automatically 
+           (unless HuggingFace cache is configured).
+
+        Returns:
+            SentenceTransformer: The loaded model.
+        """
         if self.similarity_model is None:
             logger.info("Loading SentenceTransformer model...")
             from sentence_transformers import SentenceTransformer
-            # Using local model path if exists, else huge download
-            model_path = os.path.join(PHASE_2_DIR, "models", "all-MiniLM-L6-v2")
-            if os.path.exists(model_path):
-                self.similarity_model = SentenceTransformer(model_path)
+            
+            # Check for local model
+            local_model_path = os.path.join(self.data_dir, "models", "all-MiniLM-L6-v2")
+            
+            if os.path.exists(local_model_path):
+                logger.info(f"Found local model at: {local_model_path}")
+                self.similarity_model = SentenceTransformer(local_model_path)
             else:
+                logger.warning(f"Local model not found at {local_model_path}. Downloading from HuggingFace...")
                 self.similarity_model = SentenceTransformer("all-MiniLM-L6-v2")
+                
         return self.similarity_model
 
     # ------------------------------------------------------------------------
@@ -302,24 +348,41 @@ class TreatmentGenerator:
             
             def extract_text(d, s=False):
                 parts = []
-                if 'basics' in d and 'summary' in d['basics']: parts.append(d['basics']['summary'])
-                if 'work_experience' in d:
-                    start = 1 if s else 0
-                    for job in d['work_experience'][start:]:
-                         if 'highlights' in job: parts.extend(job['highlights'])
+                try:
+                    # Safely access resume_data key if it exists
+                    # Logic: If d has 'resume_data', use it. Else assume d IS the data.
+                    data = d.get('resume_data', d) if isinstance(d, dict) else {}
+                    
+                    if 'basics' in data and 'summary' in data['basics']: 
+                        parts.append(data['basics']['summary'])
+                        
+                    if 'work_experience' in data:
+                        start = 1 if s else 0
+                        for job in data['work_experience'][start:]:
+                             if 'highlights' in job and isinstance(job['highlights'], list):
+                                 parts.extend(job['highlights'])
+                             elif 'highlights' in job and isinstance(job['highlights'], str):
+                                 parts.append(job['highlights'])
+                except Exception as e:
+                     logger.error(f"Text extraction warning: {e}")
                 return " ".join(parts)
 
             t1 = extract_text(control_data, False)
             t2 = extract_text(treated_data, skip)
             
-            if not t1 or not t2: return 0.0
+            if not t1 or not t2:
+                logger.warning("  -> Skipping similarity (empty text)")
+                return 0.0
             
             model = self.get_similarity_model()
             emb1 = model.encode(t1)
             emb2 = model.encode(t2)
-            return cosine_similarity([emb1], [emb2])[0][0]
+            score = cosine_similarity([emb1], [emb2])[0][0]
+            return score
         except Exception as e:
             logger.error(f"Similarity calc failed: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
             return 0.0
 
     def generate_treatment(self, prompt: str):

@@ -24,7 +24,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from libs.treatment_generator import TreatmentGenerator
 from libs.mongodb import _get_mongo_client, get_all_file_ids, get_document_by_fileid
-from Phase_2_Workflow.company_research_ui import run_ui_validation
+from company_research_ui import run_ui_validation
 from utils import setup_logging, get_logger
 
 # Config
@@ -40,25 +40,51 @@ TARGET_COL = "Treated_resumes"
 DELAY_FILES = 3.0
 DELAY_QUICK = 2.0
 
+# -------------------------------------------------------------------------
+# IDE Configuration (For running without command line arguments)
+# -------------------------------------------------------------------------
+RUN_FROM_IDE = True  # Set to True to use the config below
+IDE_CONFIG = {
+    "sector": "CCC",        # Target Sector
+    "files": ["CCC resume 10.pdf"],          # List of file IDs e.g. ["ITC-01.pdf"] or None for all
+    "skip_ui": False,       # Set to True to skip manual validation
+    "dry_run": True         # Set to True to print JSON to terminal and SKIP MongoDB save
+}
+# -------------------------------------------------------------------------
+
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--sector", type=str, required=True, help="Industry Sector (e.g. ITC)")
-    parser.add_argument("--files", nargs='+', help="Specific file IDs to process")
-    parser.add_argument("--skip-ui", action="store_true", help="Skip manual UI validation (Auto-accept)")
-    args = parser.parse_args()
-    
-    sector = args.sector.upper()
-    logger.info(f"Starting Phase 2 for Sector: {sector}")
+    if RUN_FROM_IDE:
+        sector = IDE_CONFIG["sector"].upper()
+        specific_files = IDE_CONFIG["files"]
+        skip_ui = IDE_CONFIG["skip_ui"]
+        dry_run = IDE_CONFIG.get("dry_run", False)
+        logger.info(f"Running in IDE Mode for Sector: {sector} (Dry Run: {dry_run})")
+    else:
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--sector", type=str, required=True, help="Industry Sector (e.g. ITC)")
+        parser.add_argument("--files", nargs='+', help="Specific file IDs to process")
+        parser.add_argument("--skip-ui", action="store_true", help="Skip manual UI validation (Auto-accept)")
+        parser.add_argument("--dry-run", action="store_true", help="Print JSON to terminal instead of saving to MongoDB")
+        args = parser.parse_args()
+        
+        sector = args.sector.upper()
+        specific_files = args.files
+        skip_ui = args.skip_ui
+        dry_run = args.dry_run
+        logger.info(f"Starting Phase 2 for Sector: {sector} (Dry Run: {dry_run})")
 
     # 1. Initialize Generator
-    generator = TreatmentGenerator(sector)
+    # We pass the current directory (where this script runs) as the data_dir
+    # This effectively handles the folder rename logic automatically.
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    generator = TreatmentGenerator(sector, data_dir=current_dir)
     mongo_client = _get_mongo_client()
     target_collection = mongo_client[DB_NAME][TARGET_COL]
     
     # 2. Get Files
     all_files = get_all_file_ids(DB_NAME, SOURCE_COL, mongo_client)
-    if args.files:
-         files_to_process = [f for f in args.files if f in all_files]
+    if specific_files:
+         files_to_process = [f for f in specific_files if f in all_files]
     else:
          files_to_process = [f for f in all_files if sector in f]
     
@@ -84,7 +110,7 @@ def main():
                 logger.info("Generating company mappings...")
                 mappings = generator.research_companies_headless(resume_data)
                 
-                if args.skip_ui:
+                if skip_ui:
                      break # Auto-accept
                 
                 # Launch UI
@@ -117,9 +143,17 @@ def main():
                  "resume_data": generator.replace_companies_and_positions(clean_data, mappings, "Type_I"), # Use Type I for control generally or just generic
                  "timestamp": datetime.datetime.now()
             }
-            # Note: Logic indicates control is just "Cleaned + Mapped" with no extra CEC/CWE
-            target_collection.insert_one(control_doc)
-            logger.info("Saved Control.")
+            
+            if dry_run:
+                logger.info(f"*** DRY RUN: Control Doc for {file_id} ***")
+                # Convert datetime to string for printing
+                print_doc = control_doc.copy()
+                print_doc["timestamp"] = print_doc["timestamp"].isoformat()
+                import json
+                print(json.dumps(print_doc, indent=2, default=str))
+            else:
+                target_collection.insert_one(control_doc)
+                logger.info("Saved Control.")
             
             # E. Generate Treatments (I, II, III)
             prompts = generator.prepare_treatment_prompts(resume_data)
@@ -148,8 +182,15 @@ def main():
                         "metadata": p_data["treatment_applied"],
                         "timestamp": datetime.datetime.now()
                     }
-                    target_collection.insert_one(t_doc)
-                    logger.info(f"Saved {t_type} (Similarity: {sim_score:.2f})")
+                    
+                    if dry_run:
+                        logger.info(f"*** DRY RUN: {t_type} Doc for {file_id} (Similarity: {sim_score:.2f}) ***")
+                        print_doc = t_doc.copy()
+                        print_doc["timestamp"] = print_doc["timestamp"].isoformat()
+                        print(json.dumps(print_doc, indent=2, default=str))
+                    else:
+                        target_collection.insert_one(t_doc)
+                        logger.info(f"Saved {t_type} (Similarity: {sim_score:.2f})")
                 
                 time.sleep(DELAY_QUICK)
 
