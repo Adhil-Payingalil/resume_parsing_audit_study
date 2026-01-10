@@ -1,26 +1,4 @@
-# Vector Search in Resume-Job Matching Workflow
 
-## Overview
-
-This document explains how the **vector search system** works in our resume-job matching workflow. The system uses a sophisticated two-stage filtering approach with MongoDB's native vector search capabilities to efficiently match job postings with resumes based on semantic similarity.
-
----
-
-##  Architecture: Two-Stage Filtering
-
-### Stage 1: Industry-Based Pre-Filtering
-- **Purpose**: Fast, efficient filtering using MongoDB indexes
-- **Method**: Traditional MongoDB queries on `industry_prefix` field
-- **Performance**: Lightning-fast using database indexes
-- **Result**: Reduces candidate pool from potentially thousands to dozens/hundreds
-
-### Stage 2: Vector Search on Filtered Candidates
-- **Purpose**: Semantic similarity matching using AI embeddings
-- **Method**: MongoDB `$vectorSearch` aggregation pipeline
-- **Performance**: Optimized by working on pre-filtered subset
-- **Result**: Top-K most semantically similar resumes
-
----
 # Vector Search in Resume-Job Matching Workflow
 
 ## Overview

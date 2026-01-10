@@ -1,9 +1,8 @@
 """
-Greenhouse Resume-Job Matching Workflow
+Resume-Job Matching Workflow
 
 This module provides a robust, configurable workflow for matching resumes to job postings
-from the Greenhouse collection using MongoDB vector search and LLM validation. 
-Designed for production use with flexible filtering capabilities.
+using MongoDB vector search and LLM validation. Designed for production use with flexible filtering capabilities.
 """
 
 import os
@@ -17,12 +16,17 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from bson import ObjectId
 
 # Add parent directories to path for imports
+import sys
+import os
+# Add root directory (Repo) to path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
+# Add phase directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from libs.mongodb import _get_mongo_client
 from libs.gemini_processor import GeminiProcessor
 from utils import get_logger
-from greenhouse_config import GreenhouseConfig, default_greenhouse_config
+from configs.config import Config, default_config
 
 logger = get_logger(__name__)
 
@@ -55,9 +59,9 @@ class ResumeCache:
         self.cache.clear()
         self.timestamps.clear()
 
-class GreenhouseResumeJobMatchingWorkflow:
+class ResumeJobMatchingWorkflow:
     """
-    Workflow for resume-job matching using MongoDB vector search with Greenhouse job postings.
+    Workflow for resume-job matching using MongoDB vector search.
     
     Features:
     - Configurable filtering for jobs and resumes
@@ -68,23 +72,23 @@ class GreenhouseResumeJobMatchingWorkflow:
     - Progress tracking and result persistence
     """
     
-    def __init__(self, config: Optional[GreenhouseConfig] = None):
+    def __init__(self, config: Optional[Config] = None):
         """
-        Initialize the Greenhouse resume-job matching workflow.
+        Initialize the resume-job matching workflow.
         
         Args:
-            config: GreenhouseConfig instance. Uses default if not provided.
+            config: Config instance. Uses default if not provided.
         """
-        self.config = config or default_greenhouse_config
+        self.config = config or default_config
         self.mongo_client = _get_mongo_client()
         if not self.mongo_client:
             raise ConnectionError("Failed to connect to MongoDB")
         
         self.db = self.mongo_client[self.config.db_name]
-        self.job_collection = self.db["Job_postings_greenhouse"]  # Greenhouse collection
+        self.job_collection = self.db[self.config.collections["job_postings"]]
         self.resume_collection = self.db[self.config.collections["resumes"]]
-        self.matches_collection = self.db["greenhouse_resume_job_matches"]  # Separate collection
-        self.unmatched_collection = self.db["greenhouse_unmatched_job_postings"]  # Separate collection
+        self.matches_collection = self.db[self.config.collections["matches"]]
+        self.unmatched_collection = self.db[self.config.collections["unmatched"]]
         
         # Initialize Gemini processor for LLM validation
         self.gemini_processor = GeminiProcessor(
@@ -114,41 +118,13 @@ class GreenhouseResumeJobMatchingWorkflow:
             "end_time": None
         }
         
-        logger.info(f"GreenhouseResumeJobMatchingWorkflow initialized")
+        logger.info(f"ResumeJobMatchingWorkflow initialized")
         logger.info(f"Database: {self.config.db_name}")
         logger.info(f"Active filters: {self.config.get_summary()['filters']}")
     
-    def _build_processed_jobs_filter(self, job_query: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Build a filter for matches/unmatched collections that matches the job query.
-        Only includes fields that exist in both job_postings and matches/unmatched collections.
-        
-        Currently, only 'cycle' is stored in matches/unmatched collections.
-        If you need to filter by other fields (e.g., search_term), you must first
-        store those fields when saving matches/unmatched jobs.
-        
-        Args:
-            job_query: The query used to filter jobs from Job_postings_greenhouse
-            
-        Returns:
-            Filter dictionary compatible with matches/unmatched collections
-        """
-        # Fields that exist in both job_postings and matches/unmatched collections
-        # Currently only 'cycle' is stored in matches/unmatched collections
-        # To add more fields, update _store_valid_match() and _store_unmatched_job() methods
-        compatible_fields = ["cycle"]  # Add more fields here after storing them in matches/unmatched
-        
-        processed_filter = {}
-        for field in compatible_fields:
-            if field in job_query:
-                processed_filter[field] = job_query[field]
-        
-        return processed_filter
-    
     def get_filtered_jobs(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
         """
-        Get Greenhouse jobs based on current filtering configuration.
-        Only considers jobs with jd_extraction=True and jd_embedding.
+        Get jobs based on current filtering configuration.
         
         Args:
             limit: Optional limit on number of jobs to return
@@ -157,45 +133,27 @@ class GreenhouseResumeJobMatchingWorkflow:
             List of job documents matching the filters
         """
         try:
-            # Build query for Greenhouse jobs using configuration filters
+            # Build query based on configuration
             query = self.config.get_job_query()
-
-            logger.info(f"Greenhouse job filters: {query}")
             
             # Handle duplicate processing based on configuration
             if self.config.force_reprocess:
                 logger.info("Force reprocessing enabled - will process all jobs including previously processed ones")
             elif self.config.skip_processed_jobs:
                 # Add filter for jobs that haven't been processed yet
-                # IMPORTANT: Only exclude jobs that match the current filter criteria
-                # This prevents excluding jobs from other cycles/filters that were processed before
-                processed_filter = self._build_processed_jobs_filter(query)
-                
-                if processed_filter:
-                    # Only get processed job IDs that match the current filter
-                    processed_job_ids = self.matches_collection.distinct(
-                        "job_posting_id",
-                        processed_filter
-                    )
-                    unmatched_job_ids = self.unmatched_collection.distinct(
-                        "job_posting_id",
-                        processed_filter
-                    )
-                    logger.info(f"Filtering processed jobs by: {processed_filter}")
-                else:
-                    # No compatible filter fields, get all processed job IDs
-                    # (This shouldn't happen in practice, but handle it gracefully)
-                    processed_job_ids = self.matches_collection.distinct("job_posting_id")
-                    unmatched_job_ids = self.unmatched_collection.distinct("job_posting_id")
-                    logger.warning("No compatible filter fields found - excluding all processed jobs (may exclude jobs from other filters)")
+                processed_job_ids = self.matches_collection.distinct("job_posting_id")
+                unmatched_job_ids = self.unmatched_collection.distinct("job_posting_id")
                 
                 if processed_job_ids or unmatched_job_ids:
                     query["_id"] = {"$nin": processed_job_ids + unmatched_job_ids}
-                    logger.info(f"Skipping {len(processed_job_ids)} already matched jobs and {len(unmatched_job_ids)} already unmatched jobs (matching current filter)")
+                    logger.info(f"Skipping {len(processed_job_ids)} already matched jobs and {len(unmatched_job_ids)} already unmatched jobs")
                 else:
-                    logger.info("No previously processed jobs found matching current filter - processing all available jobs")
+                    logger.info("No previously processed jobs found - processing all available jobs")
             else:
                 logger.info("Duplicate processing enabled - will process all jobs including previously processed ones")
+            
+            # Add filter for jobs that have embeddings (required for vector search)
+            query["jd_embedding"] = {"$exists": True, "$ne": None}
             
             # Execute query
             if limit:
@@ -210,15 +168,11 @@ class GreenhouseResumeJobMatchingWorkflow:
             if jobs_without_embeddings > 0:
                 logger.warning(f"Found {jobs_without_embeddings} jobs without embeddings - these will be skipped")
             
-            logger.info(
-                "Found %d Greenhouse jobs matching filters (%d with embeddings)",
-                len(jobs),
-                len(jobs_with_embeddings),
-            )
+            logger.info(f"Found {len(jobs)} jobs matching filters ({len(jobs_with_embeddings)} with embeddings)")
             return jobs_with_embeddings
             
         except Exception as e:
-            logger.error(f"Error getting filtered Greenhouse jobs: {e}")
+            logger.error(f"Error getting filtered jobs: {e}")
             return []
     
     def get_filtered_resumes(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
@@ -308,7 +262,7 @@ class GreenhouseResumeJobMatchingWorkflow:
 
     def vector_search_resumes(self, job_doc: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
-        Use MongoDB vector search to find similar resumes for a Greenhouse job.
+        Use MongoDB vector search to find similar resumes for a job.
         This is the second stage of two-stage filtering for performance optimization.
         
         Args:
@@ -334,11 +288,16 @@ class GreenhouseResumeJobMatchingWorkflow:
                 return []
             
             job_embedding = job_doc.get("jd_embedding")
+            # This check is now redundant since we filter jobs at the query level
+            # but keeping it for safety
             if not job_embedding:
                 logger.warning(f"Job {job_doc.get('_id')} has no embedding")
                 return []
             
             # Stage 2: Vector search ONLY on industry-filtered resumes
+            # Since temporary collections don't have vector search indexes, we'll use a different approach
+            # We'll do the vector search on the main collection but filter results to only include our industry-filtered resumes
+            
             # Get the IDs of industry-filtered resumes for post-filtering
             industry_filtered_ids = [r["_id"] for r in candidate_resumes]
             
@@ -349,8 +308,8 @@ class GreenhouseResumeJobMatchingWorkflow:
                         "index": "resume_embedding_index",
                         "queryVector": job_embedding,
                         "path": "text_embedding",
-                        "numCandidates": min(len(candidate_resumes) * 2, self.config.top_k * 5),
-                        "limit": self.config.top_k * 2
+                        "numCandidates": min(len(candidate_resumes) * 2, self.config.top_k * 5),  # Get more candidates
+                        "limit": self.config.top_k * 2  # Get more results for filtering
                     }
                 },
                 {
@@ -402,7 +361,7 @@ class GreenhouseResumeJobMatchingWorkflow:
     
     def llm_validate_matches(self, job_doc: Dict[str, Any], resume_docs: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
-        Use LLM to validate and rank multiple resumes against a Greenhouse job posting.
+        Use LLM to validate and rank multiple resumes against a job posting.
         
         Args:
             job_doc: Job document
@@ -446,12 +405,14 @@ class GreenhouseResumeJobMatchingWorkflow:
             }
     
     def _create_multiple_validation_prompt(self, job_doc: Dict[str, Any], resume_docs: List[Dict[str, Any]]) -> str:
-        """Create the prompt for LLM validation of multiple resumes against a Greenhouse job."""
-        # Extract key job information from Greenhouse format
+        """Create the prompt for LLM validation of multiple resumes."""
+        # Extract key job information
         job_title = job_doc.get("title", "Unknown")
         company_name = job_doc.get("company", "Unknown")
-        job_description = job_doc.get("job_description", "")[:1500]  # Limit length
-        location = job_doc.get("location", "Not specified")
+        job_description = job_doc.get("description", "")[:1500]  # Limit length
+        required_skills = job_doc.get("required_skills", [])
+        required_experience = job_doc.get("required_experience", "")
+        required_education = job_doc.get("required_education", "")
 
         # Create the base prompt
         prompt = f"""
@@ -460,8 +421,10 @@ You are an expert technical recruiter evaluating multiple candidates for a job p
 JOB DETAILS:
 Title: {job_title}
 Company: {company_name}
-Location: {location}
 Description: {job_description}
+Required Skills: {', '.join(required_skills) if required_skills else 'Not specified'}
+Required Experience: {required_experience or 'Not specified'}
+Required Education: {required_education or 'Not specified'}
 
 CANDIDATE RESUMES:
 """
@@ -514,6 +477,8 @@ Do not include any other text or formatting.
 """
         return prompt
     
+
+    
     def _parse_multiple_validation_response(self, response_text: str) -> Dict[str, Any]:
         """Parse the LLM validation response for multiple candidates."""
         try:
@@ -562,7 +527,7 @@ Do not include any other text or formatting.
     
     def process_job(self, job_doc: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Process matching for a single Greenhouse job posting with optimized two-stage filtering.
+        Process matching for a single job posting with optimized two-stage filtering.
         
         Args:
             job_doc: Job document to process
@@ -575,27 +540,27 @@ Do not include any other text or formatting.
             job_title = job_doc.get("title", "Unknown")
             company = job_doc.get("company", "Unknown")
             
-            logger.info(f"Processing Greenhouse job: {job_id} - {job_title} at {company}")
+            logger.info(f"Processing job: {job_id} - {job_title} at {company}")
             
             # Stage 1: Two-stage filtering (industry + vector search)
             top_resumes = self.vector_search_resumes(job_doc)
             
             if not top_resumes:
-                logger.info(f"No resumes found for Greenhouse job {job_id}")
+                logger.info(f"No resumes found for job {job_id}")
                 return {"status": "no_resumes_found", "job_id": str(job_id)}
             
             # Stage 2: LLM validation
             validation_results = self.llm_validate_matches(job_doc, top_resumes)
             
             if "error" in validation_results:
-                logger.error(f"Error in validation for Greenhouse job {job_id}: {validation_results['error']}")
+                logger.error(f"Error in validation for job {job_id}: {validation_results['error']}")
                 return {"status": "validation_error", "job_id": str(job_id), "error": validation_results["error"]}
             
             # Process validation results
             return self._process_validation_results(job_doc, top_resumes, validation_results)
             
         except Exception as e:
-            logger.error(f"Error processing Greenhouse job {job_doc.get('_id')}: {e}")
+            logger.error(f"Error processing job {job_doc.get('_id')}: {e}")
             return {"status": "error", "job_id": str(job_doc.get("_id")), "error": str(e)}
     
     def _process_validation_results(self, job_doc: Dict[str, Any], resumes: List[Dict[str, Any]], 
@@ -657,7 +622,7 @@ Do not include any other text or formatting.
     
     def _store_valid_match(self, job_doc: Dict[str, Any], matched_resumes: List[Dict[str, Any]], 
                            best_match_result: Dict[str, Any]) -> None:
-        """Store valid match in the Greenhouse matches collection."""
+        """Store valid match in the database."""
         try:
             # Find the best match resume
             best_match_resume = next(
@@ -673,15 +638,14 @@ Do not include any other text or formatting.
             if not resume_doc:
                 return
             
-            # Prepare base job document for Greenhouse format
+            # Prepare base job document (exactly like working version)
             job_doc_base = {
                 "job_posting_id": job_doc["_id"],
-                "job_link": job_doc.get("job_link"),
+                "job_url_direct": job_doc.get("job_url_direct"),
+                "job_link": job_doc.get("job_url_direct") or job_doc.get("job_url"),
                 "title": job_doc.get("title"),
                 "company": job_doc.get("company"),
-                "location": job_doc.get("location"),
-                "job_description": job_doc.get("job_description"),
-                "cycle": job_doc.get("cycle"),
+                "description": job_doc.get("description"),
                 "matched_resumes": [
                     {
                         "file_id": r.get("file_id"),
@@ -694,11 +658,10 @@ Do not include any other text or formatting.
                 ],
                 "created_at": datetime.now(),
                 "validated_at": datetime.now(),
-                "workflow_run": True,
-                "posted_date": job_doc.get("posted_date")
+                "workflow_run": True
             }
             
-            # Create match document for Greenhouse collection
+            # Create match document (exactly like working version)
             match_doc = {
                 **job_doc_base,
                 "resume_id": resume_doc["_id"],
@@ -712,23 +675,22 @@ Do not include any other text or formatting.
             }
             
             self.matches_collection.insert_one(match_doc)
-            logger.info(f"Stored valid Greenhouse match for job {job_doc.get('_id')} with resume {resume_doc.get('_id')}")
+            logger.info(f"Stored valid match for job {job_doc.get('_id')} with resume {resume_doc.get('_id')}")
             
         except Exception as e:
-            logger.error(f"Error storing valid Greenhouse match: {e}")
+            logger.error(f"Error storing valid match: {e}")
     
     def _store_unmatched_job(self, job_doc: Dict[str, Any], matched_resumes: List[Dict[str, Any]]) -> None:
-        """Store unmatched Greenhouse job in the database."""
+        """Store unmatched job in the database."""
         try:
-            # Prepare base job document for Greenhouse format
+            # Prepare base job document (exactly like working version)
             job_doc_base = {
                 "job_posting_id": job_doc["_id"],
-                "job_link": job_doc.get("job_link"),
+                "job_url_direct": job_doc.get("job_url_direct"),
+                "job_link": job_doc.get("job_url_direct") or job_doc.get("job_url"),
                 "title": job_doc.get("title"),
                 "company": job_doc.get("company"),
-                "location": job_doc.get("location"),
-                "job_description": job_doc.get("job_description"),
-                "cycle": job_doc.get("cycle"),
+                "description": job_doc.get("description"),
                 "matched_resumes": [
                     {
                         "file_id": r.get("file_id"),
@@ -741,25 +703,24 @@ Do not include any other text or formatting.
                 ],
                 "created_at": datetime.now(),
                 "validated_at": datetime.now(),
-                "workflow_run": True,
-                "posted_date": job_doc.get("posted_date")
+                "workflow_run": True
             }
             
-            # Create unmatched document for Greenhouse collection
+            # Create unmatched document (exactly like working version)
             unmatched_doc = {
                 **job_doc_base,
                 "match_status": "NO_VALID_MATCH"
             }
             
             self.unmatched_collection.insert_one(unmatched_doc)
-            logger.info(f"Stored unmatched Greenhouse job {job_doc.get('_id')} with {len(matched_resumes)} potential matches")
+            logger.info(f"Stored unmatched job {job_doc.get('_id')} with {len(matched_resumes)} potential matches")
             
         except Exception as e:
-            logger.error(f"Error storing unmatched Greenhouse job: {e}")
+            logger.error(f"Error storing unmatched job: {e}")
     
     def run_workflow(self, max_jobs: Optional[int] = None) -> Dict[str, Any]:
         """
-        Run the complete Greenhouse matching workflow with optimized batch processing.
+        Run the complete matching workflow with optimized batch processing.
         
         Args:
             max_jobs: Maximum number of jobs to process. Uses config default if None.
@@ -769,7 +730,7 @@ Do not include any other text or formatting.
         """
         try:
             self.stats["start_time"] = datetime.now()
-            logger.info("Starting Greenhouse resume-job matching workflow with optimizations")
+            logger.info("Starting resume-job matching workflow with optimizations")
             
             # Get jobs to process
             if max_jobs is None:
@@ -778,10 +739,10 @@ Do not include any other text or formatting.
             jobs = self.get_filtered_jobs(limit=max_jobs)
             
             if not jobs:
-                logger.info("No Greenhouse jobs found to process")
-                return {"status": "no_jobs", "message": "No Greenhouse jobs found matching criteria"}
+                logger.info("No jobs found to process")
+                return {"status": "no_jobs", "message": "No jobs found matching criteria"}
             
-            logger.info(f"Processing {len(jobs)} Greenhouse jobs with batch size {self.config.batch_size}")
+            logger.info(f"Processing {len(jobs)} jobs with batch size {self.config.batch_size}")
             
             # Process jobs in optimized batches
             results = self._process_jobs_optimized(jobs)
@@ -793,11 +754,11 @@ Do not include any other text or formatting.
             # Calculate summary
             summary = self._calculate_workflow_summary(results)
             
-            logger.info(f"Greenhouse workflow completed: {summary['total_valid_matches']} valid matches, {summary['total_rejected_matches']} rejected")
+            logger.info(f"Workflow completed: {summary['total_valid_matches']} valid matches, {summary['total_rejected_matches']} rejected")
             return summary
             
         except Exception as e:
-            logger.error(f"Error in Greenhouse workflow: {e}")
+            logger.error(f"Error in workflow: {e}")
             return {"status": "error", "error": str(e)}
     
     def _process_jobs_optimized(self, jobs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -811,7 +772,7 @@ Do not include any other text or formatting.
             batch_num = (i // self.config.batch_size) + 1
             total_batches = (len(jobs) + self.config.batch_size - 1) // self.config.batch_size
             
-            logger.info(f"Processing Greenhouse batch {batch_num}/{total_batches} ({len(batch)} jobs)")
+            logger.info(f"Processing batch {batch_num}/{total_batches} ({len(batch)} jobs)")
             
             # Process batch with parallel processing
             batch_results = self._process_job_batch(batch)
@@ -819,12 +780,12 @@ Do not include any other text or formatting.
             
             # Update progress
             processed_job_ids.extend([str(job.get("_id")) for job in batch])
-            logger.info(f"Completed Greenhouse batch {batch_num}/{total_batches}. Total processed: {len(results)}/{len(jobs)}")
+            logger.info(f"Completed batch {batch_num}/{total_batches}. Total processed: {len(results)}/{len(jobs)}")
             
             # Save checkpoint periodically
             if len(results) % self.config.checkpoint_interval == 0:
                 self._save_checkpoint(processed_job_ids)
-                logger.info(f"Greenhouse checkpoint saved at {len(results)} jobs")
+                logger.info(f"Checkpoint saved at {len(results)} jobs")
             
             # Memory management - clear cache if needed
             if len(results) % (self.config.checkpoint_interval * 2) == 0:
@@ -833,7 +794,7 @@ Do not include any other text or formatting.
         return results
     
     def _process_job_batch(self, batch: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Process a batch of Greenhouse jobs with parallel processing."""
+        """Process a batch of jobs with parallel processing."""
         try:
             with ThreadPoolExecutor(max_workers=self.config.max_workers) as executor:
                 # Submit all jobs in the batch
@@ -847,7 +808,7 @@ Do not include any other text or formatting.
                         result = future.result()
                         batch_results.append(result)
                     except Exception as e:
-                        logger.error(f"Error processing Greenhouse job {job.get('_id')}: {e}")
+                        logger.error(f"Error processing job {job.get('_id')}: {e}")
                         batch_results.append({
                             "status": "error",
                             "job_id": str(job.get("_id")),
@@ -857,7 +818,7 @@ Do not include any other text or formatting.
                 return batch_results
                 
         except Exception as e:
-            logger.error(f"Error in Greenhouse batch processing: {e}")
+            logger.error(f"Error in batch processing: {e}")
             # Fallback to sequential processing
             return [self.process_job(job) for job in batch]
     
@@ -868,19 +829,18 @@ Do not include any other text or formatting.
                 "processed_jobs": processed_job_ids,
                 "timestamp": datetime.now(),
                 "workflow_status": "in_progress",
-                "performance_metrics": self.performance_metrics,
-                "workflow_type": "greenhouse"
+                "performance_metrics": self.performance_metrics
             }
             
             # Remove old checkpoints
-            self.db.checkpoints.delete_many({"workflow_type": "greenhouse"})
+            self.db.checkpoints.delete_many({})
             
             # Save new checkpoint
             self.db.checkpoints.insert_one(checkpoint)
-            logger.info(f"Greenhouse checkpoint saved with {len(processed_job_ids)} processed jobs")
+            logger.info(f"Checkpoint saved with {len(processed_job_ids)} processed jobs")
             
         except Exception as e:
-            logger.warning(f"Failed to save Greenhouse checkpoint: {e}")
+            logger.warning(f"Failed to save checkpoint: {e}")
     
     def _manage_memory(self) -> None:
         """Manage memory usage for large-scale processing."""
@@ -899,8 +859,210 @@ Do not include any other text or formatting.
         except Exception as e:
             logger.warning(f"Memory management failed: {e}")
     
+    def resume_from_checkpoint(self) -> Optional[List[str]]:
+        """Resume workflow from the last checkpoint."""
+        try:
+            checkpoint = self.db.checkpoints.find_one({}, sort=[("timestamp", -1)])
+            if checkpoint:
+                processed_jobs = checkpoint.get("processed_jobs", [])
+                logger.info(f"Found checkpoint with {len(processed_jobs)} processed jobs")
+                return processed_jobs
+            else:
+                logger.info("No checkpoint found - starting fresh")
+                return None
+                
+        except Exception as e:
+            logger.warning(f"Failed to load checkpoint: {e}")
+            return None
+    
+    def get_performance_recommendations(self) -> Dict[str, Any]:
+        """Get performance optimization recommendations based on current metrics."""
+        recommendations = []
+        
+        # Cache performance recommendations
+        cache_hit_rate = self.performance_metrics.get("cache_hit_rate", 0)
+        if cache_hit_rate < 50:
+            recommendations.append({
+                "type": "cache_optimization",
+                "priority": "high",
+                "message": f"Cache hit rate is {cache_hit_rate:.1f}%. Consider increasing cache TTL or optimizing industry filtering."
+            })
+        
+        # Vector search performance
+        avg_vector_time = 0
+        if self.performance_metrics["vector_search_times"]:
+            avg_vector_time = sum(self.performance_metrics["vector_search_times"]) / len(self.performance_metrics["vector_search_times"])
+        
+        if avg_vector_time > 2.0:  # More than 2 seconds
+            recommendations.append({
+                "type": "vector_search_optimization",
+                "priority": "medium",
+                "message": f"Average vector search time is {avg_vector_time:.2f}s. Consider reducing top_k or similarity threshold."
+            })
+        
+        # LLM validation performance
+        avg_llm_time = 0
+        if self.performance_metrics["llm_validation_times"]:
+            avg_llm_time = sum(self.performance_metrics["llm_validation_times"]) / len(self.performance_metrics["llm_validation_times"])
+        
+        if avg_llm_time > 10.0:  # More than 10 seconds
+            recommendations.append({
+                "type": "llm_optimization",
+                "priority": "medium",
+                "message": f"Average LLM validation time is {avg_llm_time:.2f}s. Consider reducing max_resumes for validation."
+            })
+        
+        # Memory usage recommendations
+        if self.config.memory_limit_mb < 4096:
+            recommendations.append({
+                "type": "memory_optimization",
+                "priority": "low",
+                "message": f"Memory limit is {self.config.memory_limit_mb}MB. Consider increasing for better cache performance."
+            })
+        
+        return {
+            "recommendations": recommendations,
+            "total_recommendations": len(recommendations),
+            "performance_summary": {
+                "cache_hit_rate": cache_hit_rate,
+                "avg_vector_search_time": avg_vector_time,
+                "avg_llm_validation_time": avg_llm_time
+            }
+        }
+    
+    def is_job_processed(self, job_id: str) -> Dict[str, Any]:
+        """
+        Check if a specific job has already been processed.
+        
+        Args:
+            job_id: Job ID to check
+            
+        Returns:
+            Dictionary with processing status and details
+        """
+        try:
+            # Check if job exists in matches collection
+            match_doc = self.matches_collection.find_one({"job_posting_id": job_id})
+            if match_doc:
+                return {
+                    "processed": True,
+                    "status": "matched",
+                    "collection": "matches",
+                    "match_id": str(match_doc["_id"]),
+                    "timestamp": match_doc.get("timestamp"),
+                    "details": {
+                        "resume_count": len(match_doc.get("resumes", [])),
+                        "best_match_score": match_doc.get("best_match_score"),
+                        "validation_score": match_doc.get("validation_score")
+                    }
+                }
+            
+            # Check if job exists in unmatched collection
+            unmatched_doc = self.unmatched_collection.find_one({"job_posting_id": job_id})
+            if unmatched_doc:
+                return {
+                    "processed": True,
+                    "status": "unmatched",
+                    "collection": "unmatched",
+                    "unmatched_id": str(unmatched_doc["_id"]),
+                    "timestamp": unmatched_doc.get("timestamp"),
+                    "reason": unmatched_doc.get("reason", "No specific reason recorded")
+                }
+            
+            # Job not processed yet
+            return {
+                "processed": False,
+                "status": "not_processed",
+                "message": "Job has not been processed yet"
+            }
+            
+        except Exception as e:
+            logger.error(f"Error checking job processing status: {e}")
+            return {
+                "processed": False,
+                "status": "error",
+                "error": str(e)
+            }
+    
+    def get_processing_statistics(self) -> Dict[str, Any]:
+        """
+        Get comprehensive statistics about job processing status.
+        
+        Returns:
+            Dictionary with processing statistics
+        """
+        try:
+            # Count total jobs
+            total_jobs = self.job_collection.count_documents({})
+            jobs_with_embeddings = self.job_collection.count_documents({"jd_embedding": {"$exists": True, "$ne": None}})
+            
+            # Count processed jobs
+            processed_jobs = self.matches_collection.count_documents({})
+            unmatched_jobs = self.unmatched_collection.count_documents({})
+            total_processed = processed_jobs + unmatched_jobs
+            
+            # Count remaining jobs
+            remaining_jobs = jobs_with_embeddings - total_processed
+            
+            # Calculate percentages
+            processing_progress = (total_processed / jobs_with_embeddings * 100) if jobs_with_embeddings > 0 else 0
+            
+            return {
+                "total_jobs": total_jobs,
+                "jobs_with_embeddings": jobs_with_embeddings,
+                "processed_jobs": {
+                    "matched": processed_jobs,
+                    "unmatched": unmatched_jobs,
+                    "total": total_processed
+                },
+                "remaining_jobs": remaining_jobs,
+                "processing_progress": {
+                    "percentage": processing_progress,
+                    "fraction": f"{total_processed}/{jobs_with_embeddings}"
+                },
+                "duplicate_processing": {
+                    "skip_processed_jobs": self.config.skip_processed_jobs,
+                    "force_reprocess": self.config.force_reprocess
+                }
+            }
+            
+        except Exception as e:
+            logger.error(f"Error getting processing statistics: {e}")
+            return {"error": str(e)}
+    
+    def _process_jobs_sequential(self, jobs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Process jobs sequentially with rate limiting (fallback method)."""
+        results = []
+        
+        for job in jobs:
+            try:
+                result = self.process_job(job)
+                results.append(result)
+                
+                # Rate limiting (simple delay)
+                time.sleep(1.0)  # 1 second delay between jobs
+                
+                # Update progress
+                if len(results) % 10 == 0:
+                    logger.info(f"Processed {len(results)}/{len(jobs)} jobs")
+                
+            except Exception as e:
+                logger.error(f"Error processing job {job.get('_id')}: {e}")
+                results.append({
+                    "status": "error",
+                    "job_id": str(job.get("_id")),
+                    "error": str(e)
+                })
+                
+                # Continue on error for simplicity
+                continue
+        
+        return results
+    
+
+    
     def _calculate_workflow_summary(self, results: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """Calculate summary statistics from Greenhouse workflow results."""
+        """Calculate summary statistics from workflow results."""
         total_valid_matches = 0
         total_rejected_matches = 0
         total_errors = 0
@@ -926,7 +1088,6 @@ Do not include any other text or formatting.
         
         return {
             "status": "completed",
-            "workflow_type": "greenhouse",
             "jobs_processed": len(results),
             "total_valid_matches": total_valid_matches,
             "total_rejected_matches": total_rejected_matches,
@@ -948,74 +1109,56 @@ Do not include any other text or formatting.
             }
         }
     
-    def get_processing_statistics(self) -> Dict[str, Any]:
-        """
-        Get comprehensive statistics about Greenhouse job processing status.
-        Uses the same filter as get_filtered_jobs() for accurate statistics.
-        
-        Returns:
-            Dictionary with processing statistics
-        """
+    def get_workflow_statistics(self) -> Dict[str, Any]:
+        """Get comprehensive workflow statistics including performance metrics."""
         try:
-            # Get the filter query to ensure statistics match what will actually be processed
-            filter_query = self.config.get_job_query()
+            # Database statistics
+            total_matches = self.matches_collection.count_documents({"workflow_run": True})
+            total_validated = self.matches_collection.count_documents({"workflow_run": True, "match_status": "VALIDATED"})
+            total_unmatched = self.unmatched_collection.count_documents({"workflow_run": True})
             
-            # Count total Greenhouse jobs
+            # Collection counts
             total_jobs = self.job_collection.count_documents({})
+            total_resumes = self.resume_collection.count_documents({})
             
-            # Count jobs matching the current filter (including cycle filter)
-            jobs_matching_filter = self.job_collection.count_documents(filter_query)
-            
-            # Also count jobs with embeddings (for reference, without cycle filter)
-            jobs_with_embeddings_all_cycles = self.job_collection.count_documents({
-                "jd_extraction": True,
-                "jd_embedding": {"$exists": True, "$ne": None}
-            })
-            
-            # Count processed jobs that match the current filter
-            processed_filter = self._build_processed_jobs_filter(filter_query)
-            if processed_filter:
-                # Only count processed jobs matching the current filter
-                processed_jobs = self.matches_collection.count_documents(processed_filter)
-                unmatched_jobs = self.unmatched_collection.count_documents(processed_filter)
-            else:
-                # No compatible filter fields, count all processed jobs
-                processed_jobs = self.matches_collection.count_documents({})
-                unmatched_jobs = self.unmatched_collection.count_documents({})
-            
-            total_processed = processed_jobs + unmatched_jobs
-            
-            # Count remaining jobs (matching filter but not yet processed)
-            remaining_jobs = jobs_matching_filter - total_processed
-            
-            # Calculate percentages
-            processing_progress = (total_processed / jobs_matching_filter * 100) if jobs_matching_filter > 0 else 0
+            # Performance metrics
+            avg_vector_search_time = 0
+            avg_llm_time = 0
+            if self.performance_metrics["vector_search_times"]:
+                avg_vector_search_time = sum(self.performance_metrics["vector_search_times"]) / len(self.performance_metrics["vector_search_times"])
+            if self.performance_metrics["llm_validation_times"]:
+                avg_llm_time = sum(self.performance_metrics["llm_validation_times"]) / len(self.performance_metrics["llm_validation_times"])
             
             return {
-                "workflow_type": "greenhouse",
-                "total_jobs": total_jobs,
-                "jobs_matching_filter": jobs_matching_filter,  # Jobs matching current filter (e.g., cycle: 6)
-                "jobs_with_embeddings_all_cycles": jobs_with_embeddings_all_cycles,  # All jobs with embeddings (any cycle)
-                "processed_jobs": {
-                    "matched": processed_jobs,
-                    "unmatched": unmatched_jobs,
-                    "total": total_processed
+                "workflow_stats": {
+                    "total_runs": total_matches + total_unmatched,
+                    "valid_matches": total_validated,
+                    "unmatched_jobs": total_unmatched,
+                    "success_rate": (total_validated / (total_matches + total_unmatched)) * 100 if (total_matches + total_unmatched) > 0 else 0
                 },
-                "remaining_jobs": remaining_jobs,
-                "processing_progress": {
-                    "percentage": processing_progress,
-                    "fraction": f"{total_processed}/{jobs_matching_filter}"
+                "collection_stats": {
+                    "total_jobs": total_jobs,
+                    "total_resumes": total_resumes,
+                    "jobs_with_embeddings": self.job_collection.count_documents({"jd_embedding": {"$exists": True}}),
+                    "resumes_with_embeddings": self.resume_collection.count_documents({"text_embedding": {"$exists": True}})
                 },
-                "filter_applied": filter_query,
-                "duplicate_processing": {
-                    "skip_processed_jobs": self.config.skip_processed_jobs,
-                    "force_reprocess": self.config.force_reprocess
-                }
+                "performance_metrics": {
+                    "cache_hits": self.performance_metrics["cache_hits"],
+                    "cache_misses": self.performance_metrics["cache_misses"],
+                    "cache_hit_rate": (self.performance_metrics["cache_hits"] / (self.performance_metrics["cache_hits"] + self.performance_metrics["cache_misses"])) * 100 if (self.performance_metrics["cache_hits"] + self.performance_metrics["cache_misses"]) > 0 else 0,
+                    "avg_vector_search_time": avg_vector_search_time,
+                    "avg_llm_validation_time": avg_llm_time,
+                    "total_vector_searches": len(self.performance_metrics["vector_search_times"]),
+                    "total_llm_validations": len(self.performance_metrics["llm_validation_times"])
+                },
+                "processing_status": self.get_processing_statistics(),
+                "current_run": self.stats,
+                "configuration": self.config.get_summary()
             }
             
         except Exception as e:
-            logger.error(f"Error getting Greenhouse processing statistics: {e}")
-            return {"error": str(e)}
+            logger.error(f"Error getting workflow statistics: {e}")
+            return {}
     
     def cleanup(self) -> None:
         """Clean up resources."""
@@ -1027,9 +1170,9 @@ Do not include any other text or formatting.
             if self.mongo_client:
                 self.mongo_client.close()
                 
-            logger.info("Greenhouse workflow cleanup completed")
+            logger.info("Workflow cleanup completed")
         except Exception as e:
-            logger.error(f"Error during Greenhouse workflow cleanup: {e}")
+            logger.error(f"Error during cleanup: {e}")
     
     def __enter__(self):
         """Context manager entry."""

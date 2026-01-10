@@ -30,7 +30,7 @@ from pymongo.errors import PyMongoError
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from libs.mongodb import _get_mongo_client
 from utils import get_logger
-from config_job_scraper import CONFIG
+from config import CONFIG
 
 load_dotenv()
 logger = get_logger(__name__)

@@ -1,0 +1,89 @@
+{
+  "test_timestamp": "2025-07-27T21:00:52.440940",
+  "job_info": {
+    "job_title": null,
+    "company_name": null,
+    "job_id": "68866e1499858055b53daca8",
+    "embedding_dimensions": 768,
+    "embedding_preview": [
+      0.03343373,
+      -0.009572568,
+      0.0015818918,
+      0.023080943,
+      0.032592215,
+      -0.009717938,
+      0.037656773,
+      -0.018463891,
+      0.05486209,
+      -0.004220518
+    ]
+  },
+  "search_results": [
+    {
+      "rank": 1,
+      "file_id": "ITC resume 07.pdf",
+      "similarity_score": 0.6135537373142974,
+      "summary_preview": "No summary"
+    },
+    {
+      "rank": 2,
+      "file_id": "ITC resume 11.pdf",
+      "similarity_score": 0.6047930835713484,
+      "summary_preview": "No summary"
+    },
+    {
+      "rank": 3,
+      "file_id": "ITC resume 06.pdf",
+      "similarity_score": 0.5939162462357039,
+      "summary_preview": "No summary"
+    },
+    {
+      "rank": 4,
+      "file_id": "ITC resume 10.pdf",
+      "similarity_score": 0.5781652046635364,
+      "summary_preview": "No summary"
+    },
+    {
+      "rank": 5,
+      "file_id": "ITC resume 09.pdf",
+      "similarity_score": 0.5780496462477529,
+      "summary_preview": "No summary"
+    },
+    {
+      "rank": 6,
+      "file_id": "ITC resume 03.pdf",
+      "similarity_score": 0.5712463443121841,
+      "summary_preview": "No summary"
+    },
+    {
+      "rank": 7,
+      "file_id": "ITC resume 04.pdf",
+      "similarity_score": 0.5672716335795326,
+      "summary_preview": "No summary"
+    },
+    {
+      "rank": 8,
+      "file_id": "ITC resume 12.pdf",
+      "similarity_score": 0.566493844757116,
+      "summary_preview": "No summary"
+    },
+    {
+      "rank": 9,
+      "file_id": "ITC resume 01.pdf",
+      "similarity_score": 0.5525045596165306,
+      "summary_preview": "No summary"
+    },
+    {
+      "rank": 10,
+      "file_id": "ITC resume 05.pdf",
+      "similarity_score": 0.5487702963879699,
+      "summary_preview": "No summary"
+    }
+  ],
+  "statistics": {
+    "total_resumes_searched": 10,
+    "average_similarity": 0.5774764596685973,
+    "max_similarity": 0.6135537373142974,
+    "min_similarity": 0.5487702963879699
+  }
+}

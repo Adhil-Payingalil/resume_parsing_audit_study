@@ -10,8 +10,8 @@ from datetime import datetime
 
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-from config_job_scraper import CONFIG
-from job_scraper_integration import JobScraperIntegration
+from config import CONFIG
+from job_scraper import JobScraperIntegration
 
 def main():
     print("=== Job Scraping Development Script ===")

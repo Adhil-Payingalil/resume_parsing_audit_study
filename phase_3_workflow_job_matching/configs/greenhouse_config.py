@@ -29,9 +29,12 @@ class GreenhouseConfig:
     search_terms: List[str] = field(default_factory=list)       # e.g., ["Software Engineer", "Full Stack Developer", "Java Developer",  "Business Intelligence Analyst"]
     max_jobs: Optional[int] = None                             # Limit jobs to process (None = all)
     
+    # Query parameters
+    cycle: Optional[float] = None                              # Cycle number to filter jobs (None = all cycles)
+
     # Vector search settings
     top_k: int = 4
-    similarity_threshold: float = 0.50
+    similarity_threshold: float = 0.30
     vector_search_index: str = "resume_embedding_index"  # MongoDB vector search index name
     
     # LLM settings  
@@ -57,9 +60,12 @@ class GreenhouseConfig:
         """Build MongoDB query for Greenhouse job filtering."""
         query = {
             "jd_extraction": True,  # Only jobs with successful extraction
-            "cycle": 8.1, 
             "jd_embedding": {"$exists": True, "$ne": None}  # Only jobs with embeddings
         }
+        
+        # Add cycle filter if specified
+        if self.cycle is not None:
+            query["cycle"] = self.cycle
         
         # Add search term filter if specified (though Greenhouse jobs may not have search_term field)
         # This is kept for compatibility but may not be used for Greenhouse jobs
@@ -82,7 +88,7 @@ class GreenhouseConfig:
         """Get a summary of current Greenhouse configuration."""
         active_job_filters = {
             "jd_extraction": True,
-            "cycle": 8.1
+            "cycle": self.cycle
         }
 
         return {

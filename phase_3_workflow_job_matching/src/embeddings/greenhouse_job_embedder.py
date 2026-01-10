@@ -28,8 +28,11 @@ import time
 from typing import List, Dict, Any, Optional, Tuple
 from datetime import datetime
 
-# Add parent directory to path for imports
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+# Add parent directories to path for imports
+import sys
+import os
+# Add root directory (Repo) to path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
 from libs.mongodb import _get_mongo_client
 from utils import get_logger
