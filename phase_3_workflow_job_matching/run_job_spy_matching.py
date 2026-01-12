@@ -12,13 +12,13 @@ sys.path.append(parent_dir) # For libs, utils
 sys.path.append(current_dir) # For configs, src
 
 from utils import get_logger
-from src.matching.standard_matcher import ResumeJobMatchingWorkflow
+from src.matching.job_spy_matcher import JobSpyResumeJobMatchingWorkflow
 from configs.config import default_config, Config
 
 logger = get_logger(__name__)
 
 def main():
-    parser = argparse.ArgumentParser(description="Standard Resume-Job Matching Workflow")
+    parser = argparse.ArgumentParser(description="JobSpy Resume-Job Matching Workflow")
     parser.add_argument("--limit", type=int, help="Limit number of jobs to process")
     parser.add_argument("--industry", nargs="+", help="Filter by industry prefix (e.g. ITC FIN)")
     parser.add_argument("--force", action="store_true", help="Force reprocess existing matches")
@@ -41,10 +41,10 @@ def main():
     if args.limit:
         config.max_jobs = args.limit
 
-    logger.info(f"Starting Standard Matching with config: {config.get_summary()}")
+    logger.info(f"Starting JobSpy Matching with config: {config.get_summary()}")
 
     # Run
-    workflow = ResumeJobMatchingWorkflow(config)
+    workflow = JobSpyResumeJobMatchingWorkflow(config)
     results = workflow.run_workflow(max_jobs=args.limit)
     
     logger.info("Workflow Finished.")

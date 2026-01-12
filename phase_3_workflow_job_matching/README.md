@@ -9,7 +9,7 @@ This directory contains the tools and workflows for matching resumes to job post
     *   `batch_resume_embedder.py`: Embeds standardized resumes.
     *   `greenhouse_job_embedder.py`: Embeds Greenhouse job postings.
 *   `src/matching/`: Core matching logic.
-    *   `standard_matcher.py`: Generalized matching workflow.
+    *   `job_spy_matcher.py`: Generalized matching workflow (using JobSpy).
     *   `greenhouse_matcher.py`: Specialized workflow for Greenhouse data.
 *   `configs/`: Configuration files for each workflow.
 *   `docs/`: Legacy documentation.
@@ -23,11 +23,11 @@ To run the **Greenhouse** matching workflow (recommended for current operations)
 ```bash
 python run_greenhouse_matching.py
 ```
-This script replicates the functionality of the old `run_greenhouse_workflow.py`.
-
-To run the **Standard** matching workflow:
+This script replicates the functionality of the old `run_greenhouse_workflow.py`
+### 2. Standard Job Matching (JobSpy)
+Run the standard matching workflow (for jobs scraped via JobSpy):
 ```bash
-python run_standard_matching.py
+python phase_3_workflow_job_matching/run_job_spy_matching.py --limit 50
 ```
 
 ### 2. Embedding Generation (Batch)

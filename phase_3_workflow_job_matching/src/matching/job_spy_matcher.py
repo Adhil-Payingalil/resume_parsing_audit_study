@@ -59,7 +59,7 @@ class ResumeCache:
         self.cache.clear()
         self.timestamps.clear()
 
-class ResumeJobMatchingWorkflow:
+class JobSpyResumeJobMatchingWorkflow:
     """
     Workflow for resume-job matching using MongoDB vector search.
     
@@ -118,7 +118,7 @@ class ResumeJobMatchingWorkflow:
             "end_time": None
         }
         
-        logger.info(f"ResumeJobMatchingWorkflow initialized")
+        logger.info(f"JobSpyResumeJobMatchingWorkflow initialized")
         logger.info(f"Database: {self.config.db_name}")
         logger.info(f"Active filters: {self.config.get_summary()['filters']}")
     
