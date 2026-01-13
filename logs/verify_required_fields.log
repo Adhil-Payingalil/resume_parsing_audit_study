@@ -1,0 +1,566 @@
+2026-01-12 19:01:50,682 - INFO - ✅ Connected to MongoDB: Resume_study.Job_postings_greenhouse
+2026-01-12 19:01:50,783 - INFO - Found 1 jobs to process for Cycle 9 (limit=1, skip_processed=True)
+2026-01-12 19:02:29,842 - INFO - ✅ Connected to MongoDB: Resume_study.Job_postings_greenhouse
+2026-01-12 19:02:30,023 - INFO - Found 173 jobs to process for Cycle 9 (limit=all, skip_processed=True)
+2026-01-12 19:02:37,297 - ERROR - Extraction failed: 'RequiredFieldChecker' object has no attribute 'process_job'
+2026-01-12 19:04:00,088 - INFO - ✅ Connected to MongoDB: Resume_study.Job_postings_greenhouse
+2026-01-12 19:04:00,192 - INFO - Found 1 jobs to process for Cycle 9 (limit=1, skip_processed=True)
+2026-01-12 19:04:16,764 - INFO - ✅ Connected to MongoDB: Resume_study.Job_postings_greenhouse
+2026-01-12 19:04:16,996 - INFO - Found 173 jobs to process for Cycle 9 (limit=all, skip_processed=True)
+2026-01-12 19:04:22,387 - INFO - Processing job 696582afbc8a5f4ff107db02: Director, Product Design (TMS & Private Dining) at OpenTable
+2026-01-12 19:04:22,388 - INFO - Scraping input_field_labels for job 696582afbc8a5f4ff107db02 (no existing labels found)
+2026-01-12 19:04:24,840 - ERROR - Error processing job 696582afbc8a5f4ff107db02: name 'collect_form_labels' is not defined
+2026-01-12 19:04:28,122 - ERROR - Error processing job 696582afbc8a5f4ff107db02: name 'collect_form_labels' is not defined
+2026-01-12 19:04:30,183 - INFO - Processing job 696582f6bc8a5f4ff107db4e: Sales Representative at Martell Ventures
+2026-01-12 19:04:30,183 - INFO - Scraping input_field_labels for job 696582f6bc8a5f4ff107db4e (no existing labels found)
+2026-01-12 19:04:32,266 - ERROR - Error processing job 696582f6bc8a5f4ff107db4e: name 'collect_form_labels' is not defined
+2026-01-12 19:04:35,487 - ERROR - Error processing job 696582f6bc8a5f4ff107db4e: name 'collect_form_labels' is not defined
+2026-01-12 19:04:37,608 - ERROR - Extraction failed: Browser.close: Connection closed while reading from the driver
+2026-01-12 19:05:52,210 - INFO - ✅ Connected to MongoDB: Resume_study.Job_postings_greenhouse
+2026-01-12 19:05:52,310 - INFO - Found 1 jobs to process for Cycle 9 (limit=1, skip_processed=True)
+2026-01-12 19:06:06,470 - INFO - ✅ Connected to MongoDB: Resume_study.Job_postings_greenhouse
+2026-01-12 19:06:06,654 - INFO - Found 173 jobs to process for Cycle 9 (limit=all, skip_processed=True)
+2026-01-12 19:06:09,984 - INFO - Processing job 696582afbc8a5f4ff107db02: Director, Product Design (TMS & Private Dining) at OpenTable
+2026-01-12 19:06:09,985 - INFO - Scraping input_field_labels for job 696582afbc8a5f4ff107db02 (no existing labels found)
+2026-01-12 19:06:12,460 - INFO - Collected 37 labels for job 696582afbc8a5f4ff107db02 (Unsupported fields: False, Count: 0)
+2026-01-12 19:06:13,548 - INFO - Processing job 696582f6bc8a5f4ff107db4e: Sales Representative at Martell Ventures
+2026-01-12 19:06:13,549 - INFO - Scraping input_field_labels for job 696582f6bc8a5f4ff107db4e (no existing labels found)
+2026-01-12 19:06:20,444 - INFO - Collected 12 labels for job 696582f6bc8a5f4ff107db4e (Unsupported fields: True, Count: 1)
+2026-01-12 19:06:21,534 - INFO - Processing job 696582f4bc8a5f4ff107db38: Partner Growth Manager at Martell Ventures
+2026-01-12 19:06:21,534 - INFO - Scraping input_field_labels for job 696582f4bc8a5f4ff107db38 (no existing labels found)
+2026-01-12 19:06:25,960 - INFO - Collected 12 labels for job 696582f4bc8a5f4ff107db38 (Unsupported fields: True, Count: 1)
+2026-01-12 19:06:27,042 - INFO - Processing job 696582a8bc8a5f4ff107daae: Broker Support Specialist at Max Insurance
+2026-01-12 19:06:27,042 - INFO - Scraping input_field_labels for job 696582a8bc8a5f4ff107daae (no existing labels found)
+2026-01-12 19:06:31,310 - INFO - Collected 9 labels for job 696582a8bc8a5f4ff107daae (Unsupported fields: False, Count: 0)
+2026-01-12 19:06:32,411 - INFO - Processing job 696582a9bc8a5f4ff107dab2: Software Development Manager at Mitratech
+2026-01-12 19:06:32,411 - INFO - Scraping input_field_labels for job 696582a9bc8a5f4ff107dab2 (no existing labels found)
+2026-01-12 19:06:34,722 - INFO - Collected 20 labels for job 696582a9bc8a5f4ff107dab2 (Unsupported fields: True, Count: 1)
+2026-01-12 19:06:35,785 - INFO - Processing job 696582b2bc8a5f4ff107db18: Chapter Leader at Fora (Interview Calendar)
+2026-01-12 19:06:35,786 - INFO - Scraping input_field_labels for job 696582b2bc8a5f4ff107db18 (no existing labels found)
+2026-01-12 19:06:38,212 - INFO - Collected 11 labels for job 696582b2bc8a5f4ff107db18 (Unsupported fields: False, Count: 0)
+2026-01-12 19:06:39,286 - INFO - Processing job 696582a7bc8a5f4ff107da9f: Account Executive at Ogilvy Canada
+2026-01-12 19:06:39,286 - INFO - Scraping input_field_labels for job 696582a7bc8a5f4ff107da9f (no existing labels found)
+2026-01-12 19:06:41,694 - INFO - Collected 17 labels for job 696582a7bc8a5f4ff107da9f (Unsupported fields: False, Count: 0)
+2026-01-12 19:06:42,774 - INFO - Processing job 696582f2bc8a5f4ff107db1b: Assembler 1 at Oldcastle BuildingEnvelope
+2026-01-12 19:06:42,775 - INFO - Scraping input_field_labels for job 696582f2bc8a5f4ff107db1b (no existing labels found)
+2026-01-12 19:06:44,942 - INFO - Collected 15 labels for job 696582f2bc8a5f4ff107db1b (Unsupported fields: False, Count: 0)
+2026-01-12 19:06:46,005 - INFO - Processing job 696582acbc8a5f4ff107dad8: Senior Finance Business Partner at OLIVER Agency - North America
+2026-01-12 19:06:46,005 - INFO - Scraping input_field_labels for job 696582acbc8a5f4ff107dad8 (no existing labels found)
+2026-01-12 19:06:48,352 - INFO - Collected 24 labels for job 696582acbc8a5f4ff107dad8 (Unsupported fields: True, Count: 1)
+2026-01-12 19:06:49,430 - INFO - Processing job 696583ffbc8a5f4ff107db8f: Senior Finance Business Partner at OLIVER Agency - North America
+2026-01-12 19:06:49,430 - INFO - Scraping input_field_labels for job 696583ffbc8a5f4ff107db8f (no existing labels found)
+2026-01-12 19:06:51,739 - INFO - Collected 24 labels for job 696583ffbc8a5f4ff107db8f (Unsupported fields: True, Count: 1)
+2026-01-12 19:06:52,838 - INFO - Processing job 696582a7bc8a5f4ff107daa3: Senior Financial Analyst, Strategic Finance at Open Farm
+2026-01-12 19:06:52,838 - INFO - Scraping input_field_labels for job 696582a7bc8a5f4ff107daa3 (no existing labels found)
+2026-01-12 19:06:55,167 - INFO - Collected 12 labels for job 696582a7bc8a5f4ff107daa3 (Unsupported fields: False, Count: 0)
+2026-01-12 19:06:56,234 - INFO - Processing job 696582f6bc8a5f4ff107db4f: AI Business Lead at Martell Ventures
+2026-01-12 19:06:56,234 - INFO - Scraping input_field_labels for job 696582f6bc8a5f4ff107db4f (no existing labels found)
+2026-01-12 19:06:58,486 - INFO - Collected 14 labels for job 696582f6bc8a5f4ff107db4f (Unsupported fields: True, Count: 1)
+2026-01-12 19:06:59,548 - INFO - Processing job 696582a8bc8a5f4ff107dab0: Senior Product Manager (Independent Contractor) at Orium
+2026-01-12 19:06:59,549 - INFO - Scraping input_field_labels for job 696582a8bc8a5f4ff107dab0 (no existing labels found)
+2026-01-12 19:07:01,975 - INFO - Collected 16 labels for job 696582a8bc8a5f4ff107dab0 (Unsupported fields: False, Count: 0)
+2026-01-12 19:07:03,057 - INFO - Processing job 696582a8bc8a5f4ff107daaa: Customer Success Manager at PartnerStack
+2026-01-12 19:07:03,057 - INFO - Scraping input_field_labels for job 696582a8bc8a5f4ff107daaa (no existing labels found)
+2026-01-12 19:07:05,307 - INFO - Collected 10 labels for job 696582a8bc8a5f4ff107daaa (Unsupported fields: False, Count: 0)
+2026-01-12 19:07:06,369 - INFO - Processing job 69658400bc8a5f4ff107db99: Blog and Social Media Specialist at Poka EN
+2026-01-12 19:07:06,370 - INFO - Scraping input_field_labels for job 69658400bc8a5f4ff107db99 (no existing labels found)
+2026-01-12 19:07:08,702 - INFO - Collected 18 labels for job 69658400bc8a5f4ff107db99 (Unsupported fields: False, Count: 0)
+2026-01-12 19:07:09,798 - INFO - Processing job 696583ffbc8a5f4ff107db86: Senior Legal Counsel, Commercial at Poka EN
+2026-01-12 19:07:09,798 - INFO - Scraping input_field_labels for job 696583ffbc8a5f4ff107db86 (no existing labels found)
+2026-01-12 19:07:12,140 - INFO - Collected 17 labels for job 696583ffbc8a5f4ff107db86 (Unsupported fields: False, Count: 0)
+2026-01-12 19:07:13,217 - INFO - Processing job 696583cbbc8a5f4ff107db76: Blog and Social Media Specialist at Poka FR
+2026-01-12 19:07:13,217 - INFO - Scraping input_field_labels for job 696583cbbc8a5f4ff107db76 (no existing labels found)
+2026-01-12 19:07:15,549 - INFO - Collected 18 labels for job 696583cbbc8a5f4ff107db76 (Unsupported fields: False, Count: 0)
+2026-01-12 19:07:16,620 - INFO - Processing job 696583ffbc8a5f4ff107db88: Conseiller·ère Juridique Sénior·e, Commercial at Poka FR
+2026-01-12 19:07:16,622 - INFO - Scraping input_field_labels for job 696583ffbc8a5f4ff107db88 (no existing labels found)
+2026-01-12 19:07:18,899 - INFO - Collected 17 labels for job 696583ffbc8a5f4ff107db88 (Unsupported fields: False, Count: 0)
+2026-01-12 19:07:19,976 - INFO - Processing job 696586cc61a717d21dc5cb5b: Account Manager/Account Executive at Quadbridge
+2026-01-12 19:07:19,976 - INFO - Scraping input_field_labels for job 696586cc61a717d21dc5cb5b (no existing labels found)
+2026-01-12 19:07:23,363 - INFO - Collected 12 labels for job 696586cc61a717d21dc5cb5b (Unsupported fields: True, Count: 1)
+2026-01-12 19:07:24,466 - INFO - Processing job 696582f7bc8a5f4ff107db5b: Customer Experience Specialist - Retention Specialist (French Bilingual, Canada) at Quince
+2026-01-12 19:07:24,466 - INFO - Scraping input_field_labels for job 696582f7bc8a5f4ff107db5b (no existing labels found)
+2026-01-12 19:07:26,712 - INFO - Collected 17 labels for job 696582f7bc8a5f4ff107db5b (Unsupported fields: False, Count: 0)
+2026-01-12 19:07:27,768 - INFO - Processing job 696582f7bc8a5f4ff107db5a: Customer Experience Specialist - Retention Specialist (French Bilingual, Canada) at Quince
+2026-01-12 19:07:27,769 - INFO - Scraping input_field_labels for job 696582f7bc8a5f4ff107db5a (no existing labels found)
+2026-01-12 19:07:30,146 - INFO - Collected 17 labels for job 696582f7bc8a5f4ff107db5a (Unsupported fields: False, Count: 0)
+2026-01-12 19:07:31,289 - INFO - Processing job 696582a9bc8a5f4ff107dabb: People & Culture Business Partner at RapidSOS
+2026-01-12 19:07:31,290 - INFO - Scraping input_field_labels for job 696582a9bc8a5f4ff107dabb (no existing labels found)
+2026-01-12 19:07:33,630 - INFO - Collected 18 labels for job 696582a9bc8a5f4ff107dabb (Unsupported fields: False, Count: 0)
+2026-01-12 19:07:34,712 - INFO - Processing job 696582f2bc8a5f4ff107db1f: Operations Supervisor at Industrial Electric Manufacturing
+2026-01-12 19:07:34,712 - INFO - Scraping input_field_labels for job 696582f2bc8a5f4ff107db1f (no existing labels found)
+2026-01-12 19:07:36,985 - INFO - Collected 18 labels for job 696582f2bc8a5f4ff107db1f (Unsupported fields: False, Count: 0)
+2026-01-12 19:07:38,074 - INFO - Processing job 696582b1bc8a5f4ff107db15: Director of Product Design at Human Agency
+2026-01-12 19:07:38,074 - INFO - Scraping input_field_labels for job 696582b1bc8a5f4ff107db15 (no existing labels found)
+2026-01-12 19:07:40,363 - INFO - Collected 19 labels for job 696582b1bc8a5f4ff107db15 (Unsupported fields: True, Count: 1)
+2026-01-12 19:07:41,458 - INFO - Processing job 696582b1bc8a5f4ff107db0e: Product Lead at Human Agency
+2026-01-12 19:07:41,458 - INFO - Scraping input_field_labels for job 696582b1bc8a5f4ff107db0e (no existing labels found)
+2026-01-12 19:07:43,757 - INFO - Collected 14 labels for job 696582b1bc8a5f4ff107db0e (Unsupported fields: False, Count: 0)
+2026-01-12 19:07:44,845 - INFO - Processing job 696582b0bc8a5f4ff107db0d: Recruiter & People Operations Generalist at Human Agency
+2026-01-12 19:07:44,845 - INFO - Scraping input_field_labels for job 696582b0bc8a5f4ff107db0d (no existing labels found)
+2026-01-12 19:07:47,169 - INFO - Collected 23 labels for job 696582b0bc8a5f4ff107db0d (Unsupported fields: True, Count: 1)
+2026-01-12 19:07:48,230 - INFO - Processing job 696582b0bc8a5f4ff107db0c: Senior Brand + Web Designer at Human Agency
+2026-01-12 19:07:48,230 - INFO - Scraping input_field_labels for job 696582b0bc8a5f4ff107db0c (no existing labels found)
+2026-01-12 19:07:50,512 - INFO - Collected 19 labels for job 696582b0bc8a5f4ff107db0c (Unsupported fields: True, Count: 1)
+2026-01-12 19:07:51,584 - INFO - Processing job 696582b0bc8a5f4ff107db06: Senior Full-Stack Engineer at Human Agency
+2026-01-12 19:07:51,584 - INFO - Scraping input_field_labels for job 696582b0bc8a5f4ff107db06 (no existing labels found)
+2026-01-12 19:07:53,840 - INFO - Collected 11 labels for job 696582b0bc8a5f4ff107db06 (Unsupported fields: True, Count: 1)
+2026-01-12 19:07:54,922 - INFO - Processing job 696582b0bc8a5f4ff107db05: Senior UI/UX Designer at Human Agency
+2026-01-12 19:07:54,922 - INFO - Scraping input_field_labels for job 696582b0bc8a5f4ff107db05 (no existing labels found)
+2026-01-12 19:07:57,179 - INFO - Collected 19 labels for job 696582b0bc8a5f4ff107db05 (Unsupported fields: True, Count: 1)
+2026-01-12 19:07:58,325 - INFO - Processing job 69658400bc8a5f4ff107db95: Administrative Assistant - Montreal, Canada at Human Agency
+2026-01-12 19:07:58,326 - INFO - Scraping input_field_labels for job 69658400bc8a5f4ff107db95 (no existing labels found)
+2026-01-12 19:08:00,853 - INFO - Collected 18 labels for job 69658400bc8a5f4ff107db95 (Unsupported fields: True, Count: 1)
+2026-01-12 19:08:02,012 - INFO - Processing job 696582f5bc8a5f4ff107db42: Administrative Assistant - Vancouver, Canada at Human Agency
+2026-01-12 19:08:02,013 - INFO - Scraping input_field_labels for job 696582f5bc8a5f4ff107db42 (no existing labels found)
+2026-01-12 19:08:10,225 - INFO - Collected 18 labels for job 696582f5bc8a5f4ff107db42 (Unsupported fields: True, Count: 1)
+2026-01-12 19:08:11,316 - INFO - Processing job 696582aebc8a5f4ff107daf8: Senior Community Manager at Inside Ideas Group
+2026-01-12 19:08:11,317 - INFO - Scraping input_field_labels for job 696582aebc8a5f4ff107daf8 (no existing labels found)
+2026-01-12 19:08:14,760 - INFO - Collected 21 labels for job 696582aebc8a5f4ff107daf8 (Unsupported fields: True, Count: 1)
+2026-01-12 19:08:15,848 - INFO - Processing job 696582f6bc8a5f4ff107db54: Mechanical Engineer (Level I-II) – Maintenance of Line (MOL) at Industrial Electric Manufacturing
+2026-01-12 19:08:15,849 - INFO - Scraping input_field_labels for job 696582f6bc8a5f4ff107db54 (no existing labels found)
+2026-01-12 19:08:19,101 - INFO - Collected 14 labels for job 696582f6bc8a5f4ff107db54 (Unsupported fields: False, Count: 0)
+2026-01-12 19:08:20,175 - INFO - Processing job 696582aebc8a5f4ff107daf5: Manager, Demand Generation at Security Compass
+2026-01-12 19:08:20,175 - INFO - Scraping input_field_labels for job 696582aebc8a5f4ff107daf5 (no existing labels found)
+2026-01-12 19:08:22,494 - INFO - Collected 11 labels for job 696582aebc8a5f4ff107daf5 (Unsupported fields: False, Count: 0)
+2026-01-12 19:08:23,571 - INFO - Processing job 696582f3bc8a5f4ff107db25: Operations Manager - Fabrication at Industrial Electric Manufacturing
+2026-01-12 19:08:23,572 - INFO - Scraping input_field_labels for job 696582f3bc8a5f4ff107db25 (no existing labels found)
+2026-01-12 19:08:26,984 - INFO - Collected 18 labels for job 696582f3bc8a5f4ff107db25 (Unsupported fields: False, Count: 0)
+2026-01-12 19:08:28,055 - INFO - Processing job 696582f2bc8a5f4ff107db23: Operations Supervisor - Fabrication at Industrial Electric Manufacturing
+2026-01-12 19:08:28,055 - INFO - Scraping input_field_labels for job 696582f2bc8a5f4ff107db23 (no existing labels found)
+2026-01-12 19:08:31,231 - INFO - Collected 18 labels for job 696582f2bc8a5f4ff107db23 (Unsupported fields: False, Count: 0)
+2026-01-12 19:08:32,295 - INFO - Processing job 696582afbc8a5f4ff107db01: Registered Veterinary Technician - Bloor West at Juno Veterinary
+2026-01-12 19:08:32,296 - INFO - Scraping input_field_labels for job 696582afbc8a5f4ff107db01 (no existing labels found)
+2026-01-12 19:08:34,726 - INFO - Collected 9 labels for job 696582afbc8a5f4ff107db01 (Unsupported fields: False, Count: 0)
+2026-01-12 19:08:35,799 - INFO - Processing job 6965831bbc8a5f4ff107db5d: Data Architect & Engineer at Lantern
+2026-01-12 19:08:35,800 - INFO - Scraping input_field_labels for job 6965831bbc8a5f4ff107db5d (no existing labels found)
+2026-01-12 19:08:39,168 - INFO - Collected 17 labels for job 6965831bbc8a5f4ff107db5d (Unsupported fields: False, Count: 0)
+2026-01-12 19:08:40,243 - INFO - Processing job 696582f7bc8a5f4ff107db55: Principal, Product Management (Client Solutions) at League Inc.
+2026-01-12 19:08:40,244 - INFO - Scraping input_field_labels for job 696582f7bc8a5f4ff107db55 (no existing labels found)
+2026-01-12 19:08:42,547 - INFO - Collected 9 labels for job 696582f7bc8a5f4ff107db55 (Unsupported fields: True, Count: 1)
+2026-01-12 19:08:43,622 - INFO - Processing job 696582afbc8a5f4ff107dafc: Ads Specialist at Levitate
+2026-01-12 19:08:43,623 - INFO - Scraping input_field_labels for job 696582afbc8a5f4ff107dafc (no existing labels found)
+2026-01-12 19:08:45,950 - INFO - Collected 12 labels for job 696582afbc8a5f4ff107dafc (Unsupported fields: False, Count: 0)
+2026-01-12 19:08:47,034 - INFO - Processing job 696582f2bc8a5f4ff107db19: Full Time Floor Leader - Metropolis at Metrotown at Lush Handmade Cosmetics
+2026-01-12 19:08:47,034 - INFO - Scraping input_field_labels for job 696582f2bc8a5f4ff107db19 (no existing labels found)
+2026-01-12 19:08:49,505 - INFO - Collected 13 labels for job 696582f2bc8a5f4ff107db19 (Unsupported fields: False, Count: 0)
+2026-01-12 19:08:50,581 - INFO - Processing job 696582f6bc8a5f4ff107db51: Full Time Floor Leader - Guildford Town Centre at Lush Handmade Cosmetics
+2026-01-12 19:08:50,581 - INFO - Scraping input_field_labels for job 696582f6bc8a5f4ff107db51 (no existing labels found)
+2026-01-12 19:08:53,034 - INFO - Collected 17 labels for job 696582f6bc8a5f4ff107db51 (Unsupported fields: False, Count: 0)
+2026-01-12 19:08:54,101 - INFO - Processing job 696583ffbc8a5f4ff107db8c: Senior Data Engineer at MaintainX
+2026-01-12 19:08:54,102 - INFO - Scraping input_field_labels for job 696583ffbc8a5f4ff107db8c (no existing labels found)
+2026-01-12 19:08:57,337 - INFO - Collected 14 labels for job 696583ffbc8a5f4ff107db8c (Unsupported fields: True, Count: 1)
+2026-01-12 19:08:58,422 - INFO - Processing job 696583febc8a5f4ff107db7b: Ingénieur de données senior at MaintainX
+2026-01-12 19:08:58,422 - INFO - Scraping input_field_labels for job 696583febc8a5f4ff107db7b (no existing labels found)
+2026-01-12 19:09:02,712 - INFO - Collected 9 labels for job 696583febc8a5f4ff107db7b (Unsupported fields: True, Count: 1)
+2026-01-12 19:09:03,786 - INFO - Processing job 696583cabc8a5f4ff107db70: Agent Developer - specs dev/SW specs at Vooban
+2026-01-12 19:09:03,786 - INFO - Scraping input_field_labels for job 696583cabc8a5f4ff107db70 (no existing labels found)
+2026-01-12 19:09:06,137 - INFO - Collected 12 labels for job 696583cabc8a5f4ff107db70 (Unsupported fields: False, Count: 0)
+2026-01-12 19:09:07,209 - INFO - Processing job 696582adbc8a5f4ff107daed: Senior DevOps/ Systems Engineer at Tucows
+2026-01-12 19:09:07,209 - INFO - Scraping input_field_labels for job 696582adbc8a5f4ff107daed (no existing labels found)
+2026-01-12 19:09:09,483 - INFO - Collected 24 labels for job 696582adbc8a5f4ff107daed (Unsupported fields: False, Count: 0)
+2026-01-12 19:09:10,575 - INFO - Processing job 696582adbc8a5f4ff107dae8: Lead Machine Learning Engineer/Scientist - Algorithms & Research at Upwork
+2026-01-12 19:09:10,576 - INFO - Scraping input_field_labels for job 696582adbc8a5f4ff107dae8 (no existing labels found)
+2026-01-12 19:09:12,819 - INFO - Collected 9 labels for job 696582adbc8a5f4ff107dae8 (Unsupported fields: False, Count: 0)
+2026-01-12 19:09:13,918 - INFO - Processing job 696582acbc8a5f4ff107dae0: Senior Manager, FP&A at Varicent
+2026-01-12 19:09:13,918 - INFO - Scraping input_field_labels for job 696582acbc8a5f4ff107dae0 (no existing labels found)
+2026-01-12 19:09:16,141 - INFO - Collected 18 labels for job 696582acbc8a5f4ff107dae0 (Unsupported fields: False, Count: 0)
+2026-01-12 19:09:17,241 - INFO - Processing job 696582f6bc8a5f4ff107db4b: Senior Software Engineer - Keela at Velora
+2026-01-12 19:09:17,241 - INFO - Scraping input_field_labels for job 696582f6bc8a5f4ff107db4b (no existing labels found)
+2026-01-12 19:09:20,541 - INFO - Collected 12 labels for job 696582f6bc8a5f4ff107db4b (Unsupported fields: False, Count: 0)
+2026-01-12 19:09:21,624 - INFO - Processing job 696582afbc8a5f4ff107dafa: Account Manager, Influencer Marketing (6-Month Contract) at Viral Nation Inc.
+2026-01-12 19:09:21,624 - INFO - Scraping input_field_labels for job 696582afbc8a5f4ff107dafa (no existing labels found)
+2026-01-12 19:09:23,997 - INFO - Collected 12 labels for job 696582afbc8a5f4ff107dafa (Unsupported fields: False, Count: 0)
+2026-01-12 19:09:25,102 - INFO - Processing job 696582f7bc8a5f4ff107db57: Data Model Co-op (May to December 2026) at Visier Solutions Inc
+2026-01-12 19:09:25,102 - INFO - Scraping input_field_labels for job 696582f7bc8a5f4ff107db57 (no existing labels found)
+2026-01-12 19:09:27,535 - INFO - Collected 23 labels for job 696582f7bc8a5f4ff107db57 (Unsupported fields: False, Count: 0)
+2026-01-12 19:09:28,596 - INFO - Processing job 696582f7bc8a5f4ff107db58: Data Science Intern (May to December 2026) at Visier Solutions Inc
+2026-01-12 19:09:28,597 - INFO - Scraping input_field_labels for job 696582f7bc8a5f4ff107db58 (no existing labels found)
+2026-01-12 19:09:30,897 - INFO - Collected 22 labels for job 696582f7bc8a5f4ff107db58 (Unsupported fields: False, Count: 0)
+2026-01-12 19:09:32,023 - INFO - Processing job 696582f3bc8a5f4ff107db2f: Business Development Representative at Visier Solutions Inc
+2026-01-12 19:09:32,023 - INFO - Scraping input_field_labels for job 696582f3bc8a5f4ff107db2f (no existing labels found)
+2026-01-12 19:09:34,477 - INFO - Collected 19 labels for job 696582f3bc8a5f4ff107db2f (Unsupported fields: False, Count: 0)
+2026-01-12 19:09:35,566 - INFO - Processing job 696582f7bc8a5f4ff107db59: Technical Writer Co-op (May to December 2026) at Visier Solutions Inc
+2026-01-12 19:09:35,567 - INFO - Scraping input_field_labels for job 696582f7bc8a5f4ff107db59 (no existing labels found)
+2026-01-12 19:09:37,904 - INFO - Collected 22 labels for job 696582f7bc8a5f4ff107db59 (Unsupported fields: False, Count: 0)
+2026-01-12 19:09:38,987 - INFO - Processing job 696582f2bc8a5f4ff107db21: Implementation Consultant at Visier Solutions Inc
+2026-01-12 19:09:38,987 - INFO - Scraping input_field_labels for job 696582f2bc8a5f4ff107db21 (no existing labels found)
+2026-01-12 19:09:41,542 - INFO - Collected 18 labels for job 696582f2bc8a5f4ff107db21 (Unsupported fields: False, Count: 0)
+2026-01-12 19:09:42,628 - INFO - Processing job 696582a8bc8a5f4ff107daa9: Product Manager at TribalScale
+2026-01-12 19:09:42,629 - INFO - Scraping input_field_labels for job 696582a8bc8a5f4ff107daa9 (no existing labels found)
+2026-01-12 19:09:46,133 - INFO - Collected 14 labels for job 696582a8bc8a5f4ff107daa9 (Unsupported fields: True, Count: 1)
+2026-01-12 19:09:47,231 - INFO - Processing job 69658340bc8a5f4ff107db64: Service Hydronics Technician at Wiehler Mechanical
+2026-01-12 19:09:47,232 - INFO - Scraping input_field_labels for job 69658340bc8a5f4ff107db64 (no existing labels found)
+2026-01-12 19:09:56,197 - INFO - Collected 15 labels for job 69658340bc8a5f4ff107db64 (Unsupported fields: False, Count: 0)
+2026-01-12 19:09:57,282 - INFO - Processing job 696582adbc8a5f4ff107daeb: Senior Data Scientist (Contract) at Wikimedia Foundation
+2026-01-12 19:09:57,282 - INFO - Scraping input_field_labels for job 696582adbc8a5f4ff107daeb (no existing labels found)
+2026-01-12 19:09:59,555 - INFO - Collected 33 labels for job 696582adbc8a5f4ff107daeb (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:00,628 - INFO - Processing job 696582aabc8a5f4ff107dac7: Account Executive, Financial Services at TELUS Digital
+2026-01-12 19:10:00,628 - INFO - Scraping input_field_labels for job 696582aabc8a5f4ff107dac7 (no existing labels found)
+2026-01-12 19:10:02,936 - INFO - Collected 18 labels for job 696582aabc8a5f4ff107dac7 (Unsupported fields: True, Count: 1)
+2026-01-12 19:10:04,020 - INFO - Processing job 696582aabc8a5f4ff107dac5: Account Executive at TELUS Digital
+2026-01-12 19:10:04,020 - INFO - Scraping input_field_labels for job 696582aabc8a5f4ff107dac5 (no existing labels found)
+2026-01-12 19:10:06,645 - INFO - Collected 18 labels for job 696582aabc8a5f4ff107dac5 (Unsupported fields: True, Count: 1)
+2026-01-12 19:10:07,740 - INFO - Processing job 696583ffbc8a5f4ff107db87: Software Developer ll - ShareGate Foundation at Workleap - en
+2026-01-12 19:10:07,740 - INFO - Scraping input_field_labels for job 696583ffbc8a5f4ff107db87 (no existing labels found)
+2026-01-12 19:10:10,019 - INFO - Collected 13 labels for job 696583ffbc8a5f4ff107db87 (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:11,080 - INFO - Processing job 696583febc8a5f4ff107db82: Account Manager - ShareGate - 12 - month contract at Workleap - en
+2026-01-12 19:10:11,080 - INFO - Scraping input_field_labels for job 696583febc8a5f4ff107db82 (no existing labels found)
+2026-01-12 19:10:13,346 - INFO - Collected 13 labels for job 696583febc8a5f4ff107db82 (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:14,404 - INFO - Processing job 696583febc8a5f4ff107db7a: Développeur(se) logiciel ll - ShareGate Foundation at Workleap - fr
+2026-01-12 19:10:14,405 - INFO - Scraping input_field_labels for job 696583febc8a5f4ff107db7a (no existing labels found)
+2026-01-12 19:10:16,761 - INFO - Collected 13 labels for job 696583febc8a5f4ff107db7a (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:17,860 - INFO - Processing job 696583febc8a5f4ff107db78: Gestionnaire de compte- ShareGate - Contrat de 12 mois at Workleap - fr
+2026-01-12 19:10:17,861 - INFO - Scraping input_field_labels for job 696583febc8a5f4ff107db78 (no existing labels found)
+2026-01-12 19:10:20,150 - INFO - Collected 13 labels for job 696583febc8a5f4ff107db78 (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:21,232 - INFO - Processing job 696582a7bc8a5f4ff107daa1: Channel Partner Manager at ZIRO
+2026-01-12 19:10:21,233 - INFO - Scraping input_field_labels for job 696582a7bc8a5f4ff107daa1 (no existing labels found)
+2026-01-12 19:10:23,553 - INFO - Collected 10 labels for job 696582a7bc8a5f4ff107daa1 (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:24,612 - INFO - Processing job 696582a9bc8a5f4ff107dab3: Director of Sales at ZIRO
+2026-01-12 19:10:24,612 - INFO - Scraping input_field_labels for job 696582a9bc8a5f4ff107dab3 (no existing labels found)
+2026-01-12 19:10:27,054 - INFO - Collected 9 labels for job 696582a9bc8a5f4ff107dab3 (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:28,136 - INFO - Processing job 696582a9bc8a5f4ff107dabd: Oracle Enterprise Sales Director at Spaulding Ridge
+2026-01-12 19:10:28,137 - INFO - Scraping input_field_labels for job 696582a9bc8a5f4ff107dabd (no existing labels found)
+2026-01-12 19:10:30,401 - INFO - Collected 21 labels for job 696582a9bc8a5f4ff107dabd (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:31,459 - INFO - Processing job 696583ffbc8a5f4ff107db83: Gestionnaire de compte- Contrat de 12 mois at ShareGate- fr
+2026-01-12 19:10:31,460 - INFO - Scraping input_field_labels for job 696583ffbc8a5f4ff107db83 (no existing labels found)
+2026-01-12 19:10:33,837 - INFO - Collected 13 labels for job 696583ffbc8a5f4ff107db83 (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:34,909 - INFO - Processing job 696583ffbc8a5f4ff107db84: Développeur(se) logiciel ll - ShareGate Foundation at ShareGate- fr
+2026-01-12 19:10:34,910 - INFO - Scraping input_field_labels for job 696583ffbc8a5f4ff107db84 (no existing labels found)
+2026-01-12 19:10:37,235 - INFO - Collected 13 labels for job 696583ffbc8a5f4ff107db84 (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:38,320 - INFO - Processing job 696583ffbc8a5f4ff107db85: Account Manager - 12 - month contract at ShareGate- en
+2026-01-12 19:10:38,321 - INFO - Scraping input_field_labels for job 696583ffbc8a5f4ff107db85 (no existing labels found)
+2026-01-12 19:10:40,689 - INFO - Collected 13 labels for job 696583ffbc8a5f4ff107db85 (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:41,748 - INFO - Processing job 696583febc8a5f4ff107db7c: Software Developer II - ShareGate Foundation at ShareGate- en
+2026-01-12 19:10:41,748 - INFO - Scraping input_field_labels for job 696583febc8a5f4ff107db7c (no existing labels found)
+2026-01-12 19:10:44,059 - INFO - Collected 14 labels for job 696583febc8a5f4ff107db7c (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:45,119 - INFO - Processing job 696582a9bc8a5f4ff107dab1: Dental Hygienist at Sherbourne Dental Associates
+2026-01-12 19:10:45,119 - INFO - Scraping input_field_labels for job 696582a9bc8a5f4ff107dab1 (no existing labels found)
+2026-01-12 19:10:47,505 - INFO - Collected 9 labels for job 696582a9bc8a5f4ff107dab1 (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:48,580 - INFO - Processing job 696582f6bc8a5f4ff107db4c: General Manager, Sandro-Paris @ Oakridge Park, Vancouver, British Columbia, Canada at SMCP NORTH AMERICA (US, CANADA)
+2026-01-12 19:10:48,580 - INFO - Scraping input_field_labels for job 696582f6bc8a5f4ff107db4c (no existing labels found)
+2026-01-12 19:10:50,904 - INFO - Collected 26 labels for job 696582f6bc8a5f4ff107db4c (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:51,970 - INFO - Processing job 696582f6bc8a5f4ff107db4a: Store Manager, Maje @ Oakridge Park, Vancouver, British Columbia, Canada at SMCP NORTH AMERICA (US, CANADA)
+2026-01-12 19:10:51,970 - INFO - Scraping input_field_labels for job 696582f6bc8a5f4ff107db4a (no existing labels found)
+2026-01-12 19:10:54,341 - INFO - Collected 26 labels for job 696582f6bc8a5f4ff107db4a (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:55,407 - INFO - Processing job 696582f6bc8a5f4ff107db49: Assistant Store Manager, Sandro-Paris @ Oakridge Park, Vancouver, British Columbia, Canada at SMCP NORTH AMERICA (US, CANADA)
+2026-01-12 19:10:55,407 - INFO - Scraping input_field_labels for job 696582f6bc8a5f4ff107db49 (no existing labels found)
+2026-01-12 19:10:57,811 - INFO - Collected 26 labels for job 696582f6bc8a5f4ff107db49 (Unsupported fields: False, Count: 0)
+2026-01-12 19:10:58,899 - INFO - Processing job 696582f5bc8a5f4ff107db46: Assistant Store Manager, Maje @ Oakridge Park, Vancouver, British Columbia, Canada at SMCP NORTH AMERICA (US, CANADA)
+2026-01-12 19:10:58,899 - INFO - Scraping input_field_labels for job 696582f5bc8a5f4ff107db46 (no existing labels found)
+2026-01-12 19:10:59,844 - ERROR - Error processing job 696582f5bc8a5f4ff107db46: Page.goto: net::ERR_NAME_NOT_RESOLVED at https://job-boards.greenhouse.io/smcp/jobs/8367079002?gh_src=my.greenhouse.search
+Call log:
+  - navigating to "https://job-boards.greenhouse.io/smcp/jobs/8367079002?gh_src=my.greenhouse.search", waiting until "domcontentloaded"
+
+2026-01-12 19:11:01,786 - ERROR - Error processing job 696582f5bc8a5f4ff107db46: Page.goto: net::ERR_NAME_NOT_RESOLVED at https://job-boards.greenhouse.io/smcp/jobs/8367079002?gh_src=my.greenhouse.search
+Call log:
+  - navigating to "https://job-boards.greenhouse.io/smcp/jobs/8367079002?gh_src=my.greenhouse.search", waiting until "domcontentloaded"
+
+2026-01-12 19:11:03,816 - INFO - Processing job 696582f2bc8a5f4ff107db1e: Technical Trainer at Sony Pictures Imageworks
+2026-01-12 19:11:03,817 - INFO - Scraping input_field_labels for job 696582f2bc8a5f4ff107db1e (no existing labels found)
+2026-01-12 19:11:14,524 - INFO - Collected 22 labels for job 696582f2bc8a5f4ff107db1e (Unsupported fields: False, Count: 0)
+2026-01-12 19:11:15,594 - INFO - Processing job 6965831bbc8a5f4ff107db60: Web Order Processor & Shipper at Homes Alive Pets Internal Job Board
+2026-01-12 19:11:15,595 - INFO - Scraping input_field_labels for job 6965831bbc8a5f4ff107db60 (no existing labels found)
+2026-01-12 19:11:17,902 - INFO - Collected 15 labels for job 6965831bbc8a5f4ff107db60 (Unsupported fields: False, Count: 0)
+2026-01-12 19:11:18,973 - INFO - Processing job 69658340bc8a5f4ff107db69: Software Engineer, macOS Core Product - Calgary, Canada at Speechify
+2026-01-12 19:11:18,974 - INFO - Scraping input_field_labels for job 69658340bc8a5f4ff107db69 (no existing labels found)
+2026-01-12 19:11:29,835 - ERROR - Error processing job 69658340bc8a5f4ff107db69: Page.goto: net::ERR_NAME_NOT_RESOLVED at https://job-boards.greenhouse.io/speechify/jobs/5754333004?gh_src=my.greenhouse.search
+Call log:
+  - navigating to "https://job-boards.greenhouse.io/speechify/jobs/5754333004?gh_src=my.greenhouse.search", waiting until "domcontentloaded"
+
+2026-01-12 19:11:31,682 - ERROR - Error processing job 69658340bc8a5f4ff107db69: Page.goto: net::ERR_NAME_NOT_RESOLVED at https://job-boards.greenhouse.io/speechify/jobs/5754333004?gh_src=my.greenhouse.search
+Call log:
+  - navigating to "https://job-boards.greenhouse.io/speechify/jobs/5754333004?gh_src=my.greenhouse.search", waiting until "domcontentloaded"
+
+2026-01-12 19:11:33,704 - INFO - Processing job 696582f4bc8a5f4ff107db3a: Software Engineer, macOS Core Product - Vancouver, Canada at Speechify
+2026-01-12 19:11:33,704 - INFO - Scraping input_field_labels for job 696582f4bc8a5f4ff107db3a (no existing labels found)
+2026-01-12 19:11:36,106 - INFO - Collected 15 labels for job 696582f4bc8a5f4ff107db3a (Unsupported fields: False, Count: 0)
+2026-01-12 19:11:37,667 - INFO - Processing job 69658400bc8a5f4ff107db91: Software Engineer, macOS Core Product - Montreal, Canada at Speechify
+2026-01-12 19:11:37,667 - INFO - Scraping input_field_labels for job 69658400bc8a5f4ff107db91 (no existing labels found)
+2026-01-12 19:11:39,992 - INFO - Collected 15 labels for job 69658400bc8a5f4ff107db91 (Unsupported fields: False, Count: 0)
+2026-01-12 19:11:41,067 - INFO - Processing job 696586cc61a717d21dc5cb5a: Software Engineer, macOS Core Product - Waterloo, Canada at Speechify
+2026-01-12 19:11:41,067 - INFO - Scraping input_field_labels for job 696586cc61a717d21dc5cb5a (no existing labels found)
+2026-01-12 19:11:43,342 - INFO - Collected 15 labels for job 696586cc61a717d21dc5cb5a (Unsupported fields: False, Count: 0)
+2026-01-12 19:11:44,414 - INFO - Processing job 69658363bc8a5f4ff107db6d: Software Engineer, macOS Core Product - Ottawa, Canada at Speechify
+2026-01-12 19:11:44,415 - INFO - Scraping input_field_labels for job 69658363bc8a5f4ff107db6d (no existing labels found)
+2026-01-12 19:11:46,802 - INFO - Collected 15 labels for job 69658363bc8a5f4ff107db6d (Unsupported fields: False, Count: 0)
+2026-01-12 19:11:47,875 - INFO - Processing job 696582adbc8a5f4ff107dae4: Software Engineer, macOS Core Product - Toronto, Canada at Speechify
+2026-01-12 19:11:47,875 - INFO - Scraping input_field_labels for job 696582adbc8a5f4ff107dae4 (no existing labels found)
+2026-01-12 19:11:50,152 - INFO - Collected 15 labels for job 696582adbc8a5f4ff107dae4 (Unsupported fields: False, Count: 0)
+2026-01-12 19:11:51,222 - INFO - Processing job 696582a8bc8a5f4ff107daaf: Payroll and Accounts Payable Specialist at Sterlington, PLLC
+2026-01-12 19:11:51,223 - INFO - Scraping input_field_labels for job 696582a8bc8a5f4ff107daaf (no existing labels found)
+2026-01-12 19:11:53,477 - INFO - Collected 11 labels for job 696582a8bc8a5f4ff107daaf (Unsupported fields: False, Count: 0)
+2026-01-12 19:11:54,532 - INFO - Processing job 696583ffbc8a5f4ff107db8b: Receptionist at Tefron
+2026-01-12 19:11:54,532 - INFO - Scraping input_field_labels for job 696583ffbc8a5f4ff107db8b (no existing labels found)
+2026-01-12 19:11:56,876 - INFO - Collected 10 labels for job 696583ffbc8a5f4ff107db8b (Unsupported fields: True, Count: 1)
+2026-01-12 19:11:57,935 - INFO - Processing job 696582aebc8a5f4ff107daf9: Copywriter at Track OMC
+2026-01-12 19:11:57,935 - INFO - Scraping input_field_labels for job 696582aebc8a5f4ff107daf9 (no existing labels found)
+2026-01-12 19:12:00,265 - INFO - Collected 16 labels for job 696582aebc8a5f4ff107daf9 (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:01,343 - INFO - Processing job 696582a7bc8a5f4ff107daa4: Marketing Operations Manager at Appspace
+2026-01-12 19:12:01,343 - INFO - Scraping input_field_labels for job 696582a7bc8a5f4ff107daa4 (no existing labels found)
+2026-01-12 19:12:03,959 - INFO - Collected 30 labels for job 696582a7bc8a5f4ff107daa4 (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:05,027 - INFO - Processing job 696582f5bc8a5f4ff107db3c: Machine Learning Applied Scientist (Co-op) at Apera AI Inc
+2026-01-12 19:12:05,027 - INFO - Scraping input_field_labels for job 696582f5bc8a5f4ff107db3c (no existing labels found)
+2026-01-12 19:12:07,336 - INFO - Collected 17 labels for job 696582f5bc8a5f4ff107db3c (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:08,393 - INFO - Processing job 696582f4bc8a5f4ff107db37: Software Developer - Full Stack (Co-op) at Apera AI Inc
+2026-01-12 19:12:08,394 - INFO - Scraping input_field_labels for job 696582f4bc8a5f4ff107db37 (no existing labels found)
+2026-01-12 19:12:10,659 - INFO - Collected 7 labels for job 696582f4bc8a5f4ff107db37 (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:11,730 - INFO - Processing job 696582f4bc8a5f4ff107db35: Software Developer - C++ (Co-op) at Apera AI Inc
+2026-01-12 19:12:11,730 - INFO - Scraping input_field_labels for job 696582f4bc8a5f4ff107db35 (no existing labels found)
+2026-01-12 19:12:14,030 - INFO - Collected 7 labels for job 696582f4bc8a5f4ff107db35 (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:15,094 - INFO - Processing job 696582f4bc8a5f4ff107db34: Roboticist – (Co-Op) at Apera AI Inc
+2026-01-12 19:12:15,094 - INFO - Scraping input_field_labels for job 696582f4bc8a5f4ff107db34 (no existing labels found)
+2026-01-12 19:12:17,353 - INFO - Collected 7 labels for job 696582f4bc8a5f4ff107db34 (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:18,417 - INFO - Processing job 696582f3bc8a5f4ff107db30: Software Developer (Cloud Infrastructure) – Co-Op at Apera AI Inc
+2026-01-12 19:12:18,418 - INFO - Scraping input_field_labels for job 696582f3bc8a5f4ff107db30 (no existing labels found)
+2026-01-12 19:12:20,703 - INFO - Collected 7 labels for job 696582f3bc8a5f4ff107db30 (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:21,766 - INFO - Processing job 696583febc8a5f4ff107db77: JAVA Software Developer at AppDirect
+2026-01-12 19:12:21,766 - INFO - Scraping input_field_labels for job 696583febc8a5f4ff107db77 (no existing labels found)
+2026-01-12 19:12:24,022 - INFO - Collected 13 labels for job 696583febc8a5f4ff107db77 (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:25,094 - INFO - Processing job 696583febc8a5f4ff107db7d: JAVA Développeur/Développeuse de logiciels at AppDirect
+2026-01-12 19:12:25,094 - INFO - Scraping input_field_labels for job 696583febc8a5f4ff107db7d (no existing labels found)
+2026-01-12 19:12:27,517 - INFO - Collected 12 labels for job 696583febc8a5f4ff107db7d (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:28,574 - INFO - Processing job 696582abbc8a5f4ff107dad3: Senior Creative Technologist at Appnovation Technologies
+2026-01-12 19:12:28,574 - INFO - Scraping input_field_labels for job 696582abbc8a5f4ff107dad3 (no existing labels found)
+2026-01-12 19:12:30,860 - INFO - Collected 11 labels for job 696582abbc8a5f4ff107dad3 (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:31,930 - INFO - Processing job 696582a7bc8a5f4ff107da9d: Senior QA Engineer (React / Headless CMS / Storybook) - Contractor at Appnovation Technologies
+2026-01-12 19:12:31,930 - INFO - Scraping input_field_labels for job 696582a7bc8a5f4ff107da9d (no existing labels found)
+2026-01-12 19:12:34,280 - INFO - Collected 11 labels for job 696582a7bc8a5f4ff107da9d (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:35,337 - INFO - Processing job 696582a7bc8a5f4ff107daa2: Senior Technical Recruiter at Appnovation Technologies
+2026-01-12 19:12:35,337 - INFO - Scraping input_field_labels for job 696582a7bc8a5f4ff107daa2 (no existing labels found)
+2026-01-12 19:12:37,943 - INFO - Collected 10 labels for job 696582a7bc8a5f4ff107daa2 (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:39,005 - INFO - Processing job 696582a9bc8a5f4ff107dab8: Customer Success Director at Anaplan
+2026-01-12 19:12:39,006 - INFO - Scraping input_field_labels for job 696582a9bc8a5f4ff107dab8 (no existing labels found)
+2026-01-12 19:12:41,229 - INFO - Collected 25 labels for job 696582a9bc8a5f4ff107dab8 (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:42,297 - INFO - Processing job 696582b1bc8a5f4ff107db16: Condition Monitoring Engineer at AssetWatch, Inc.
+2026-01-12 19:12:42,298 - INFO - Scraping input_field_labels for job 696582b1bc8a5f4ff107db16 (no existing labels found)
+2026-01-12 19:12:44,579 - INFO - Collected 19 labels for job 696582b1bc8a5f4ff107db16 (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:45,633 - INFO - Processing job 696582f6bc8a5f4ff107db52: 2D Game Artist Co-op/Intern (May - Aug 2026 term) at A Thinking Ape
+2026-01-12 19:12:45,633 - INFO - Scraping input_field_labels for job 696582f6bc8a5f4ff107db52 (no existing labels found)
+2026-01-12 19:12:47,924 - INFO - Collected 16 labels for job 696582f6bc8a5f4ff107db52 (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:48,982 - INFO - Processing job 69658363bc8a5f4ff107db6f: Senior Engineer, Infrastructure at Atlas Technology Solutions
+2026-01-12 19:12:48,983 - INFO - Scraping input_field_labels for job 69658363bc8a5f4ff107db6f (no existing labels found)
+2026-01-12 19:12:51,324 - INFO - Collected 11 labels for job 69658363bc8a5f4ff107db6f (Unsupported fields: True, Count: 1)
+2026-01-12 19:12:52,393 - INFO - Processing job 69658363bc8a5f4ff107db6e: Global Marketing Performance Manager at Atlas Technology Solutions
+2026-01-12 19:12:52,393 - INFO - Scraping input_field_labels for job 69658363bc8a5f4ff107db6e (no existing labels found)
+2026-01-12 19:12:55,507 - INFO - Collected 12 labels for job 69658363bc8a5f4ff107db6e (Unsupported fields: False, Count: 0)
+2026-01-12 19:12:56,585 - INFO - Processing job 696582f5bc8a5f4ff107db45: CG Animator at Atomic Cartoons
+2026-01-12 19:12:56,585 - INFO - Scraping input_field_labels for job 696582f5bc8a5f4ff107db45 (no existing labels found)
+2026-01-12 19:12:59,258 - INFO - Collected 18 labels for job 696582f5bc8a5f4ff107db45 (Unsupported fields: False, Count: 0)
+2026-01-12 19:13:20,005 - INFO - Processing job 696582b0bc8a5f4ff107db09: Business Development & Partnerships Specialist - Canada at Baidu USA
+2026-01-12 19:13:20,005 - INFO - Scraping input_field_labels for job 696582b0bc8a5f4ff107db09 (no existing labels found)
+2026-01-12 19:13:24,422 - INFO - Collected 19 labels for job 696582b0bc8a5f4ff107db09 (Unsupported fields: False, Count: 0)
+2026-01-12 19:13:25,473 - INFO - Processing job 696582b0bc8a5f4ff107db08: Client Manager - Canada at Baidu USA
+2026-01-12 19:13:25,474 - INFO - Scraping input_field_labels for job 696582b0bc8a5f4ff107db08 (no existing labels found)
+2026-01-12 19:13:40,704 - WARNING - Timeout loading https://job-boards.greenhouse.io/baidu/jobs/7521232?gh_src=my.greenhouse.search for job 696582b0bc8a5f4ff107db08 (attempt 1)
+2026-01-12 19:13:45,382 - INFO - Collected 19 labels for job 696582b0bc8a5f4ff107db08 (Unsupported fields: False, Count: 0)
+2026-01-12 19:13:46,445 - INFO - Processing job 6965831bbc8a5f4ff107db5e: Senior Software Engineer at Fleetworthy
+2026-01-12 19:13:46,446 - INFO - Scraping input_field_labels for job 6965831bbc8a5f4ff107db5e (no existing labels found)
+2026-01-12 19:13:48,685 - INFO - Collected 14 labels for job 6965831bbc8a5f4ff107db5e (Unsupported fields: False, Count: 0)
+2026-01-12 19:13:49,744 - INFO - Processing job 696582abbc8a5f4ff107dacc: Player Experience Manager at Betty
+2026-01-12 19:13:49,745 - INFO - Scraping input_field_labels for job 696582abbc8a5f4ff107dacc (no existing labels found)
+2026-01-12 19:13:52,249 - INFO - Collected 14 labels for job 696582abbc8a5f4ff107dacc (Unsupported fields: False, Count: 0)
+2026-01-12 19:13:53,525 - INFO - Processing job 696582adbc8a5f4ff107dae6: Sr Solutions Engineer at BeyondTrust
+2026-01-12 19:13:53,525 - INFO - Scraping input_field_labels for job 696582adbc8a5f4ff107dae6 (no existing labels found)
+2026-01-12 19:13:56,772 - INFO - Collected 19 labels for job 696582adbc8a5f4ff107dae6 (Unsupported fields: False, Count: 0)
+2026-01-12 19:13:57,831 - INFO - Processing job 696582f5bc8a5f4ff107db3d: QC Analyst II, Microbiology at AbCellera
+2026-01-12 19:13:57,832 - INFO - Scraping input_field_labels for job 696582f5bc8a5f4ff107db3d (no existing labels found)
+2026-01-12 19:14:01,061 - INFO - Collected 16 labels for job 696582f5bc8a5f4ff107db3d (Unsupported fields: False, Count: 0)
+2026-01-12 19:14:02,116 - INFO - Processing job 69658400bc8a5f4ff107db93: Director, Customer Marketing at Ivalua
+2026-01-12 19:14:02,116 - INFO - Scraping input_field_labels for job 69658400bc8a5f4ff107db93 (no existing labels found)
+2026-01-12 19:14:04,662 - INFO - Collected 15 labels for job 69658400bc8a5f4ff107db93 (Unsupported fields: False, Count: 0)
+2026-01-12 19:14:05,759 - INFO - Processing job 69658340bc8a5f4ff107db65: Client Success Associate at Orennia
+2026-01-12 19:14:05,759 - INFO - Scraping input_field_labels for job 69658340bc8a5f4ff107db65 (no existing labels found)
+2026-01-12 19:14:16,496 - ERROR - Error processing job 69658340bc8a5f4ff107db65: Page.goto: net::ERR_NAME_NOT_RESOLVED at https://boards.greenhouse.io/orennia/jobs/5065720008?gh_jid=5065720008&gh_src=my.greenhouse.search
+Call log:
+  - navigating to "https://boards.greenhouse.io/orennia/jobs/5065720008?gh_jid=5065720008&gh_src=my.greenhouse.search", waiting until "domcontentloaded"
+
+2026-01-12 19:14:18,248 - ERROR - Error processing job 69658340bc8a5f4ff107db65: Page.goto: net::ERR_NAME_NOT_RESOLVED at https://boards.greenhouse.io/orennia/jobs/5065720008?gh_jid=5065720008&gh_src=my.greenhouse.search
+Call log:
+  - navigating to "https://boards.greenhouse.io/orennia/jobs/5065720008?gh_jid=5065720008&gh_src=my.greenhouse.search", waiting until "domcontentloaded"
+
+2026-01-12 19:14:20,267 - INFO - Processing job 696582acbc8a5f4ff107dadb: Senior Sales Executive at Ridgeline
+2026-01-12 19:14:20,268 - INFO - Scraping input_field_labels for job 696582acbc8a5f4ff107dadb (no existing labels found)
+2026-01-12 19:14:23,896 - INFO - Collected 16 labels for job 696582acbc8a5f4ff107dadb (Unsupported fields: True, Count: 1)
+2026-01-12 19:14:24,964 - INFO - Processing job 696582f4bc8a5f4ff107db39: Senior Sales Executive at Ridgeline
+2026-01-12 19:14:24,964 - INFO - Scraping input_field_labels for job 696582f4bc8a5f4ff107db39 (no existing labels found)
+2026-01-12 19:14:27,390 - INFO - Collected 16 labels for job 696582f4bc8a5f4ff107db39 (Unsupported fields: True, Count: 1)
+2026-01-12 19:14:28,459 - INFO - Processing job 696582aebc8a5f4ff107daf6: Sales Planning & Commissions Manager at TouchBistro
+2026-01-12 19:14:28,460 - INFO - Scraping input_field_labels for job 696582aebc8a5f4ff107daf6 (no existing labels found)
+2026-01-12 19:14:31,205 - INFO - Collected 11 labels for job 696582aebc8a5f4ff107daf6 (Unsupported fields: False, Count: 0)
+2026-01-12 19:14:32,440 - INFO - Processing job 696582b1bc8a5f4ff107db17: GTM Engineer at 7shifts
+2026-01-12 19:14:32,440 - INFO - Scraping input_field_labels for job 696582b1bc8a5f4ff107db17 (no existing labels found)
+2026-01-12 19:14:34,724 - INFO - Collected 12 labels for job 696582b1bc8a5f4ff107db17 (Unsupported fields: False, Count: 0)
+2026-01-12 19:14:35,787 - INFO - Processing job 6965848cbc8a5f4ff107dba4: GTM Engineer at 7shifts
+2026-01-12 19:14:35,787 - INFO - Scraping input_field_labels for job 6965848cbc8a5f4ff107dba4 (no existing labels found)
+2026-01-12 19:14:38,028 - INFO - Collected 12 labels for job 6965848cbc8a5f4ff107dba4 (Unsupported fields: False, Count: 0)
+2026-01-12 19:14:39,100 - INFO - Processing job 6965848cbc8a5f4ff107dba3: Data Analyst, Product at 7shifts
+2026-01-12 19:14:39,100 - INFO - Scraping input_field_labels for job 6965848cbc8a5f4ff107dba3 (no existing labels found)
+2026-01-12 19:14:41,369 - INFO - Collected 13 labels for job 6965848cbc8a5f4ff107dba3 (Unsupported fields: False, Count: 0)
+2026-01-12 19:14:42,424 - INFO - Processing job 696582acbc8a5f4ff107dadc: Data Analyst, Revenue Operations at 7shifts
+2026-01-12 19:14:42,424 - INFO - Scraping input_field_labels for job 696582acbc8a5f4ff107dadc (no existing labels found)
+2026-01-12 19:14:44,687 - INFO - Collected 13 labels for job 696582acbc8a5f4ff107dadc (Unsupported fields: False, Count: 0)
+2026-01-12 19:14:45,739 - INFO - Processing job 6965848cbc8a5f4ff107dba2: Data Analyst, Revenue Operations at 7shifts
+2026-01-12 19:14:45,740 - INFO - Scraping input_field_labels for job 6965848cbc8a5f4ff107dba2 (no existing labels found)
+2026-01-12 19:14:48,049 - INFO - Collected 13 labels for job 6965848cbc8a5f4ff107dba2 (Unsupported fields: False, Count: 0)
+2026-01-12 19:14:49,114 - INFO - Processing job 696582a9bc8a5f4ff107dab7: Software Engineer - Access & Notifications at BitGo
+2026-01-12 19:14:49,115 - INFO - Scraping input_field_labels for job 696582a9bc8a5f4ff107dab7 (no existing labels found)
+2026-01-12 19:14:51,319 - INFO - Collected 13 labels for job 696582a9bc8a5f4ff107dab7 (Unsupported fields: False, Count: 0)
+2026-01-12 19:14:52,375 - INFO - Processing job 696582f3bc8a5f4ff107db26: Research Scientist – Protein Mass Spectrometry at AbCellera
+2026-01-12 19:14:52,375 - INFO - Scraping input_field_labels for job 696582f3bc8a5f4ff107db26 (no existing labels found)
+2026-01-12 19:14:54,647 - INFO - Collected 16 labels for job 696582f3bc8a5f4ff107db26 (Unsupported fields: False, Count: 0)
+2026-01-12 19:14:55,711 - INFO - Processing job 696582b1bc8a5f4ff107db0f: Senior Product Designer, AI Manager Experience at Ada
+2026-01-12 19:14:55,712 - INFO - Scraping input_field_labels for job 696582b1bc8a5f4ff107db0f (no existing labels found)
+2026-01-12 19:14:58,058 - INFO - Collected 11 labels for job 696582b1bc8a5f4ff107db0f (Unsupported fields: True, Count: 2)
+2026-01-12 19:14:59,122 - INFO - Processing job 696582aebc8a5f4ff107daf4: Presales Consultant at Ada
+2026-01-12 19:14:59,123 - INFO - Scraping input_field_labels for job 696582aebc8a5f4ff107daf4 (no existing labels found)
+2026-01-12 19:15:01,339 - INFO - Collected 10 labels for job 696582aebc8a5f4ff107daf4 (Unsupported fields: False, Count: 0)
+2026-01-12 19:15:02,407 - INFO - Processing job 696582aebc8a5f4ff107daf2: Senior Presales Consultant at Ada
+2026-01-12 19:15:02,407 - INFO - Scraping input_field_labels for job 696582aebc8a5f4ff107daf2 (no existing labels found)
+2026-01-12 19:15:04,663 - INFO - Collected 10 labels for job 696582aebc8a5f4ff107daf2 (Unsupported fields: False, Count: 0)
+2026-01-12 19:15:05,719 - INFO - Processing job 696582f4bc8a5f4ff107db3b: Technical Support Engineer at Ada
+2026-01-12 19:15:05,719 - INFO - Scraping input_field_labels for job 696582f4bc8a5f4ff107db3b (no existing labels found)
+2026-01-12 19:15:07,917 - INFO - Collected 11 labels for job 696582f4bc8a5f4ff107db3b (Unsupported fields: False, Count: 0)
+2026-01-12 19:15:08,980 - INFO - Processing job 696582adbc8a5f4ff107dae7: Senior Data Analyst at Ada
+2026-01-12 19:15:08,980 - INFO - Scraping input_field_labels for job 696582adbc8a5f4ff107dae7 (no existing labels found)
+2026-01-12 19:15:11,219 - INFO - Collected 10 labels for job 696582adbc8a5f4ff107dae7 (Unsupported fields: False, Count: 0)
+2026-01-12 19:15:12,283 - INFO - Processing job 696582adbc8a5f4ff107dae2: Engineering Manager - Integrations and Onboarding at Ada Health GmbH
+2026-01-12 19:15:12,284 - INFO - Scraping input_field_labels for job 696582adbc8a5f4ff107dae2 (no existing labels found)
+2026-01-12 19:15:14,528 - INFO - Collected 25 labels for job 696582adbc8a5f4ff107dae2 (Unsupported fields: False, Count: 0)
+2026-01-12 19:15:15,587 - INFO - Processing job 696582aabc8a5f4ff107dabe: Revenue Operations - Systems Manager at AfterShip
+2026-01-12 19:15:15,587 - INFO - Scraping input_field_labels for job 696582aabc8a5f4ff107dabe (no existing labels found)
+2026-01-12 19:15:18,028 - INFO - Collected 18 labels for job 696582aabc8a5f4ff107dabe (Unsupported fields: False, Count: 0)
+2026-01-12 19:15:19,083 - INFO - Processing job 696582f2bc8a5f4ff107db1c: Revenue Operations Manager - Deal Desk at AfterShip
+2026-01-12 19:15:19,083 - INFO - Scraping input_field_labels for job 696582f2bc8a5f4ff107db1c (no existing labels found)
+2026-01-12 19:15:21,286 - INFO - Collected 18 labels for job 696582f2bc8a5f4ff107db1c (Unsupported fields: False, Count: 0)
+2026-01-12 19:15:22,359 - INFO - Processing job 696582f5bc8a5f4ff107db44: Mobile Engineer (iOS) at EarnIn
+2026-01-12 19:15:22,359 - INFO - Scraping input_field_labels for job 696582f5bc8a5f4ff107db44 (no existing labels found)
+2026-01-12 19:15:24,601 - INFO - Collected 16 labels for job 696582f5bc8a5f4ff107db44 (Unsupported fields: True, Count: 1)
+2026-01-12 19:15:25,659 - INFO - Processing job 69658469bc8a5f4ff107db9f: Brand Designer at CoLab Software
+2026-01-12 19:15:25,659 - INFO - Scraping input_field_labels for job 69658469bc8a5f4ff107db9f (no existing labels found)
+2026-01-12 19:15:27,926 - INFO - Collected 18 labels for job 69658469bc8a5f4ff107db9f (Unsupported fields: True, Count: 1)
+2026-01-12 19:15:28,987 - INFO - Processing job 696582a7bc8a5f4ff107daa0: Software Engineering Manager at ContactMonkey
+2026-01-12 19:15:28,987 - INFO - Scraping input_field_labels for job 696582a7bc8a5f4ff107daa0 (no existing labels found)
+2026-01-12 19:15:31,349 - INFO - Collected 16 labels for job 696582a7bc8a5f4ff107daa0 (Unsupported fields: True, Count: 1)
+2026-01-12 19:15:32,418 - INFO - Processing job 696582a9bc8a5f4ff107dab4: Staff Data Engineer at Correlation One
+2026-01-12 19:15:32,418 - INFO - Scraping input_field_labels for job 696582a9bc8a5f4ff107dab4 (no existing labels found)
+2026-01-12 19:15:34,699 - INFO - Collected 17 labels for job 696582a9bc8a5f4ff107dab4 (Unsupported fields: True, Count: 1)
+2026-01-12 19:15:35,760 - INFO - Processing job 696582a8bc8a5f4ff107daa8: Service Manager at Dael Thermal Group
+2026-01-12 19:15:35,761 - INFO - Scraping input_field_labels for job 696582a8bc8a5f4ff107daa8 (no existing labels found)
+2026-01-12 19:15:38,128 - INFO - Collected 35 labels for job 696582a8bc8a5f4ff107daa8 (Unsupported fields: True, Count: 1)
+2026-01-12 19:15:39,192 - INFO - Processing job 696582aabc8a5f4ff107dac9: Dental Treatment Coordinator at Dentalook
+2026-01-12 19:15:39,192 - INFO - Scraping input_field_labels for job 696582aabc8a5f4ff107dac9 (no existing labels found)
+2026-01-12 19:15:41,812 - INFO - Collected 9 labels for job 696582aabc8a5f4ff107dac9 (Unsupported fields: False, Count: 0)
+2026-01-12 19:15:42,883 - INFO - Processing job 696582f4bc8a5f4ff107db36: Account Supervisor (6 Month FTC) at DEPT®
+2026-01-12 19:15:42,883 - INFO - Scraping input_field_labels for job 696582f4bc8a5f4ff107db36 (no existing labels found)
+2026-01-12 19:15:46,056 - INFO - Collected 9 labels for job 696582f4bc8a5f4ff107db36 (Unsupported fields: False, Count: 0)
+2026-01-12 19:15:47,116 - INFO - Processing job 696582f2bc8a5f4ff107db1a: Field Marketing Specialist at Diligent Corporation
+2026-01-12 19:15:47,117 - INFO - Scraping input_field_labels for job 696582f2bc8a5f4ff107db1a (no existing labels found)
+2026-01-12 19:15:49,392 - INFO - Collected 18 labels for job 696582f2bc8a5f4ff107db1a (Unsupported fields: False, Count: 0)
+2026-01-12 19:15:50,452 - INFO - Processing job 696582f6bc8a5f4ff107db53: Director, Solutions Architect at Diligent Corporation
+2026-01-12 19:15:50,453 - INFO - Scraping input_field_labels for job 696582f6bc8a5f4ff107db53 (no existing labels found)
+2026-01-12 19:15:52,826 - INFO - Collected 9 labels for job 696582f6bc8a5f4ff107db53 (Unsupported fields: False, Count: 0)
+2026-01-12 19:15:53,897 - INFO - Processing job 696582adbc8a5f4ff107daec: Senior DevOps/ Systems Engineer at Tucows Domains
+2026-01-12 19:15:53,897 - INFO - Scraping input_field_labels for job 696582adbc8a5f4ff107daec (no existing labels found)
+2026-01-12 19:15:56,293 - INFO - Collected 24 labels for job 696582adbc8a5f4ff107daec (Unsupported fields: False, Count: 0)
+2026-01-12 19:15:57,352 - INFO - Processing job 696582f5bc8a5f4ff107db47: Head of Marketing at Durable
+2026-01-12 19:15:57,352 - INFO - Scraping input_field_labels for job 696582f5bc8a5f4ff107db47 (no existing labels found)
+2026-01-12 19:15:59,610 - INFO - Collected 13 labels for job 696582f5bc8a5f4ff107db47 (Unsupported fields: True, Count: 1)
+2026-01-12 19:16:00,664 - INFO - Processing job 696582aebc8a5f4ff107daf0: Brand Designer at CoLab Software
+2026-01-12 19:16:00,665 - INFO - Scraping input_field_labels for job 696582aebc8a5f4ff107daf0 (no existing labels found)
+2026-01-12 19:16:03,063 - INFO - Collected 18 labels for job 696582aebc8a5f4ff107daf0 (Unsupported fields: True, Count: 1)
+2026-01-12 19:16:04,146 - INFO - Processing job 696583febc8a5f4ff107db80: P1 - ECS - Analyste Développeur .Net at EC-Solutions
+2026-01-12 19:16:04,147 - INFO - Scraping input_field_labels for job 696583febc8a5f4ff107db80 (no existing labels found)
+2026-01-12 19:16:06,436 - INFO - Collected 10 labels for job 696583febc8a5f4ff107db80 (Unsupported fields: False, Count: 0)
+2026-01-12 19:16:07,497 - INFO - Processing job 696582aebc8a5f4ff107daef: Account Manager, Brand at Flipp
+2026-01-12 19:16:07,497 - INFO - Scraping input_field_labels for job 696582aebc8a5f4ff107daef (no existing labels found)
+2026-01-12 19:16:09,911 - INFO - Collected 15 labels for job 696582aebc8a5f4ff107daef (Unsupported fields: False, Count: 0)
+2026-01-12 19:16:10,965 - INFO - Processing job 696582abbc8a5f4ff107dad2: Lead, Latam Measurement at Flipp
+2026-01-12 19:16:10,965 - INFO - Scraping input_field_labels for job 696582abbc8a5f4ff107dad2 (no existing labels found)
+2026-01-12 19:16:13,364 - INFO - Collected 15 labels for job 696582abbc8a5f4ff107dad2 (Unsupported fields: False, Count: 0)
+2026-01-12 19:16:14,425 - INFO - Processing job 696582a8bc8a5f4ff107daa6: Client Relationship Specialist at Focus Financial Partners
+2026-01-12 19:16:14,425 - INFO - Scraping input_field_labels for job 696582a8bc8a5f4ff107daa6 (no existing labels found)
+2026-01-12 19:16:16,693 - INFO - Collected 15 labels for job 696582a8bc8a5f4ff107daa6 (Unsupported fields: False, Count: 0)
+2026-01-12 19:16:17,752 - INFO - Processing job 696582b1bc8a5f4ff107db14: Sales Development Representative (Canada) at FreeWill
+2026-01-12 19:16:17,752 - INFO - Scraping input_field_labels for job 696582b1bc8a5f4ff107db14 (no existing labels found)
+2026-01-12 19:16:20,014 - INFO - Collected 22 labels for job 696582b1bc8a5f4ff107db14 (Unsupported fields: True, Count: 1)
+2026-01-12 19:16:21,076 - INFO - Processing job 696582afbc8a5f4ff107dafb: Onboarding Specialist at GlossGenius
+2026-01-12 19:16:21,077 - INFO - Scraping input_field_labels for job 696582afbc8a5f4ff107dafb (no existing labels found)
+2026-01-12 19:16:23,287 - INFO - Collected 12 labels for job 696582afbc8a5f4ff107dafb (Unsupported fields: False, Count: 0)
+2026-01-12 19:16:24,344 - INFO - Processing job 696582abbc8a5f4ff107daca: Sales Development Representative at Granum
+2026-01-12 19:16:24,344 - INFO - Scraping input_field_labels for job 696582abbc8a5f4ff107daca (no existing labels found)
+2026-01-12 19:16:26,611 - INFO - Collected 13 labels for job 696582abbc8a5f4ff107daca (Unsupported fields: False, Count: 0)
+2026-01-12 19:16:27,671 - INFO - Processing job 696582b1bc8a5f4ff107db10: AI Engineer at Guidepoint
+2026-01-12 19:16:27,672 - INFO - Scraping input_field_labels for job 696582b1bc8a5f4ff107db10 (no existing labels found)
+2026-01-12 19:16:29,994 - INFO - Collected 20 labels for job 696582b1bc8a5f4ff107db10 (Unsupported fields: False, Count: 0)
+2026-01-12 19:16:31,057 - INFO - Processing job 696582b1bc8a5f4ff107db11: Data/AI Engineer at Guidepoint
+2026-01-12 19:16:31,057 - INFO - Scraping input_field_labels for job 696582b1bc8a5f4ff107db11 (no existing labels found)
+2026-01-12 19:16:33,549 - INFO - Collected 20 labels for job 696582b1bc8a5f4ff107db11 (Unsupported fields: False, Count: 0)
+2026-01-12 19:16:34,601 - INFO - Processing job 696583cbbc8a5f4ff107db73: Territory Sales Manager PCLT (Quebec) at Hankook Tire America Corp.
+2026-01-12 19:16:34,601 - INFO - Scraping input_field_labels for job 696583cbbc8a5f4ff107db73 (no existing labels found)
+2026-01-12 19:16:36,912 - INFO - Collected 14 labels for job 696583cbbc8a5f4ff107db73 (Unsupported fields: False, Count: 0)
+2026-01-12 19:16:37,976 - INFO - Processing job 69658446bc8a5f4ff107db9e: Dispatcher at Clutch Technologies Inc.
+2026-01-12 19:16:37,976 - INFO - Scraping input_field_labels for job 69658446bc8a5f4ff107db9e (no existing labels found)
+2026-01-12 19:16:40,181 - INFO - Collected 13 labels for job 69658446bc8a5f4ff107db9e (Unsupported fields: False, Count: 0)
+2026-01-12 19:16:41,248 - INFO - Processing job 696582a8bc8a5f4ff107daac: Enterprise Account Executive at Boosted.ai
+2026-01-12 19:16:41,248 - INFO - Scraping input_field_labels for job 696582a8bc8a5f4ff107daac (no existing labels found)
+2026-01-12 19:16:43,522 - INFO - Collected 11 labels for job 696582a8bc8a5f4ff107daac (Unsupported fields: True, Count: 1)
+2026-01-12 19:16:44,588 - INFO - Processing job 696582f5bc8a5f4ff107db41: Leasing Coordinator, Commercial at Bosa Properties Inc.
+2026-01-12 19:16:44,589 - INFO - Scraping input_field_labels for job 696582f5bc8a5f4ff107db41 (no existing labels found)
+2026-01-12 19:16:46,897 - INFO - Collected 12 labels for job 696582f5bc8a5f4ff107db41 (Unsupported fields: False, Count: 0)
+2026-01-12 19:16:47,968 - INFO - Processing job 696582a9bc8a5f4ff107dab5: Business Development Representative at BrainStation
+2026-01-12 19:16:47,968 - INFO - Scraping input_field_labels for job 696582a9bc8a5f4ff107dab5 (no existing labels found)
+2026-01-12 19:16:50,304 - INFO - Collected 10 labels for job 696582a9bc8a5f4ff107dab5 (Unsupported fields: True, Count: 1)
+2026-01-12 19:16:51,385 - INFO - Processing job 696582a9bc8a5f4ff107dab9: Account Executive at BrainStation
+2026-01-12 19:16:51,385 - INFO - Scraping input_field_labels for job 696582a9bc8a5f4ff107dab9 (no existing labels found)
+2026-01-12 19:16:53,771 - INFO - Collected 10 labels for job 696582a9bc8a5f4ff107dab9 (Unsupported fields: True, Count: 1)
+2026-01-12 19:16:54,831 - INFO - Processing job 696582a7bc8a5f4ff107daa5: Client Relationship Specialist at Cardinal Point, Focus Partners Canada
+2026-01-12 19:16:54,832 - INFO - Scraping input_field_labels for job 696582a7bc8a5f4ff107daa5 (no existing labels found)
+2026-01-12 19:16:57,069 - INFO - Collected 15 labels for job 696582a7bc8a5f4ff107daa5 (Unsupported fields: False, Count: 0)
+2026-01-12 19:16:58,141 - INFO - Processing job 696582b0bc8a5f4ff107db04: Senior Full Stack Engineer, Data Ecosystem at Carta
+2026-01-12 19:16:58,141 - INFO - Scraping input_field_labels for job 696582b0bc8a5f4ff107db04 (no existing labels found)
+2026-01-12 19:17:00,700 - INFO - Collected 21 labels for job 696582b0bc8a5f4ff107db04 (Unsupported fields: True, Count: 1)
+2026-01-12 19:17:01,763 - INFO - Processing job 696582b0bc8a5f4ff107db03: Senior Software Engineer, Data Ecosystem at Carta
+2026-01-12 19:17:01,763 - INFO - Scraping input_field_labels for job 696582b0bc8a5f4ff107db03 (no existing labels found)
+2026-01-12 19:17:04,217 - INFO - Collected 21 labels for job 696582b0bc8a5f4ff107db03 (Unsupported fields: True, Count: 1)
+2026-01-12 19:17:05,312 - INFO - Processing job 696582aabc8a5f4ff107dac8: Delivery Practice Manager, Professional Services at Clariti Cloud Inc.
+2026-01-12 19:17:05,312 - INFO - Scraping input_field_labels for job 696582aabc8a5f4ff107dac8 (no existing labels found)
+2026-01-12 19:17:08,261 - INFO - Collected 16 labels for job 696582aabc8a5f4ff107dac8 (Unsupported fields: False, Count: 0)
+2026-01-12 19:17:09,324 - INFO - Processing job 696582aabc8a5f4ff107dac4: Senior Software Engineer at Clariti Cloud Inc.
+2026-01-12 19:17:09,324 - INFO - Scraping input_field_labels for job 696582aabc8a5f4ff107dac4 (no existing labels found)
+2026-01-12 19:17:11,698 - INFO - Collected 14 labels for job 696582aabc8a5f4ff107dac4 (Unsupported fields: True, Count: 1)
+2026-01-12 19:17:12,760 - INFO - Processing job 696582b1bc8a5f4ff107db12: Customer Advisor, Sell-to-Clutch at Clutch Technologies Inc.
+2026-01-12 19:17:12,761 - INFO - Scraping input_field_labels for job 696582b1bc8a5f4ff107db12 (no existing labels found)
+2026-01-12 19:17:15,081 - INFO - Collected 12 labels for job 696582b1bc8a5f4ff107db12 (Unsupported fields: False, Count: 0)
+2026-01-12 19:17:16,185 - INFO - Processing job 69658400bc8a5f4ff107db94: Director, Customer Marketing at Ivalua
+2026-01-12 19:17:16,185 - INFO - Scraping input_field_labels for job 69658400bc8a5f4ff107db94 (no existing labels found)
+2026-01-12 19:17:18,735 - INFO - Collected 15 labels for job 69658400bc8a5f4ff107db94 (Unsupported fields: False, Count: 0)
+2026-01-12 19:17:19,833 - INFO - Processing job 696582adbc8a5f4ff107dae3: Vehicle Shuttler at Clutch Technologies Inc.
+2026-01-12 19:17:19,834 - INFO - Scraping input_field_labels for job 696582adbc8a5f4ff107dae3 (no existing labels found)
+2026-01-12 19:17:22,238 - INFO - Collected 11 labels for job 696582adbc8a5f4ff107dae3 (Unsupported fields: False, Count: 0)
+2026-01-12 19:17:23,337 - INFO - Processing job 69658446bc8a5f4ff107db9d: Vehicle Detailer at Clutch Technologies Inc.
+2026-01-12 19:17:23,337 - INFO - Scraping input_field_labels for job 69658446bc8a5f4ff107db9d (no existing labels found)
+2026-01-12 19:17:25,867 - INFO - Collected 11 labels for job 69658446bc8a5f4ff107db9d (Unsupported fields: False, Count: 0)
+2026-01-12 19:17:26,939 - INFO - Processing job 69658446bc8a5f4ff107db9c: Vehicle Inspector at Clutch Technologies Inc.
+2026-01-12 19:17:26,939 - INFO - Scraping input_field_labels for job 69658446bc8a5f4ff107db9c (no existing labels found)
+2026-01-12 19:17:29,265 - INFO - Collected 10 labels for job 69658446bc8a5f4ff107db9c (Unsupported fields: False, Count: 0)
+2026-01-12 19:17:30,339 - INFO - Processing job 696582abbc8a5f4ff107dacf: Vehicle Detailer at Clutch Technologies Inc.
+2026-01-12 19:17:30,340 - INFO - Scraping input_field_labels for job 696582abbc8a5f4ff107dacf (no existing labels found)
+2026-01-12 19:17:32,734 - INFO - Collected 13 labels for job 696582abbc8a5f4ff107dacf (Unsupported fields: False, Count: 0)
+2026-01-12 19:17:33,816 - INFO - Processing job 696582abbc8a5f4ff107dace: Last Mile Associate at Clutch Technologies Inc.
+2026-01-12 19:17:33,816 - INFO - Scraping input_field_labels for job 696582abbc8a5f4ff107dace (no existing labels found)
+2026-01-12 19:17:36,286 - INFO - Collected 13 labels for job 696582abbc8a5f4ff107dace (Unsupported fields: False, Count: 0)
+2026-01-12 19:17:37,348 - INFO - Processing job 696582abbc8a5f4ff107dacd: Vehicle Quality Control Associate at Clutch Technologies Inc.
+2026-01-12 19:17:37,349 - INFO - Scraping input_field_labels for job 696582abbc8a5f4ff107dacd (no existing labels found)
+2026-01-12 19:17:39,675 - INFO - Collected 11 labels for job 696582abbc8a5f4ff107dacd (Unsupported fields: False, Count: 0)
+2026-01-12 19:17:40,745 - INFO - Processing job 696582a8bc8a5f4ff107daab: Parts Associate at Clutch Technologies Inc.
+2026-01-12 19:17:40,746 - INFO - Scraping input_field_labels for job 696582a8bc8a5f4ff107daab (no existing labels found)
+2026-01-12 19:17:43,033 - INFO - Collected 12 labels for job 696582a8bc8a5f4ff107daab (Unsupported fields: False, Count: 0)
+2026-01-12 19:17:44,103 - INFO - Processing job 69658469bc8a5f4ff107dba0: SEO Content Manager at CoLab Software
+2026-01-12 19:17:44,104 - INFO - Scraping input_field_labels for job 69658469bc8a5f4ff107dba0 (no existing labels found)
+2026-01-12 19:17:46,550 - INFO - Collected 18 labels for job 69658469bc8a5f4ff107dba0 (Unsupported fields: True, Count: 1)
+2026-01-12 19:17:47,619 - INFO - Processing job 6965846abc8a5f4ff107dba1: Product Marketing Manager at CoLab Software
+2026-01-12 19:17:47,619 - INFO - Scraping input_field_labels for job 6965846abc8a5f4ff107dba1 (no existing labels found)
+2026-01-12 19:17:49,931 - INFO - Collected 18 labels for job 6965846abc8a5f4ff107dba1 (Unsupported fields: False, Count: 0)
+2026-01-12 19:17:50,745 - INFO - ============================================================
+2026-01-12 19:17:50,745 - INFO - ✅ Required field extraction completed for Cycle 9
+2026-01-12 19:17:50,762 - INFO - Results saved to data\required_fields_20260113_001750.json

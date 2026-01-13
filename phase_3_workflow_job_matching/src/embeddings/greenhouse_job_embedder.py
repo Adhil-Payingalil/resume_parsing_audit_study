@@ -44,9 +44,10 @@ class GreenhouseJobEmbeddingProcessor:
     Processes greenhouse job postings in parallel to generate and store embeddings.
     """
     
-    def __init__(self, db_name: str = "Resume_study", max_concurrent: int = 5):
+    def __init__(self, db_name: str = "Resume_study", max_concurrent: int = 3, cycle: float = 0):
         self.db_name = db_name
         self.max_concurrent = max_concurrent
+        self.cycle = cycle
         self.mongo_client = _get_mongo_client()
         if not self.mongo_client:
             raise ConnectionError("Failed to connect to MongoDB")
@@ -61,6 +62,7 @@ class GreenhouseJobEmbeddingProcessor:
         
         logger.info(f"GreenhouseJobEmbeddingProcessor initialized for database: {db_name}")
         logger.info(f"Max concurrent requests: {max_concurrent}")
+        logger.info(f"Target Cycle: {cycle}")
     
     def get_jobs_without_embeddings(self) -> List[Dict[str, Any]]:
         """
@@ -72,7 +74,7 @@ class GreenhouseJobEmbeddingProcessor:
         try:
             # Find documents with jd_extraction=True that don't have embeddings
             query = {
-                "cycle": 8.1,
+                "cycle": self.cycle,
                 "jd_extraction": True,
                 "$or": [
                     {"jd_embedding": {"$exists": False}},
@@ -82,13 +84,15 @@ class GreenhouseJobEmbeddingProcessor:
             }
             
             jobs = list(self.job_collection.find(query))
-            logger.info(f"Found {len(jobs)} greenhouse job postings without embeddings")
+            logger.info(f"Found {len(jobs)} greenhouse job postings without embeddings for cycle {self.cycle}")
             return jobs
             
         except Exception as e:
             logger.error(f"Error retrieving jobs without embeddings: {e}")
             return []
     
+    # ... extract_greenhouse_job_content, generate_embedding_async, process_job_embedding, process_jobs_concurrently remain the same ...
+
     def extract_greenhouse_job_content(self, job_doc: Dict[str, Any]) -> str:
         """
         Extract content from greenhouse job document for embedding.
@@ -328,7 +332,7 @@ class GreenhouseJobEmbeddingProcessor:
                 
                 # Small delay between batches to respect rate limits
                 if i + batch_size < len(tasks):
-                    await asyncio.sleep(1.0)
+                    await asyncio.sleep(2.0)
         
         stats["end_time"] = time.time()
         stats["duration"] = stats["end_time"] - stats["start_time"]
@@ -343,9 +347,10 @@ class GreenhouseJobEmbeddingProcessor:
             Dict[str, Any]: Statistics about embeddings
         """
         try:
-            total_docs = self.job_collection.count_documents({"jd_extraction": True})
+            total_docs = self.job_collection.count_documents({"jd_extraction": True, "cycle": self.cycle})
             docs_with_embeddings = self.job_collection.count_documents({
                 "jd_extraction": True,
+                "cycle": self.cycle,
                 "jd_embedding": {"$exists": True, "$ne": None, "$ne": []}
             })
             docs_without_embeddings = total_docs - docs_with_embeddings
@@ -364,13 +369,13 @@ class GreenhouseJobEmbeddingProcessor:
             logger.error(f"Error getting embedding statistics: {e}")
             return {}
 
-async def main():
+async def main(cycle: float = 0):
     """Main function to run the greenhouse job embedding process with parallel processing."""
     try:
-        logger.info("Starting greenhouse job embedding process with parallel processing")
+        logger.info(f"Starting greenhouse job embedding process with parallel processing for cycle {cycle}")
         
         # Initialize processor
-        processor = GreenhouseJobEmbeddingProcessor(max_concurrent=5)
+        processor = GreenhouseJobEmbeddingProcessor(max_concurrent=3, cycle=cycle)
         
         # Get initial statistics
         initial_stats = processor.get_embedding_statistics()
@@ -408,15 +413,17 @@ def run():
     import argparse
     
     parser = argparse.ArgumentParser(description="Greenhouse Job Embedding Processor")
-    parser.add_argument("--concurrent", type=int, default=5,
+    parser.add_argument("--concurrent", type=int, default=3,
                        help="Number of concurrent requests")
+    parser.add_argument("--cycle", type=float, default=0,
+                       help="Cycle number to process (default: 0)")
     
     args = parser.parse_args()
     
-    if args.concurrent != 5:
+    if args.concurrent != 3:
         logger.info(f"Using {args.concurrent} concurrent requests")
     
-    asyncio.run(main())
+    asyncio.run(main(cycle=args.cycle))
 
 if __name__ == "__main__":
     run()

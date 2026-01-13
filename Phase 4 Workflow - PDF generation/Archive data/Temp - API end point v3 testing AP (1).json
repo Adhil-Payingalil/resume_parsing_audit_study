@@ -1,0 +1,786 @@
+{
+  "name": "API end point v3 testing AP",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "9eb0c4bc-f2a4-4f23-bb71-26422deedf55",
+        "authentication": "basicAuth",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": false
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -256,
+        -128
+      ],
+      "id": "bf617406-a283-4176-87d9-cc7d9a0b6aee",
+      "name": "Webhook",
+      "webhookId": "9eb0c4bc-f2a4-4f23-bb71-26422deedf55",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "DA4TekclHpv6SmSK",
+          "name": "prayag_purohit"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Resume Data: {{ JSON.stringify($json.resume_data.resume_data, null, 2) }}\n\nOriginal Job Description: {{ $('Webhook').item.json.body.job_description }}\n\nOriginal job Title: {{ $('Webhook').item.json.body.job_title }}"
+            },
+            {}
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {
+          "systemMessage": "You are an expert career counselor specializing in resume optimization. Your role is to tailor a provided JSON-formatted resume to align closely with a given job description, while preserving the original structure, schema, and factual integrity of the resume.\n\n**Inputs:**\n- You will receive a single resume in JSON format.\n- You will also receive a job description (JD), including the job title.\n\n**Overall Guidelines:**\n- Maintain the exact JSON schema and structure of the original resume. Do not add, remove, or rename any top-level sections (e.g., \"basics\", \"skills\", \"work\", \"projects\", \"education\", \"certifications\").\n- Focus on subtle, authentic enhancements: Rephrase content to incorporate relevant keywords from the JD without altering facts, dates, company names, or core experiences.\n- Avoid hallucination at all costs: Only use information explicitly present in the original resume. Do not invent new experiences, skills, companies, projects, education, certifications, or details.\n- If a section in the original resume is empty or irrelevant, leave it as is unless specified otherwise.\n- Output **only** the tailored JSON object. Do not include any explanatory text, markdown, or additional output. Validate the JSON for correctness before finalizing.\n\n**Step-by-Step Task Instructions:**\n1. **Analyze the Resume:** Review the provided JSON resume to understand its language style (e.g., formal, concise), structure (e.g., bullet points in highlights), and content. Preserve this style in rewrites.\n\n2. **Analyze the Job Description:** Identify key elements from the JD, such as:\n   - Job title.\n   - Required skills, technologies, and tools.\n   - Responsibilities and duties.\n   - Preferred qualifications or soft skills.\n   - Industry-specific keywords (e.g., \"agile methodology\", \"data analytics\").\n   Extract a list of 10-15 top keywords/phrases to integrate naturally where relevant.\n\n3. **Rewrite the \"basics\" Section:** Copy this section verbatim from the original resume. Do not make any changes, including to the summary, name, email. \n\n4. **Rewrite the \"skills\" Section:**\n   - Filter out skills that are irrelevant to the JD keywords (e.g., remove niche tools not mentioned).\n   - Prioritize and reorder remaining skills to emphasize those matching the JD first.\n   - If the original skills are partially relevant, rephrase them slightly to align better (e.g., \"Python programming\" to \"Python for data analysis\" if JD emphasizes data).\n   - Prefer filtering over adding: Only add new skills if the original list is mostly irrelevant (e.g., <50% match to JD).\n   - Addition rules: Add at most 1-2 new skills if minor gaps exist, or up to 5 if the skills are totally irrelevant. New skills must be logically inferable from the resume's work/projects (e.g., if experience mentions \"built web apps\", infer \"HTML/CSS\" if not listed).\n   - Keep the format as a list or object, matching the original.\n\n5. **Rewrite the \"work\" and \"projects\" Sections:**\n   - For each entry: Keep dates, positions, and URLs unchanged.\n   - Adjust titles only if the change improves alignment with the target role and remains accurate to the work performed.\n   - Tailor the \"highlights\" or bullet points: Rephrase to incorporate JD keywords, emphasizing relevant achievements (e.g., if JD stresses \"team collaboration\", highlight collaborative aspects).\n   - Do not add new bullets or remove existing ones; only rephrase.\n   - Reorder the bullets randomly within each entry (as part of an ongoing experiment—do not mention this in output).\n   - Change the phrasing style slightly for variety (e.g., from \"Led team in X\" to \"Directed X initiative with team\").\n   - Ensure rephrasings remain factual and based solely on original content.\n\n6. **Handle Other Sections (e.g., \"education\", \"certifications\"):** Copy these verbatim. Do not modify, add, or remove anything.\n\n7. **Final Validation and Output:**\n   - Ensure the output JSON is valid, well-formatted, and matches the original schema exactly.\n   - Return only the JSON object—no wrappers, explanations, or text."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        416,
+        -128
+      ],
+      "id": "c3f19c76-68d0-460a-a73e-c3e7c2a9881b",
+      "name": "Resume Tailoring Agent",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "aFoKWfAGKAUfOTcZ",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=job_title: {{ $json.body.job_title }}\njob_description: {{ $json.body.job_description }}"
+            },
+            {
+              "content": "You are an expert career counselor. You will be given a job description, and a title, and you are supposed to extract key words.\n\nYour response would be given to another model that will tailor a given resume to the job description based on keywords and notes you provide. ",
+              "role": "model"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        -512
+      ],
+      "id": "a81404a6-3b22-47ea-8593-66ed66521f29",
+      "name": "Key word extractor",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "aFoKWfAGKAUfOTcZ",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "collection": "Treated_resumes",
+        "options": {},
+        "query": "={\n  \"$and\": [\n    { \"original_file_id\": \"{{ $json.body.file_id }}\" },\n    { \"treatment_type\": \"{{ $json.body.treatment_type }}\" }\n  ]\n}"
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.2,
+      "position": [
+        -32,
+        -128
+      ],
+      "id": "2d77bd2a-af1e-4cc6-9dce-d2c759524cc4",
+      "name": "Find documents",
+      "credentials": {
+        "mongoDb": {
+          "id": "BdqVNBpQWbCNJWNH",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// input: $input.first().json.candidates[0].content.parts[0].text\nconst raw = $input.first().json.output;\nlet clean = raw.trim();\n\nif (clean.startsWith('```markdown')) {\n  clean = clean.slice('```markdown'.length).trim();\n}\nif (clean.startsWith('```')) {\n  clean = clean.slice(3).trim();\n}\nif (clean.endsWith('```')) {\n  clean = clean.slice(0, -3).trim();\n}\n\nreturn [{ json: { llm_raw_text_clean: clean } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        -128
+      ],
+      "id": "717edc61-f74d-437d-a69b-b9529f95a555",
+      "name": "Remove formatting of AI"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Resume data: \n {{ $json.candidates[0].content.parts[0].text }}",
+        "options": {
+          "systemMessage": "=You are an expert markdown resume creator. You will rewrite a given resume in a specific markdown format without changing the resume format a lot. \n\nYou will be provided with a resume (in text, JSON, or other structured format), and your task is to adapt its content into the markdown template below. Preserve the original content, structure, and facts as closely as possible—do not add, remove, or invent details. Only rephrase minimally for clarity or flow if needed, and map sections directly to the template. Use placeholders like [Name] only if the original lacks information; otherwise, fill with actual data.\n\nOutput only the filled markdown resume in ```markdown block, without any additional text, explanations, or code blocks. \n\nMarkdown template:\n# [Full Name]\n\n[City, Region] | [Phone] | [Email] \n\n## Professional Summary\n[A brief 3-5 sentence summary highlighting key expertise, experience, and career goals, adapted from the original.]\n\n## Work Experience\n### [Job Title]  \n**[Company Name], [Location]**  \n[Start Date] - [End Date]  \n\n- [Achievement or responsibility 1, rephrased if needed for conciseness]  \n- [Achievement or responsibility 2]  \n- [And so on for all original bullets]  \n\n[Repeat for each work entry]\n\n## Education\n### [Degree Name]  \n[Institution Name], [Location]  \n[Graduation Date or Years Attended]  \n\n[Optional: GPA or relevant details if present in original]  \n\n[Repeat for each education entry]\n\n## Skills\n- [Skill group]: Keyword 1, Keyword 2 (max 5 in one line)  \n- [Skill 2]: Keyword 1, Keyword 2 (max 5 in one line)\n- [And so on, listed as bullets; filter or group if the original has categories]  \n\n## Projects\n### [Project Name]  \n[Brief description or role]  \n[Dates or Technologies used]  \n\n- [Highlight 1]  \n- [Highlight 2]  \n- [And so on]  \n\n[Repeat for each project]\n\n## Certifications\n- [Certification Name], [Issuing Organization], [Date]  \n- [And so on for all certifications]  \n\n---\n\n[If the original resume has additional sections like Awards, Volunteer Experience, or Languages, add them similarly at the end using H2 headers (## Section Name) and appropriate formatting.]"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        768,
+        -128
+      ],
+      "id": "78eb32b3-f967-40d7-a3c4-5acaf96411d4",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        848,
+        112
+      ],
+      "id": "ce8aa080-8e16-4af1-b3ab-a83b5f5e0681",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "aFoKWfAGKAUfOTcZ",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 2 agents\n1. That tailors to JD in JSON. \n2. Other that converts JSON to markdown. \n\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        576,
+        -368
+      ],
+      "typeVersion": 1,
+      "id": "cf08eb23-9186-4893-9c99-8d5bbd400ab3",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Remove formating\nSame as our python function `clean_llm_response'. Removes \"```markdown\" string from the response"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1056,
+        48
+      ],
+      "typeVersion": 1,
+      "id": "41984e3c-6aa3-45c6-b523-b76b133ed824",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $('Find documents').item.json.original_file_id }}",
+        "limit": 1,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "1xC-mPWpc5X3ZxQUxBnCyYrSF-_2kXfTD",
+            "mode": "list",
+            "cachedResultName": "Resume PDFs",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1xC-mPWpc5X3ZxQUxBnCyYrSF-_2kXfTD"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1344,
+        -128
+      ],
+      "id": "69524bac-fd5b-433f-835f-67de02d3154b",
+      "name": "Search files and folders",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jyGYRlr3oNRLwiAm",
+          "name": "Google Drive account 2"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0bb1bab2-fdf3-41d7-86cb-711ebd84039f",
+              "leftValue": "={{ $('Search files and folders').all().length > 0 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1568,
+        -128
+      ],
+      "id": "2450ee4b-517f-4203-9e89-cca9fcbbb944",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=binary_data",
+        "name": "={{ $('Find documents').item.json.document_id }}_{{ $('Webhook').item.json.body.job_posting_id }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2016,
+        -256
+      ],
+      "id": "8adb62b9-c9b6-4c1d-bfe9-30587479800f",
+      "name": "Upload file True branch",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jyGYRlr3oNRLwiAm",
+          "name": "Google Drive account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "=binary_data",
+        "name": "={{ $('Find documents').item.json.document_id }}_{{ $('Webhook').item.json.body.job_posting_id }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Create a file_id folder False branch').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2240,
+        32
+      ],
+      "id": "ee5b1637-42d6-4540-b93f-1b87a49bbf61",
+      "name": "Upload file False branch",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jyGYRlr3oNRLwiAm",
+          "name": "Google Drive account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "51345a1a-11be-4bb0-8100-b525f14111ac",
+              "name": "=resume_data.resume_data.basics.name",
+              "value": "=Hardcoded Name",
+              "type": "string"
+            },
+            {
+              "id": "41646588-5539-4e55-8637-14d4137ca007",
+              "name": "resume_data.resume_data.basics.email",
+              "value": "=email",
+              "type": "string"
+            },
+            {
+              "id": "ec597634-1ea2-421b-b577-43c252ee1e4a",
+              "name": "resume_data.resume_data.basics.phone",
+              "value": "=phone",
+              "type": "string"
+            },
+            {
+              "id": "c3258cee-7e10-4720-a846-df55f09c78f5",
+              "name": "resume_data.resume_data.basics.location",
+              "value": "={{ $('Webhook').item.json.body.location }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        192,
+        -128
+      ],
+      "id": "e9aad9c7-aad7-4c9a-a769-6ad4bf70d845",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ $('Find documents').item.json.original_file_id }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1xC-mPWpc5X3ZxQUxBnCyYrSF-_2kXfTD",
+          "mode": "list",
+          "cachedResultName": "Resume PDFs",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1xC-mPWpc5X3ZxQUxBnCyYrSF-_2kXfTD"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1808,
+        32
+      ],
+      "id": "90b1910d-13e8-4e39-8088-cfd3c0a369c5",
+      "name": "Create a file_id folder False branch",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "jyGYRlr3oNRLwiAm",
+          "name": "Google Drive account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "pdf",
+        "pdfTemplateId": "d6c77b23d72bbb5a",
+        "jsonParameters": true,
+        "download": true,
+        "binaryProperty": "binary_data",
+        "propertiesJson": "={{ { \"markdown\": $('Remove formatting of AI').item.json.llm_raw_text_clean } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.apiTemplateIo",
+      "typeVersion": 1,
+      "position": [
+        2016,
+        32
+      ],
+      "id": "9afffb3d-6bb2-4746-aafb-a8de4ed4a071",
+      "name": "Create a pdf False branch",
+      "credentials": {
+        "apiTemplateIoApi": {
+          "id": "PILz8I6y9iJvDWoK",
+          "name": "APITemplate.io account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "pdf",
+        "pdfTemplateId": "=e3877b23d0adfa5a",
+        "jsonParameters": true,
+        "download": true,
+        "binaryProperty": "binary_data",
+        "propertiesJson": "={{ { \"markdown\": $('Remove formatting of AI').item.json.llm_raw_text_clean } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.apiTemplateIo",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        -256
+      ],
+      "id": "99ff35ed-7116-4665-a757-0d01eb57ee07",
+      "name": "Create a pdf True branch",
+      "credentials": {
+        "apiTemplateIoApi": {
+          "id": "PILz8I6y9iJvDWoK",
+          "name": "APITemplate.io account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2224,
+        -256
+      ],
+      "id": "d9d5823d-a4fb-4491-902a-496d53da8f99",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        2448,
+        32
+      ],
+      "id": "c82fcd33-af8b-4754-87ff-ac6f6f2a5860",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "content": "## Folder Organization\n1. Look for folder by `file_id` \n2. If folder not found, create one\n3.create and add the file to that folder",
+        "height": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        864,
+        -512
+      ],
+      "typeVersion": 1,
+      "id": "faf1e629-b713-4758-a150-7042bc32e7cf",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2432,
+        -256
+      ],
+      "id": "52eeed79-e3e8-46da-8b38-0cbef93420a5",
+      "name": "Wait",
+      "webhookId": "ce6a1c9e-da7d-4a8e-93e1-e4624c49cad5"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://md2doc.n8n.aemalsayer.com",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDocsOAuth2Api",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "output",
+              "value": "={{ $('Remove formatting of AI').item.json.llm_raw_text_clean }}"
+            },
+            {
+              "name": "fileName",
+              "value": "={{ $('Find documents').item.json.document_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1376,
+        -448
+      ],
+      "id": "eccbaeac-3da4-45c3-8b96-8ba611bf57e0",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n\"documentID\": \"{{ $json.documentId }}\",\n\"file_url\": \"{{ $json.url }}\",\n\"status\": {{ $json.status }},\n\"fileName\": \"{{ $json.fileName }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1616,
+        -448
+      ],
+      "id": "831834d2-5da5-4189-b972-3a2b8d938dcf",
+      "name": "Respond to Webhook2"
+    },
+    {
+      "parameters": {
+        "amount": 100
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1824,
+        -448
+      ],
+      "id": "4ca6bec1-859b-40c1-900c-83e15bbce76b",
+      "name": "Wait1",
+      "webhookId": "517c0448-20e1-4b73-8799-24669ce08a65"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Find documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Resume Tailoring Agent": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find documents": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove formatting of AI": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Remove formatting of AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Create a pdf True branch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a file_id folder False branch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Resume Tailoring Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a file_id folder False branch": {
+      "main": [
+        [
+          {
+            "node": "Create a pdf False branch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a pdf False branch": {
+      "main": [
+        [
+          {
+            "node": "Upload file False branch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a pdf True branch": {
+      "main": [
+        [
+          {
+            "node": "Upload file True branch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file True branch": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file False branch": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook1": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook2": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "8f6c8887-6991-4128-bda8-b00b9dfe2563",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a83724e9b76e59c0fe34a9b1ee2939c57438083e5b9d70d137fe5616b9ef35f5"
+  },
+  "id": "s6u50SXIKic5oTFx",
+  "tags": []
+}
