@@ -298,14 +298,14 @@ class TreatmentGenerator:
         cec = cec_sample[0]
         prompts["Type_I"] = {
             "prompt": self._fill_prompt(base_prompt, cec, "Type_I", styles[0]),
-            "treatment_applied": {"Canadian_Education": cec}
+            "treatment_applied": {"Canadian_Education": cec, "style_guide": styles[0]}
         }
 
         # Type II (CWE)
         cwe = cwe_sample[0]
         prompts["Type_II"] = {
             "prompt": self._fill_prompt(base_prompt, cwe, "Type_II", styles[1]),
-            "treatment_applied": {"Canadian_Work_Experience": cwe}
+            "treatment_applied": {"Canadian_Work_Experience": cwe, "style_guide": styles[1]}
         }
 
         # Type III (Mixed) - Use the *other* samples
@@ -315,7 +315,7 @@ class TreatmentGenerator:
         }
         prompts["Type_III"] = {
             "prompt": self._fill_prompt(base_prompt, mixed, "Type_III", styles[2]),
-            "treatment_applied": {"Canadian_Education": cec_sample[1], "Canadian_Work_Experience": cwe_sample[1]}
+            "treatment_applied": {"Canadian_Education": cec_sample[1], "Canadian_Work_Experience": cwe_sample[1], "style_guide": styles[2]}
         }
         return prompts
 

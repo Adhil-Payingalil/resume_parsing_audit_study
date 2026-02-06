@@ -129,32 +129,36 @@ def set_date_posted_filter(page, days=30):
             print("❌ Could not click 'Date posted' dropdown with any selector")
             return False
         
-        # Now try to select "Within 30 days" option
-        within_30_days_selectors = [
-            "text=Within 30 days",
-            "label:has-text('Within 30 days')",
-            "[value*='30']",
-            "input[type='radio']:near(text=Within 30 days)"
+        # Now try to select "Within X days" option
+        # Determine strict text: "day" for 1, "days" for others
+        day_text = "day" if days == 1 else "days"
+        filter_text = f"Within {days} {day_text}"
+        
+        within_days_selectors = [
+            f"text={filter_text}",
+            f"label:has-text('{filter_text}')",
+            f"[value*='{days}']",
+            f"input[type='radio']:near(text={filter_text})"
         ]
         
         option_selected = False
-        for selector in within_30_days_selectors:
+        for selector in within_days_selectors:
             try:
-                print(f"Trying to select 'Within 30 days' with selector: {selector}")
+                print(f"Trying to select '{filter_text}' with selector: {selector}")
                 page.click(selector)
                 time.sleep(1)  # Wait for selection to apply
                 option_selected = True
-                print("✅ Successfully selected 'Within 30 days'")
+                print(f"✅ Successfully selected '{filter_text}'")
                 break
             except Exception as e:
                 print(f"Failed with selector '{selector}': {e}")
                 continue
         
         if option_selected:
-            print("✅ Successfully set 'Date posted' filter to 'Within 30 days'")
+            print(f"✅ Successfully set 'Date posted' filter to '{filter_text}'")
             return True
         else:
-            print("❌ Could not select 'Within 30 days' option")
+            print(f"❌ Could not select '{filter_text}' option")
             return False
             
     except Exception as e:
@@ -749,31 +753,7 @@ def clear_search_filters(page):
     except Exception as e:
         print(f"Warning: Could not clear filters: {e}")
 
-def set_date_posted_filter(page, days=30):
-    """Set the Date Posted filter to 'Within X days'"""
-    try:
-        # Determine strict text: "day" for 1, "days" for others
-        day_text = "day" if days == 1 else "days"
-        filter_text = f"Within {days} {day_text}"
-        
-        print(f"Setting 'Date posted' filter to '{filter_text}'...")
-        
-        # Click the dropdown first
-        print("Trying to click 'Date posted' with selector: text=Date posted")
-        page.click("text=Date posted")
-        time.sleep(1)
-        print("✅ Successfully clicked 'Date posted' dropdown")
-        
-        # Wait for options and click the specific one
-        print(f"Trying to select '{filter_text}' with selector: text={filter_text}")
-        page.click(f"text={filter_text}")
-        time.sleep(2)
-        print(f"✅ Successfully selected '{filter_text}'")
-        return True
-    
-    except Exception as e:
-        print(f"❌ Error setting date filter: {e}")
-        return False
+
 
 def scrape_location(page, location, mongo_collection, date_posted_days=30, cycle=0):
     """Scrape jobs for a specific location"""
@@ -849,6 +829,13 @@ def scrape_location(page, location, mongo_collection, date_posted_days=30, cycle
 def main():
     """Main scraping function"""
     print("Starting Greenhouse job scraper...")
+    # DEBUG: Print AgentQL API Key to verify correctness
+    api_key = os.getenv("AGENTQL_API_KEY")
+    if api_key:
+        print(f"DEBUG: AgentQL API Key: {api_key[:5]}...{api_key[-5:] if len(api_key) > 10 else ''}")
+    else:
+        print("DEBUG: AgentQL API Key not found in environment variables")
+
     
     # Define list of locations to scrape
     locations = [

@@ -37,7 +37,7 @@ logger = get_logger(__name__)
 # ============================================================================
 
 # Set to False to actually update the database
-DRY_RUN = True
+DRY_RUN = False
 
 # Database configuration
 DB_NAME = "Resume_study"

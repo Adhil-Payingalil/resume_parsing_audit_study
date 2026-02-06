@@ -176,8 +176,11 @@ class JobDescriptionExtractor:
             
         Returns:
             Tuple of (job_id, description, api_success, error_message) where:
-            - api_success: True if API call succeeded, False if API returned error
-            - error_message: Error details if API failed, None if succeeded
+            - api_success: True if API call succeeded
+            - error_message: None if succeeded
+            
+        Raises:
+            CriticalAPIError: If API calls fail after all retries
         """
         if not job_url or not job_url.startswith('http'):
             error_msg = f"Invalid URL: {job_url}"
@@ -225,25 +228,28 @@ class JobDescriptionExtractor:
                         error_msg = f"HTTP {response.status} error for URL: {job_url}"
                         logger.error(f"HTTP {response.status} for job {job_id}: {job_url}")
                         if attempt == MAX_RETRIES - 1:
-                            return job_id, None, False, error_msg
+                            # Max retries exceeded for HTTP error - Stop script
+                            raise CriticalAPIError(f"Persistent API error: {error_msg}")
                         await asyncio.sleep(1)
                         
             except asyncio.TimeoutError:
                 error_msg = f"Timeout after {MAX_RETRIES} attempts for URL: {job_url}"
                 logger.error(f"Timeout for job {job_id} (attempt {attempt + 1})")
                 if attempt == MAX_RETRIES - 1:
-                    return job_id, None, False, error_msg
+                    raise CriticalAPIError(f"Persistent Timeout error: {error_msg}")
                 await asyncio.sleep(2 ** attempt)
                 
+            except CriticalAPIError:
+                raise
             except Exception as e:
                 error_msg = f"Exception after {MAX_RETRIES} attempts: {str(e)} for URL: {job_url}"
                 logger.error(f"Error fetching job {job_id}: {e}")
                 if attempt == MAX_RETRIES - 1:
-                    return job_id, None, False, error_msg
+                    raise CriticalAPIError(f"Persistent unexpected error: {error_msg}")
                 await asyncio.sleep(1)
         
-        error_msg = f"Max retries ({MAX_RETRIES}) exceeded for URL: {job_url}"
-        return job_id, None, False, error_msg
+        # This point should not be reached if CriticalAPIError is raised properly above
+        raise CriticalAPIError(f"Max retries ({MAX_RETRIES}) exceeded for URL: {job_url}")
 
     def extract_description_from_content(self, content: str) -> tuple[Optional[str], bool]:
         """
@@ -357,7 +363,12 @@ class JobDescriptionExtractor:
         # Execute all tasks concurrently
         results = await asyncio.gather(*tasks, return_exceptions=True)
         
-        # Filter out exceptions and return valid results
+        # Check for CriticalAPIErrors first
+        for result in results:
+            if isinstance(result, CriticalAPIError):
+                raise result
+        
+        # Filter out other exceptions and return valid results
         valid_results = []
         for result in results:
             if isinstance(result, Exception):
@@ -370,7 +381,8 @@ class JobDescriptionExtractor:
 
     async def update_job_descriptions(self, results: List[Tuple[str, Optional[str], bool, Optional[str]]]):
         """
-        Update MongoDB with job descriptions
+        Update MongoDB with job descriptions. 
+        Note: ONLY updates successful extractions. Failed extractions stop the script before this point.
         
         Args:
             results: List of (job_id, description, api_success, error_message) tuples
@@ -413,27 +425,15 @@ class JobDescriptionExtractor:
                     else:
                         logger.warning(f"⚠️ No changes made to job {job_id}")
                         
-                elif not api_success:
-                    # API failed - set jd_extraction to false and store error details
-                    update_data = {
-                        'jd_extraction': False,
-                        'api_error': error_message
-                    }
-                    
-                    result = self.collection.update_one(
-                        {'_id': ObjectId(job_id)},
-                        {'$set': update_data}
-                    )
-                    
-                    if result.modified_count > 0:
-                        self.processed_count += 1
-                        logger.info(f"❌ Marked job {job_id} as failed (API error: {error_message}) - will not retry")
-                    else:
-                        logger.warning(f"⚠️ No changes made to job {job_id}")
                 else:
-                    # No description data but API succeeded (shouldn't happen)
-                    self.failed_count += 1
-                    logger.warning(f"⚠️ No description data for job {job_id} despite API success")
+                    # This branch should rarely be reached if CriticalAPIError works as intended,
+                    # but logic is kept for any non-critical failures if any exist (e.g. invalid URL)
+                    if not api_success:
+                         logger.warning(f"⚠️ Skipping update for job {job_id} due to API failure (Script should have stopped if critical)")
+                    else:
+                        # No description data but API succeeded (shouldn't happen)
+                        self.failed_count += 1
+                        logger.warning(f"⚠️ No description data for job {job_id} despite API success")
                     
             except Exception as e:
                 logger.error(f"Error updating job {job_id}: {e}")

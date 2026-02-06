@@ -45,11 +45,17 @@ UNSUPPORTED_INPUT_FIELD_PATTERNS = [
     "portfolio link",
     "portfolio password",
     "street address",
+    "address line 1",
     "postal code/zip code",
+    "zip/postal code",
     "video",
-    "cover letter"
-]
+    "cover letter",
+    "writing sample",
+    "GitHub repo",
+    "transcript",
+    "Please attach a copy of your transcript."
 
+]
 
 def collect_form_labels(page, unsupported_patterns: List[str]) -> Tuple[List[str], bool, List[str]]:
     """

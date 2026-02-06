@@ -91,7 +91,7 @@ def run_ui_validation(initial_json: list) -> tuple[str, list]:
     """
     app = QApplication.instance() or QApplication(sys.argv)
     
-    text_input = json.dumps(initial_json, indent=2)
+    text_input = json.dumps(initial_json, indent=2, ensure_ascii=False)
     dialog = TextEditorDialog(text_input)
     status, final_text = dialog.run()
     

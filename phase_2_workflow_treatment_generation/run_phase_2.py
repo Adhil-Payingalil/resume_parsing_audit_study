@@ -45,10 +45,10 @@ DELAY_QUICK = 2.0
 # -------------------------------------------------------------------------
 RUN_FROM_IDE = True  # Set to True to use the config below
 IDE_CONFIG = {
-    "sector": "CCC",        # Target Sector
-    "files": ["CCC resume 10.pdf"],          # List of file IDs e.g. ["ITC-01.pdf"] or None for all
+    "sector": "EEC",        # Target Sector
+    "files": ["EEC resume 13.pdf"],          # List of file IDs e.g. ["ITC-01.pdf"] or None for all
     "skip_ui": False,       # Set to True to skip manual validation
-    "dry_run": True         # Set to True to print JSON to terminal and SKIP MongoDB save
+    "dry_run": False         # Set to True to print JSON to terminal and SKIP MongoDB save
 }
 # -------------------------------------------------------------------------
 
@@ -89,17 +89,41 @@ def main():
          files_to_process = [f for f in all_files if sector in f]
     
     if not files_to_process:
-        logger.error(f"No files found for {sector}")
+        logger.error(f"No files found.")
         return
 
     logger.info(f"Processing {len(files_to_process)} files...")
     
+    # Cache generators by sector to avoid reloading
+    generators = {} 
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    def get_generator(sec):
+        if sec not in generators:
+             logger.info(f"Initializing Generator for Sector: {sec}")
+             generators[sec] = TreatmentGenerator(sec, data_dir=current_dir)
+        return generators[sec]
+
+    # Pre-load the default sector generator
+    if sector:
+        get_generator(sector)
+
     # 3. Processing Loop
     for idx, file_id in enumerate(files_to_process):
         logger.info(f"--- Processing {idx+1}/{len(files_to_process)}: {file_id} ---")
         if idx > 0: time.sleep(DELAY_FILES)
         
         try:
+            # Determine Sector from File ID (e.g., "ITC resume 1.pdf" -> "ITC")
+            file_sector = file_id.split(' ')[0].upper()
+            
+            # Fallback to default if extraction fails or looks wrong
+            if len(file_sector) < 2 or not file_sector.isalpha():
+                file_sector = sector
+                logger.warning(f"Could not extract sector from {file_id}, using default: {sector}")
+            
+            generator = get_generator(file_sector)
+
             # A. Fetch Data
             doc = get_document_by_fileid(DB_NAME, SOURCE_COL, file_id, mongo_client)
             resume_data = doc.get("resume_data", {})
@@ -136,11 +160,12 @@ def main():
             time.sleep(DELAY_QUICK)
 
             # D. Save Control
+            # FIX: Control should just be the clean data, NOT replaced companies
             control_doc = {
                 "original_file_id": file_id,
                  "document_id": f"{file_id}_control",
                  "treatment_type": "control",
-                 "resume_data": generator.replace_companies_and_positions(clean_data, mappings, "Type_I"), # Use Type I for control generally or just generic
+                 "resume_data": clean_data, 
                  "timestamp": datetime.datetime.now()
             }
             
@@ -150,7 +175,7 @@ def main():
                 print_doc = control_doc.copy()
                 print_doc["timestamp"] = print_doc["timestamp"].isoformat()
                 import json
-                print(json.dumps(print_doc, indent=2, default=str))
+                print(json.dumps(print_doc, indent=2, default=str, ensure_ascii=False))
             else:
                 target_collection.insert_one(control_doc)
                 logger.info("Saved Control.")
@@ -158,7 +183,7 @@ def main():
             # E. Generate Treatments (I, II, III)
             prompts = generator.prepare_treatment_prompts(resume_data)
             if not prompts:
-                logger.error("Failed to prepare prompts")
+                logger.error(f"Failed to prepare prompts for {file_id} (Sector: {file_sector})")
                 continue
                 
             for t_type, p_data in prompts.items():
@@ -170,7 +195,7 @@ def main():
                     final_data = generator.replace_companies_and_positions(treated_data, mappings, t_type)
                     
                     # Calculate Similarity
-                    sim_score = generator.calculate_similarity(control_doc["resume_data"], final_data, t_type)
+                    sim_score = float(generator.calculate_similarity(control_doc["resume_data"], final_data, t_type))
                     
                     # Save
                     t_doc = {
@@ -187,7 +212,7 @@ def main():
                         logger.info(f"*** DRY RUN: {t_type} Doc for {file_id} (Similarity: {sim_score:.2f}) ***")
                         print_doc = t_doc.copy()
                         print_doc["timestamp"] = print_doc["timestamp"].isoformat()
-                        print(json.dumps(print_doc, indent=2, default=str))
+                        print(json.dumps(print_doc, indent=2, default=str, ensure_ascii=False))
                     else:
                         target_collection.insert_one(t_doc)
                         logger.info(f"Saved {t_type} (Similarity: {sim_score:.2f})")
