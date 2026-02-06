@@ -1,0 +1,1093 @@
+{
+  "name": "PDF Generation Workflow:  I/O File Operations & Logging",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "={{ $json.body['base _resume_file_id'] }}",
+        "limit": 1,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "1xC-mPWpc5X3ZxQUxBnCyYrSF-_2kXfTD"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "id": "37544fcd-79c2-4481-ab90-1350d1e45208",
+      "name": "Search files and folders",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1648,
+        384
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $('Search files and folders').item.json }}",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "7aa717a4-f670-4e9a-8b4f-312b9f4f5055",
+      "name": "Check if Folder Exists",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1248,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ $('Search files and folders').item.json.name }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1xC-mPWpc5X3ZxQUxBnCyYrSF-_2kXfTD"
+        },
+        "options": {
+          "simplifyOutput": true
+        }
+      },
+      "id": "837da3d3-e050-4c2b-b089-f9faf71e4869",
+      "name": "Create Folder if Not Found",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -928,
+        496
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "pdf",
+        "pdfTemplateId": "={{ $('Edit Fields').item.json.body.template_id }}",
+        "jsonParameters": true,
+        "download": true,
+        "binaryProperty": "binary_data",
+        "propertiesJson": "={{ { \"markdown\": $('Edit Fields').item.json.body.resume_markdown } }}",
+        "options": {}
+      },
+      "id": "668c8bd6-7732-4ba2-9159-a466dad8a1a2",
+      "name": "Create PDF - Folder Exists",
+      "type": "n8n-nodes-base.apiTemplateIo",
+      "typeVersion": 1,
+      "position": [
+        -800,
+        256
+      ],
+      "credentials": {
+        "apiTemplateIoApi": {
+          "id": "StSWIl5L6UjRzs4p",
+          "name": "APITemplate.io account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "pdf",
+        "pdfTemplateId": "={{ $('Prepare Data from Workflow 1').item.json.template_id }}",
+        "jsonParameters": true,
+        "download": true,
+        "binaryProperty": "binary_data",
+        "propertiesJson": "={{ { \"markdown\": $('Prepare Data from Workflow 1').item.json.markdown_text } }}",
+        "options": {}
+      },
+      "id": "025efca4-ce3a-4aa9-89b2-22c2fc1182c3",
+      "name": "Create PDF - New Folder",
+      "type": "n8n-nodes-base.apiTemplateIo",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        496
+      ],
+      "credentials": {
+        "apiTemplateIoApi": {
+          "id": "StSWIl5L6UjRzs4p",
+          "name": "APITemplate.io account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputDataFieldName": "binary_data",
+        "name": "={{ $('Edit Fields').item.json.body.resume_filename }}.pdf",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Search files and folders').item.json.id }}"
+        },
+        "options": {}
+      },
+      "id": "969848ba-0364-44cc-8991-63d51326cf0f",
+      "name": "Upload PDF to Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -304,
+        384
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1ifmUvUoNqMdw0fve7aUP9jVQqCssvEN8pfp7XthvtXo",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ifmUvUoNqMdw0fve7aUP9jVQqCssvEN8pfp7XthvtXo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "_id": "={{ $json._id }}",
+            "u_id": "={{ $json.u_id }}",
+            "match_id": "={{ $json.match_id }}",
+            "base _resume_file_id": "={{ $json.base_resume_file_id }}",
+            "treatment_type": "={{ $json.treatment_type }}",
+            "PDF_google_drive_link": "={{ $json.PDF_google_drive_link }}",
+            "resume_filename": "={{ $json.resume_filename }}",
+            "full_name": "={{ $json.full_name }}",
+            "email": "={{ $json.email }}",
+            "phone": "=`{{ $json.phone }}",
+            "first_name": "={{ $json.first_name }}",
+            "last_name": "={{ $json.last_name }}",
+            "gender": "={{ $json.gender }}",
+            "geographic_cluster": "={{ $json.geographic_cluster }}",
+            "likely_home_country": "={{ $json.likely_home_country }}",
+            "company": "={{ $json.company }}",
+            "job_title": "={{ $json.job_title }}",
+            "job_url_direct": "={{ $json.job_url_direct }}",
+            "job_description": "={{ $json.job_description }}",
+            "resume_final_md": "={{ $json.resume_final_markdown }}",
+            "match_score": "={{ $json.match_score }}",
+            "Job_location": "={{ $json.job_location }}",
+            "timestamp": "={{ $now }}",
+            "validation_score": "={{ $json.validation_score }}",
+            "validation_json": "={{ $json.validation_json }}",
+            "workflow_mode": "={{ $json.workflow_mode }}",
+            "job_id": "={{ $json.job_posting_id }}",
+            "PDF_download_link": "={{ $json.PDF_download_link }}"
+          },
+          "matchingColumns": [
+            "_id"
+          ],
+          "schema": [
+            {
+              "id": "_id",
+              "displayName": "_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "u_id",
+              "displayName": "u_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "match_id",
+              "displayName": "match_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "base _resume_file_id",
+              "displayName": "base _resume_file_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "treatment_type",
+              "displayName": "treatment_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "PDF_google_drive_link",
+              "displayName": "PDF_google_drive_link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "resume_filename",
+              "displayName": "resume_filename",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "full_name",
+              "displayName": "full_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_name",
+              "displayName": "last_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "gender",
+              "displayName": "gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "geographic_cluster",
+              "displayName": "geographic_cluster",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "likely_home_country",
+              "displayName": "likely_home_country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "job_title",
+              "displayName": "job_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "job_url_direct",
+              "displayName": "job_url_direct",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "job_description",
+              "displayName": "job_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "resume_final_md",
+              "displayName": "resume_final_md",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "match_score",
+              "displayName": "match_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job_location",
+              "displayName": "Job_location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "validation_score",
+              "displayName": "validation_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "validation_json",
+              "displayName": "validation_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "workflow_mode",
+              "displayName": "workflow_mode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "job_id",
+              "displayName": "job_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "PDF_download_link",
+              "displayName": "PDF_download_link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "2a13c909-1322-4a26-a78c-1317a65ea625",
+      "name": "Log to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1024,
+        384
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "4PTgIjGqr3WHoFX3",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "e05131b6-59ea-459b-8b32-58236328f630",
+        "authentication": "basicAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2304,
+        384
+      ],
+      "id": "f20ec651-b3ec-4003-a767-750e1293f050",
+      "name": "Webhook",
+      "webhookId": "e05131b6-59ea-459b-8b32-58236328f630",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "WjnSubEirDdvkiFa",
+          "name": "adhil"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\"success\": true} }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1488,
+        384
+      ],
+      "id": "f286af1f-dc36-4053-b7c5-93a2b0e19a87",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "693fb54c-09ac-42a8-8c7a-a2ce249b98d4",
+              "name": "body",
+              "value": "={{ $json.body }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1952,
+        384
+      ],
+      "id": "ea65192d-98e4-45b0-ac6e-f98197393f6d",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "fileName": "=",
+        "parentId": "AE9A4AF18A98EB4C!s30e396fbd57346ecbf9acb24bf85345b",
+        "binaryData": true
+      },
+      "id": "899e47cd-427c-4623-a037-6e642852d043",
+      "name": "Upload to OneDrive1",
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [
+        144,
+        384
+      ],
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "GrtUhKGeUeXOwcbB",
+          "name": "Microsoft Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -80,
+        384
+      ],
+      "id": "b5ca8830-8ac0-46a6-8656-9c5263d2736a",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "0WpximKCWxFC8OXg",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "collection": "n8n_resume_render_log",
+        "updateKey": "_id",
+        "fields": "=render_status, PDF_google_drive_link, PDF_download_link",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.2,
+      "position": [
+        560,
+        384
+      ],
+      "id": "ec16bf99-0ac0-42a3-a2bd-9cffeaf66034",
+      "name": "Update documents",
+      "alwaysOutputData": false,
+      "credentials": {
+        "mongoDb": {
+          "id": "M1ISL6y9nE1CM4BJ",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "collection": "n8n_resume_render_log",
+        "options": {},
+        "query": "={ \"_id\": \"{{ $('Set').item.json._id }}\" } "
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.2,
+      "position": [
+        800,
+        384
+      ],
+      "id": "c355799d-f0b1-4f18-bc5c-691f8c37bdb7",
+      "name": "Find documents",
+      "alwaysOutputData": false,
+      "credentials": {
+        "mongoDb": {
+          "id": "M1ISL6y9nE1CM4BJ",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b79e553d-86c8-46a9-8fe7-f92d5e318a95",
+              "name": "_id",
+              "value": "={{ $('Edit Fields').item.json.body.id }}",
+              "type": "string"
+            },
+            {
+              "id": "9c14a632-69c0-44e2-b507-54817e8aa70f",
+              "name": "PDF_google_drive_link",
+              "value": "={{ $('Upload PDF to Google Drive').item.json.webViewLink }}",
+              "type": "string"
+            },
+            {
+              "id": "41955b41-8e74-444b-a336-30d634f075dc",
+              "name": "PDF_download_link",
+              "value": "={{ $('Upload PDF to Google Drive').item.json.webContentLink }}",
+              "type": "string"
+            },
+            {
+              "id": "f6b6ee95-d456-470e-836a-9f9f8f81611a",
+              "name": "u_id",
+              "value": "={{ $('Edit Fields').item.json.body.u_id }}",
+              "type": "string"
+            },
+            {
+              "id": "ed59bb6f-60bd-4456-998d-fd233576614d",
+              "name": "render_status",
+              "value": "successful",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        352,
+        384
+      ],
+      "id": "a4fc810e-44ec-44e5-966a-8cb3c147d482",
+      "name": "Set"
+    },
+    {
+      "parameters": {
+        "resource": "worksheet",
+        "operation": "append",
+        "workbook": {
+          "__rl": true,
+          "value": "=AE9A4AF18A98EB4C!s07baf0b89cde44b29e4dd611346dd0c2",
+          "mode": "id"
+        },
+        "worksheet": {
+          "__rl": true,
+          "value": "{00000000-0001-0000-0000-000000000000}",
+          "mode": "list",
+          "cachedResultName": "data_repo"
+        },
+        "fieldsUi": {
+          "values": [
+            {
+              "column": "u_id",
+              "fieldValue": "={{ $json.u_id }}"
+            },
+            {
+              "column": "base _resume_file_id",
+              "fieldValue": "={{ $json['base _resume_file_id'] }}"
+            },
+            {
+              "column": "resume_filename",
+              "fieldValue": "={{ $json.resume_filename }}"
+            },
+            {
+              "column": "treatment_type",
+              "fieldValue": "={{ $json.treatment_type }}"
+            },
+            {
+              "column": "full_name",
+              "fieldValue": "={{ $json.full_name }}"
+            },
+            {
+              "column": "email",
+              "fieldValue": "={{ $json.email }}"
+            },
+            {
+              "column": "phone",
+              "fieldValue": "={{ $json.phone }}"
+            },
+            {
+              "column": "first_name",
+              "fieldValue": "={{ $json.first_name }}"
+            },
+            {
+              "column": "last_name",
+              "fieldValue": "={{ $json.first_name }}"
+            },
+            {
+              "column": "gender",
+              "fieldValue": "={{ $json.gender }}"
+            },
+            {
+              "column": "geographic_cluster",
+              "fieldValue": "={{ $json.geographic_cluster }}"
+            },
+            {
+              "column": "likely_home_country",
+              "fieldValue": "={{ $json.likely_home_country }}"
+            },
+            {
+              "column": "company",
+              "fieldValue": "={{ $json.company }}"
+            },
+            {
+              "column": "job_title",
+              "fieldValue": "={{ $json.job_title }}"
+            },
+            {
+              "column": "job_url_direct",
+              "fieldValue": "={{ $json.job_url_direct }}"
+            },
+            {
+              "column": "job_description",
+              "fieldValue": "={{ $json.job_description }}"
+            },
+            {
+              "column": "match_score",
+              "fieldValue": "={{ $json.match_score }}"
+            },
+            {
+              "column": "Job_location",
+              "fieldValue": "={{ $json.Job_location }}"
+            },
+            {
+              "column": "timestamp",
+              "fieldValue": "={{ $json.timestamp }}"
+            },
+            {
+              "column": "workflow_mode",
+              "fieldValue": "={{ $json.workflow_mode }}"
+            },
+            {
+              "column": "validation_score",
+              "fieldValue": "={{ $json.validation_score }}"
+            },
+            {
+              "column": "validation_json",
+              "fieldValue": "={{ $json.validation_json }}"
+            },
+            {
+              "column": "id",
+              "fieldValue": "={{ $json._id }}"
+            },
+            {
+              "column": "match_id",
+              "fieldValue": "={{ $json.match_id }}"
+            },
+            {
+              "column": "job_id",
+              "fieldValue": "={{ $json.job_id }}"
+            },
+            {
+              "column": "PDF_download_link",
+              "fieldValue": "={{ $json.PDF_download_link }}"
+            },
+            {
+              "column": "=PDF_google_drive_link",
+              "fieldValue": "={{ $json.PDF_google_drive_link }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.microsoftExcel",
+      "typeVersion": 2.2,
+      "position": [
+        1232,
+        384
+      ],
+      "id": "5eb3aa25-6b8e-4e92-9023-b5e2ddeb4cff",
+      "name": "Append data to sheet",
+      "credentials": {
+        "microsoftExcelOAuth2Api": {
+          "id": "lkKKkBji7GlaVLuB",
+          "name": "Microsoft Excel account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "adhil-is-dummy.app.n8n.cloud",
+            "user-agent": "axios/1.12.0",
+            "content-length": "3137",
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "accept-encoding": "gzip, br",
+            "authorization": "Basic YWRoaWxfcDpSZXN1bWVhdWRpdA==",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "4.184.78.245",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "DE",
+            "cf-ray": "99e862c4325bc518-FRA",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "x-forwarded-for": "4.184.78.245, 172.70.248.120",
+            "x-forwarded-host": "adhil-is-dummy.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-81-6b7d5f4f4f-6g9dm",
+            "x-is-trusted": "yes",
+            "x-real-ip": "4.184.78.245"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "id": "69176a968611caa10b0dd3a3",
+            "match_id": "6914e988d4563fbd0dbc0194",
+            "u_id": "6914e988d4563fbd0dbc0194_control",
+            "template_id": "72b77b23d48f366e",
+            "resume_markdown": "# Rohit Singh\n\nToronto, ON | +1 (647)-558-4334 | singh02339@gmail.com\n\n## Professional Summary\nStrategic marketing leader with over 6 years of experience developing and executing go-to-market strategies for B2B products. Proven success in driving revenue growth, product adoption, and sales team effectiveness through data-driven insights and cross-functional collaboration. Expertise in crafting compelling value propositions, leading product launches, and building repeatable processes in fast-paced environments.\n\n## Work Experience\n### Senior Marketing Manager  \n**IMAEC Ltd., Pune, India**  \n2021-04 - 2024-07  \n\n- Defined and executed end-to-end go-to-market strategies for 4 B2B products, managing the full lifecycle from roadmap input to launch and achieving 35% revenue growth.  \n- Developed sales enablement materials, including product guides and training resources, to improve sales team effectiveness and product adoption.  \n- Collaborated with product and sales teams to develop compelling messaging and positioning that resonated with target customer segments.  \n- Analyzed campaign performance data to optimize the marketing budget, reallocating resources to high-performing channels and improving marketing ROI by 25%.  \n\n### Senior Marketing Executive  \n**Ohaus India Pvt. Ltd., Mumbai, India**  \n2016-07 - 2021-01  \n\n- Executed strategic cross-selling initiatives that increased product line revenue by $1M and expanded the customer base by 18% year-over-year.  \n- Developed targeted marketing programs that generated a 12% annual increase in MQLs, directly supporting sales pipeline growth.  \n- Crafted compelling product messaging for digital campaigns, boosting brand awareness by 20% and driving a 10% increase in new customer acquisition.  \n- Conducted market and competitive analysis to identify customer needs and inform product positioning strategies for laboratory equipment.  \n\n## Education\n### Master in Marketing  \nMumbai University, Mumbai, India  \n2016-08  \n\n### Bachelor in Biotechnology  \nD. Y Patil University, Pune, India  \n2014-08  \n\n## Skills\n- **Product Marketing & Strategy:** Go-to-Market (GTM) Strategy, Product Launches, Messaging & Positioning, Competitive Analysis, Pricing & Packaging, Market Research  \n- **Marketing Operations:** Digital Campaign Management, Integrated Campaigns, Budget Optimization, ROI Measurement, Data & Insights Analysis  \n- **Sales Enablement & Collaboration:** Sales Enablement Strategy, Cross-Functional Leadership, Stakeholder Communication, People Management, Value-Based Selling  \n- **Marketing Technology:** HubSpot, Salesforce, MailChimp, Showpad  \n\n## Languages\n- **English:** Fluent\n\n## Certifications\n- Digital Marketing Foundation, (LinkedIn, 2023-12)  \n- Strategic Digital Marketing & Analytics, (IIM Rohtak, 2022-12)",
+            "resume_filename": "Rohit_Resume_ThoughtExchange_Director_of_Product_Marketing",
+            "base _resume_file_id": "DMC Resume 11.pdf"
+          },
+          "webhookUrl": "https://adhil-is-dummy.app.n8n.cloud/webhook-test/e05131b6-59ea-459b-8b32-58236328f630",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Check if Folder Exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if Folder Exists": {
+      "main": [
+        [
+          {
+            "node": "Create PDF - Folder Exists",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Folder if Not Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Folder if Not Found": {
+      "main": [
+        [
+          {
+            "node": "Create PDF - New Folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create PDF - Folder Exists": {
+      "main": [
+        [
+          {
+            "node": "Upload PDF to Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create PDF - New Folder": {
+      "main": [
+        [
+          {
+            "node": "Upload PDF to Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload PDF to Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Append data to sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to OneDrive1": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Upload to OneDrive1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update documents": {
+      "main": [
+        [
+          {
+            "node": "Find documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find documents": {
+      "main": [
+        [
+          {
+            "node": "Log to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "Update documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append data to sheet": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "wOZUjyffXjodGKNO",
+    "timeSavedPerExecution": 15
+  },
+  "versionId": "c1ecb231-6ff5-4d09-b598-5c9d00537009",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ddd41ed71e058fee91a615d65aac4c1b4f042ff46a10234383bb9a91cd4c923c"
+  },
+  "id": "moQwKjk9wvU3li0g",
+  "tags": [
+    {
+      "updatedAt": "2025-08-26T18:37:24.706Z",
+      "createdAt": "2025-08-26T18:37:24.706Z",
+      "id": "kf9yG9s2xGLak03u",
+      "name": "AP"
+    }
+  ]
+}
