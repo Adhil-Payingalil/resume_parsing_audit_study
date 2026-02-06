@@ -254,11 +254,13 @@ def classify_all_emails(
         db = mongo_client["Resume_study"]
         collection = db[collection_name]
         
-        # Get all emails
-        emails = list(collection.find())
+        # Get unclassified emails
+        query = {"email_category": {"$exists": False}}
+        emails = list(collection.find(query))
         stats["total_emails"] = len(emails)
         
-        logger.info(f"Classifying {stats['total_emails']} emails...")
+        total_in_db = collection.count_documents({})
+        logger.info(f"Total emails in DB: {total_in_db}. Found {len(emails)} unclassified emails to process.")
         
         for idx, email in enumerate(emails, 1):
             try:

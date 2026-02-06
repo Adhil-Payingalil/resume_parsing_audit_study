@@ -36,8 +36,8 @@ Handles the creation of resume treatments (variations). This involves applying s
 *Directory: `phase_3_workflow_job_matching`*
 Responsible for scraping job postings (using JINA AI/AgentQL/Playwright) and matching them with the generated resume treatments using vector search. This phase ensures that resumes are sent to relevant job openings.
 
-### [Phase 4: PDF Generation](Phase 4 Workflow - PDF generation)
-*Directory: `Phase 4 Workflow - PDF generation`*
+### [Phase 4: PDF Generation](phase_4_workflow_PDF_generation)
+*Directory: `phase_4_workflow_PDF_generation`*
 Converts the structured resume data (JSON) into high-quality PDF documents suitable for application. This phase heavily utilizes **n8n** for workflow automation and **APItemplate.io** for PDF generation.
 
 ### [Phase 5: Response Tracking](Phase 5 Workflow - Gmail response tracking)

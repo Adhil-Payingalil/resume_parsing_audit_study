@@ -21,7 +21,7 @@ Based on the provided Base Resume JSON and Treatment Instructions, perform the f
       - DO NOT add any work experience
       - DO NOT create internships or work entries from the education data
       - Education `endDate` should be a year (2025 or 2024) based on candidate's last work experience. Leave the `startDate` empty.
-      - 
+      - **CRITICAL:** Ensure the `location` field is set to the value provided in the Treatment Instructions (e.g., "Toronto, ON").
     
     * **Type_II (Work Experience ONLY):**
       - Add ONLY the work experience from the Treatment Instructions
@@ -33,6 +33,7 @@ Based on the provided Base Resume JSON and Treatment Instructions, perform the f
     * **Type_III (Both Education AND Work Experience):**
       - Add BOTH the education credential AND work experience from the Treatment Instructions
       - Follow the placement rules from Type_I and Type_II above
+      - **CRITICAL:** Ensure the `location` field for the added education is set to the value provided in the Treatment Instructions.
 
 
 3.  **Refine for Anonymity:** To prevent the resume from being an exact duplicate of the control, you will subtly rephrase some descriptive text. Follow these rules precisely:
