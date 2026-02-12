@@ -35,15 +35,42 @@ Exported_resumes/
 Adhoc/
 Adhoc analysis/
 
-# Jupyter
-Jupyternotebooks/
 
 # Phase Specific Data/Testing (redundant with above, but explicit for safety)
 phase_3_workflow_job_matching/Job Scraping Modules/data/
 phase_3_workflow_job_matching/Resume Job Matching/data/
 phase_3_workflow_job_matching/Resume Job Matching/test_results/
 phase_3_workflow_job_matching/Batch Embedding Modules/testing/
+phase_3_workflow_job_matching/data/logs/
+phase_3_workflow_job_matching/greenhouse_scraper/Adhoc/
+phase_3_workflow_job_matching/greenhouse_scraper/logs/
+phase_3_workflow_job_matching/greenhouse_scraper/testing/
+phase_3_workflow_job_matching/test_results/
 phase_4_workflow_PDF_generation/data/
+phase_4_workflow_PDF_generation/Archive data/
+phase_4_workflow_PDF_generation/country_cluster_mapping.csv
+phase_4_workflow_PDF_generation/PII_country_cluster_mapping.csv
+
+# Phase 2 Workflow Treatment Generation
+phase_2_workflow_treatment_generation/adhoc_files/
+phase_2_workflow_treatment_generation/data/
+phase_2_workflow_treatment_generation/models/
+phase_2_workflow_treatment_generation/education_credentials.csv
+phase_2_workflow_treatment_generation/work_experience_credentials.csv
+
+# Phase 2.1 Workflow Framework 2 Treatment Generation
+Phase_2.1_workflow_framework_2_treatment_generation/Adhoc/
+Phase_2.1_workflow_framework_2_treatment_generation/data/logs/
+Phase_2.1_workflow_framework_2_treatment_generation/AEC_ACESS_education_credentials.csv
+Phase_2.1_workflow_framework_2_treatment_generation/audit_dates.csv
+Phase_2.1_workflow_framework_2_treatment_generation/CEC_ontario_college_graduate_certificates.csv
+Phase_2.1_workflow_framework_2_treatment_generation/CWE_work_experience_credentials.csv
+
+Phase_2.1_workflow_framework_2_treatment_generation/CWE_work_experience_credentials.csv
+
+# Phase 5 Workflow Gmail Response Tracking
+phase_5_workflow_gmail_response_tracking/Adhoc/
+phase_5_workflow_gmail_response_tracking/data/
 
 # Legacy / Cleanup
 just pdf/
