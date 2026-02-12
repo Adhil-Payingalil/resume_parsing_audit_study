@@ -1,0 +1,158 @@
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet"><style>
+
+/* --- Basic Setup --- */
+body {
+    font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: white;
+    color: #34495e;
+    /* Dark blue-gray for text */
+    /* CHANGE: Slightly reduced font size for a more refined look. */
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: left;
+    /* Ensure all text is left-aligned for readability */
+    /* Simulates a standard page layout */
+    max-width: 8.5in;
+    margin: 0 auto;
+    /* CHANGE: Significantly increased padding to a standard 0.75in margin. This is crucial for a professional look. */
+    padding: 0.2in;
+}
+
+#output {
+    max-width: 100%;
+    text-align: left;
+}
+
+/* --- Header: Name and Contact Info --- */
+#output h1 {
+    font-size: 2.6em;
+    /* CHANGE: Increased font weight for a stronger, more classic name. */
+    font-weight: 600;
+    /* CHANGE: Name color is now a strong, dark gray, not an accent color. */
+    color: #2c3e50;
+    margin-bottom: 0.3rem;
+    text-align: left;
+    /* CHANGE: Removed uppercase and letter-spacing for a cleaner look. */
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+/* Contact info right after the name */
+#output h1+p {
+    font-size: 1em;
+    color: #5d6d7e;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+    text-align: left;
+    letter-spacing: normal;
+}
+
+/* --- Section Headings (e.g., Work Experience, Education) --- */
+#output h2 {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #34495e;
+    border-bottom: 1px solid #bdc3c7;
+    padding-bottom: 0.3rem;
+    margin: 1.5rem 0 1rem 0;
+    /* CHANGE: Removed uppercase and letter-spacing for a less stylized heading. */
+    text-transform: none;
+    text-align: left;
+    letter-spacing: normal;
+}
+
+/* --- Job/Education Entry (Title & Dates) --- */
+#output h3 {
+    font-size: 1.1em;
+    font-weight: 600;
+    /* CHANGE: Replaced red accent with a professional dark blue. */
+    color: #0056b3;
+    margin: 1.2rem 0 0.2rem 0;
+    text-align: left;
+    text-transform: none;
+}
+
+/* Dates paragraph immediately following the job title */
+#output h3+p {
+    font-weight: 400;
+    color: #7f8c8d;
+    font-size: 0.9em;
+    margin-top: 0;
+    margin-bottom: 0.6rem;
+    text-align: left;
+    font-style: italic;
+}
+
+/* --- General Paragraphs & Lists --- */
+#output p {
+    margin: 0.4rem 0;
+    color: #34495e;
+    font-weight: 400;
+    /* CHANGE: Justified text can be hard to read; left-aligned is standard for resumes. */
+    text-align: left;
+}
+
+#output ul {
+    margin: 0.5rem 0 1rem 0;
+    padding-left: 0;
+}
+
+#output ul li {
+    list-style: none;
+    position: relative;
+    padding-left: 1.5rem;
+    margin: 0.4rem 0;
+    line-height: 1.6;
+    /* CHANGE: Left-aligned for readability. */
+    text-align: left;
+}
+
+#output ul li::before {
+    /* CHANGE: Changed to a standard solid bullet for a more traditional look. */
+    content: "•";
+    /* CHANGE: Using the new blue accent color. */
+    color: #0056b3;
+    font-weight: bold;
+    position: absolute;
+    left: 0.2rem;
+    font-size: 1em;
+    top: 0.1em;
+}
+
+/* --- Links --- */
+#output a {
+    /* CHANGE: Links now use the new blue accent color. */
+    color: #0056b3;
+    text-decoration: underline;
+    border-bottom: none;
+    transition: color 0.2s ease;
+}
+
+#output a:hover {
+    /* CHANGE: A slightly darker blue for the hover effect. */
+    color: #003d82;
+}
+
+/* --- Emphasis --- */
+#output strong {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* --- Horizontal Line --- */
+#output hr {
+    border: none;
+    border-top: 1px solid #cccccc;
+    margin: 1.5rem 0;
+}
+
+/* --- REMOVED: Inconsistent multi-colored borders --- */
+/* The following rules using ":contains()" were removed to ensure a consistent, professional appearance across all sections. */
+#output h2:contains("Skills"),
+#output h2:contains("Experience"),
+#output h2:contains("Education") {
+    border-bottom: 1px solid #bdc3c7;
+    /* Ensures all sections have the same default border */
+}
+
+</style>

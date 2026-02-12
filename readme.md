@@ -14,7 +14,7 @@ The project utilizes a robust set of tools and APIs to handle various stages of 
 -   **MongoDB**: Serves as the central database for storing resume data, job postings, and experiment results.
 -   **n8n**: Orchestrates complex workflows, particularly in the PDF generation and file handling phases (Phase 4).
 -   **AgentQL & Playwright**: Power the job scraping capabilities (Phase 3), enabling robust data collection from dynamic web pages.
--   **Jina AI**: integrated API for enhanced search and retrieval capabilities.
+-   **Jina AI**: Integrated API for enhanced search and retrieval capabilities.
 -   **PySide6**: Used for building local UI components for manual review and configuration steps.
 -   **APItemplate.io**: Integrated within n8n for standardized resume formatting and PDF generation.
 -   **Python**: The core logic is implemented in Python, leveraging a class-based architecture.
@@ -40,9 +40,11 @@ Responsible for scraping job postings (using JINA AI/AgentQL/Playwright) and mat
 *Directory: `phase_4_workflow_PDF_generation`*
 Converts the structured resume data (JSON) into high-quality PDF documents suitable for application. This phase heavily utilizes **n8n** for workflow automation and **APItemplate.io** for PDF generation.
 
-### [Phase 5: Response Tracking](Phase 5 Workflow - Gmail response tracking)
-*Directory: `Phase 5 Workflow - Gmail response tracking`*
-Workflows for extracting email responses to the submitted applications using **IMAP**. It automates the tracking of callbacks and interview requests.
+### [Phase 5: Gmail Response Tracking](phase_5_workflow_gmail_response_tracking)
+*Directory: `phase_5_workflow_gmail_response_tracking`*
+Tracks and analyzes employer responses to submitted applications.
+-   **Gmail Scraper**: Fetches emails from study accounts using IMAP.
+-   **Email Classifier**: Categorizes emails into "Application Updates" (Interviews, Rejections) vs. other types using keyword matching and LLM validation.
 
 ## Setup & usage
 

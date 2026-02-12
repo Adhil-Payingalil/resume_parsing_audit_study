@@ -1,0 +1,145 @@
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><style>
+
+/* --- Basic Setup --- */
+body {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	background: white;
+	color: #2c3e50;
+	/* Dark Slate Blue for text */
+	font-size: 12px;
+	/* Base font size as requested */
+	line-height: 1.4;
+	text-align: justify;
+	/* Justified text alignment */
+	/* Simulates a standard page layout */
+	max-width: 8.5in;
+	margin: 0 auto;
+	padding: 0.1in;
+}
+
+#output {
+	max-width: 100%;
+	text-align: justify;
+	/* Ensure all content is justified */
+}
+
+/* --- Header: Name and Contact Info --- */
+#output h1 {
+	font-size: 2.5em;
+	/* 30px relative to 12px base */
+	font-weight: 700;
+	color: #2c3e50;
+	margin-bottom: 0.3rem;
+	letter-spacing: -0.02em;
+	text-align: left;
+	/* Keep name left-aligned for visual hierarchy */
+}
+
+/* Contact info right after the name */
+#output h1+p {
+	font-size: 1em;
+	/* 12px */
+	color: #666666;
+	margin-bottom: 1.5rem;
+	font-weight: 400;
+	text-align: left;
+	/* Keep contact info left-aligned */
+}
+
+/* --- Section Headings (e.g., Work Experience, Education) --- */
+#output h2 {
+	font-size: 1.4em;
+	/* 16.8px relative to 12px base */
+	font-weight: 600;
+	color: #4A90E2;
+	/* Professional blue accent */
+	border-bottom: 2px solid #4A90E2;
+	padding-bottom: 0.3rem;
+	margin: 1.8rem 0 1rem 0;
+	text-transform: none;
+	text-align: left;
+	/* Keep section headers left-aligned */
+}
+
+/* --- Job/Education Entry (Title & Dates) --- */
+#output h3 {
+	font-size: 1.2em;
+	/* 14.4px relative to 12px base */
+	font-weight: 600;
+	color: #2c3e50;
+	margin: 1.2rem 0 0.1rem 0;
+	text-align: left;
+	/* Keep job titles left-aligned */
+}
+
+/* Dates paragraph immediately following the job title */
+#output h3+p {
+	font-weight: 400;
+	color: #666666;
+	font-size: 0.9em;
+	/* 10.8px relative to 12px base */
+	margin-top: 0;
+	margin-bottom: 0.8rem;
+	text-align: left;
+	/* Keep dates left-aligned */
+}
+
+/* --- General Paragraphs & Lists --- */
+#output p {
+	margin: 0.5rem 0;
+	color: #2c3e50;
+	font-weight: 400;
+	text-align: justify;
+	/* Justified text for body paragraphs */
+}
+
+#output ul {
+	margin: 0.8rem 0;
+	padding-left: 0;
+}
+
+/* Custom bullet points for a polished look */
+#output ul li {
+	list-style: none;
+	position: relative;
+	padding-left: 1.2rem;
+	margin: 0.3rem 0;
+	line-height: 1.5;
+	text-align: justify;
+	/* Justified text for list items */
+}
+
+#output ul li::before {
+	content: "•";
+	color: #4A90E2;
+	font-weight: bold;
+	position: absolute;
+	left: 0;
+}
+
+/* --- Links --- */
+#output a {
+	color: #4A90E2;
+	text-decoration: none;
+	border-bottom: 1px solid transparent;
+	transition: border-color 0.2s ease;
+}
+
+#output a:hover {
+	border-bottom-color: #4A90E2;
+}
+
+/* --- Emphasis --- */
+#output strong {
+	font-weight: 600;
+	color: #2c3e50;
+}
+
+/* --- Horizontal Line (optional) --- */
+#output hr {
+	border: none;
+	border-top: 1px solid #E8F4FD;
+	margin: 1.5rem 0;
+}
+
+</style>

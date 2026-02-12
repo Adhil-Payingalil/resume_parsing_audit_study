@@ -1,43 +1,48 @@
 # Phase 3: Job Matching Workflow
 
-This directory contains the tools and workflows for matching resumes to job postings. The logic is divided into **Embeddings** (preparing data) and **Matching** (finding matches).
+This directory contains the tools and workflows for **embedding** job descriptions and **matching** them to resumes. This workflow is the direct follow-up to the **Greenhouse Scraper** (`greenhouse_scraper/`).
+
+## Workflow Overview
+
+After scraping jobs using the tools in `greenhouse_scraper/`, you must run the following two scripts in order to generate matches.
+
+### Step 1: Generate Embeddings
+**Script:** `run_greenhouse_embedding.py`
+
+*   **Purpose:** Converts the text descriptions of scraped jobs into vector embeddings using the configured model. These embeddings are essential for the semantic matching process.
+*   **Action:**
+    *   Reads jobs from MongoDB (filtered by Cycle).
+    *   Generates embeddings for the `job_description` field.
+    *   Updates the job document with the vector data.
+*   **Usage:**
+    ```bash
+    python run_greenhouse_embedding.py
+    ```
+    *Prompts for Cycle Number upon execution.*
+
+### Step 2: Run Matching
+**Script:** `run_greenhouse_matching.py`
+
+*   **Purpose:** Matches existing resumes (from Phase 2) against the newly embedded job postings.
+*   **Action:**
+    *   Loads resumes and job embeddings.
+    *   Calculates similarity scores.
+    *   Applies threshold logic to determine valid matches.
+    *   Updates MongoDB with match results.
+*   **Usage:**
+    ```bash
+    python run_greenhouse_matching.py [--cycle X.X] [--limit N] [--industry PREFIX] [--force]
+    ```
+*   **Arguments:**
+    *   `--cycle`: Filter jobs by a specific cycle number (e.g., `8.1`). If omitted, you will be prompted or can choose to process all.
+    *   `--limit`: Restrict the number of jobs to process (useful for testing).
+    *   `--industry`: Filter by industry prefix (e.g., `ITC`, `FIN`).
+    *   `--force`: Reprocess jobs that have already been matched (overwrites existing results).
+    *   `--skip-processed`: Skip jobs that have already been processed (default behavior).
 
 ## Directory Structure
 
-*   `src/embeddings/`: Scripts to generate vector embeddings for jobs and resumes.
-    *   `batch_job_embedder.py`: Embeds standard scraped jobs.
-    *   `batch_resume_embedder.py`: Embeds standardized resumes.
-    *   `greenhouse_job_embedder.py`: Embeds Greenhouse job postings.
-*   `src/matching/`: Core matching logic.
-    *   `job_spy_matcher.py`: Generalized matching workflow (using JobSpy).
-    *   `greenhouse_matcher.py`: Specialized workflow for Greenhouse data.
-*   `configs/`: Configuration files for each workflow.
-*   `docs/`: Legacy documentation.
-*   `tests/`: Test scripts.
-
-## Usage
-
-### 1. Job Matching (Production)
-
-To run the **Greenhouse** matching workflow (recommended for current operations):
-```bash
-python run_greenhouse_matching.py
-```
-This script replicates the functionality of the old `run_greenhouse_workflow.py`
-### 2. Standard Job Matching (JobSpy)
-Run the standard matching workflow (for jobs scraped via JobSpy):
-```bash
-python phase_3_workflow_job_matching/run_job_spy_matching.py --limit 50
-```
-
-### 2. Embedding Generation (Batch)
-
-To update embeddings for jobs or resumes, run the scripts in `src/embeddings/` directly (or creating a runner if needed).
-Example:
-```bash
-python src/embeddings/batch_job_embedder.py
-```
-
-## Configuration
-
-Edit `configs/greenhouse_config.py` or `configs/config.py` to adjust thresholds, batch sizes, and model parameters.
+*   `src/embeddings/`: Core logic for generating vector embeddings.
+*   `src/matching/`: Core logic for matching algorithms.
+*   `configs/`: Configuration files for thresholds and model parameters.
+*   `greenhouse_scraper/`: (See separate README) The precursor step for finding jobs.

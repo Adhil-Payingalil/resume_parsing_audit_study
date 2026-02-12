@@ -1,0 +1,128 @@
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet"><style>
+
+/* --- Basic Setup --- */
+body {
+	/* Unified Font Family for the entire document */
+	font-family: 'Lato', sans-serif;
+	background: white;
+	color: #333333;
+	font-size: 13px;
+	line-height: 1.5;
+	/* Slightly tighter for professional density */
+	text-align: left;
+	max-width: 8.5in;
+	margin: 0 auto;
+	padding: 0.2in;
+}
+
+#output {
+	max-width: 100%;
+	text-align: left;
+}
+
+/* --- Header: Name and Contact Info --- */
+#output h1 {
+	font-family: 'Lato', sans-serif;
+	font-size: 2.5em;
+	font-weight: 700;
+	color: #1a1a1a;
+	margin-bottom: 0.2rem;
+	text-align: center;
+	letter-spacing: 1px;
+}
+
+#output h1+p {
+	font-family: 'Lato', sans-serif;
+	font-size: 1em;
+	color: #555555;
+	margin-bottom: 1.2rem;
+	/* Reduced to tighten space before first section */
+	font-weight: 400;
+	text-align: center;
+	border-bottom: none;
+	padding-bottom: 0.5rem;
+}
+
+/* --- Section Headings (Summary, Skills, Experience, etc.) --- */
+#output h2 {
+	font-family: 'Lato', sans-serif;
+	font-size: 1.1em;
+	font-weight: 700;
+	color: #333333;
+	text-align: left;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	margin: 1.2rem 0 0.4rem 0;
+	/* Reduced margins */
+
+	/* Added line after every section heading */
+	border-bottom: 1px solid #dddddd;
+	padding-bottom: 0.2rem;
+	break-after: avoid !important;
+	page-break-after: avoid !important;
+}
+
+/* --- Job/Education Entry (Title & Dates) --- */
+#output h3 {
+	font-family: 'Lato', sans-serif;
+	font-size: 1.15em;
+	font-weight: 700;
+	color: #1a1a1a;
+	margin: 0.8rem 0 0.1rem 0;
+	break-after: avoid !important;
+	page-break-after: avoid !important;
+	display: block;
+}
+
+#output h3+p {
+	font-family: 'Lato', sans-serif;
+	font-weight: 400;
+	color: #666666;
+	font-size: 0.9em;
+	margin-top: 0;
+	margin-bottom: 0.4rem;
+	font-style: italic;
+	break-before: avoid !important;
+	page-break-before: avoid !important;
+	display: block;
+}
+
+/* --- General Paragraphs & Lists --- */
+#output p,
+#output ul li {
+	font-family: 'Lato', sans-serif;
+	margin: 0.3rem 0;
+	color: #333333;
+	font-weight: 400;
+}
+
+#output ul {
+	margin: 0.4rem 0 0.8rem 0;
+	padding-left: 0;
+	break-inside: auto;
+}
+
+#output ul li {
+	list-style: none;
+	position: relative;
+	padding-left: 1.2rem;
+	line-height: 1.6;
+	break-inside: avoid !important;
+	page-break-inside: avoid !important;
+}
+
+#output ul li::before {
+	content: "–";
+	/* Standard dash for professional look */
+	color: #333333;
+	position: absolute;
+	left: 0;
+}
+
+/* --- Emphasis --- */
+#output strong {
+	font-weight: 700;
+	color: #000000;
+}
+
+</style>

@@ -1,0 +1,142 @@
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet"><style>
+
+/* --- Basic Setup --- */
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: white;
+    color: #1a1a1a;
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: left;
+    max-width: 8.5in;
+    margin: 0 auto;
+    padding: 0.1in;
+}
+
+#output {
+    max-width: 100%;
+    text-align: left;
+}
+
+/* --- Header: Name and Contact Info --- */
+#output h1 {
+    font-size: 2.8em;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.1rem;
+    text-align: left;
+    padding-bottom: 0.3rem;
+}
+
+#output h1+p {
+    font-size: 1.1em;
+    color: #444444;
+    margin-bottom: 2rem;
+    font-weight: 400;
+    text-align: left;
+}
+
+/* --- Section Headings (e.g., Work Experience, Education) --- */
+#output h2 {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #1a1a1a;
+    border-bottom: 1px solid #333333;
+    padding-bottom: 0.2rem;
+    margin: 1.8rem 0 1rem 0;
+    text-transform: none;
+    letter-spacing: normal;
+    text-align: left;
+}
+
+/* --- Job/Education Entry (Markdown-Friendly Version) --- */
+/* This section is designed to work with standard Markdown H3s and paragraphs. */
+
+/* Styles the Job Title (H3) */
+#output h3 {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 1.2rem 0 0.1rem 0;
+    /* Creates space above, keeps it tight to the line below */
+    text-transform: none;
+}
+
+/* Styles the FIRST paragraph after the title (assumed to be Date Range) */
+#output h3+p {
+    font-style: italic;
+    color: #555555;
+    font-size: 1em;
+    margin-top: 0;
+    margin-bottom: 0.2rem;
+}
+
+/* Styles the SECOND paragraph after the title (assumed to be Company Name & Location) */
+#output h3+p+p {
+    font-weight: 600;
+    font-style: normal;
+    /* Override italic style from the rule above */
+    color: #444444;
+    font-size: 1.1em;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
+
+
+/* --- General Paragraphs & Lists --- */
+#output p {
+    margin: 0.4rem 0;
+    color: #1a1a1a;
+    font-weight: 400;
+    text-align: left;
+}
+
+#output ul {
+    margin: 0.5rem 0 1rem 0;
+    padding-left: 0;
+}
+
+#output ul li {
+    list-style: none;
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.4rem;
+    line-height: 1.6;
+    text-align: left;
+}
+
+#output ul li::before {
+    content: "•";
+    color: #1a1a1a;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    font-size: 1.2em;
+    top: -0.1em;
+}
+
+/* --- Links --- */
+#output a {
+    color: #1a1a1a;
+    text-decoration: underline;
+    border-bottom: none;
+}
+
+#output a:hover {
+    color: #0056b3;
+}
+
+/* --- Emphasis --- */
+#output strong {
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+/* --- Horizontal Line --- */
+#output hr {
+    border: none;
+    border-top: 1px solid #cccccc;
+    margin: 1.5rem 0;
+}
+
+</style>

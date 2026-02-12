@@ -38,7 +38,7 @@ class GreenhouseConfig:
     vector_search_index: str = "resume_embedding_index"  # MongoDB vector search index name
     
     # LLM settings  
-    llm_model: str = "gemini-3-pro-preview"
+    llm_model: str = "gemini-2.5-pro"
     validation_threshold: int = 60
     
     # Retry settings for LLM calls

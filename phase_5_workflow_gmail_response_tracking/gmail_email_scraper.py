@@ -420,7 +420,6 @@ def read_gmail_credentials(csv_path: str) -> List[Dict[str, str]]:
                     credentials.append({
                         "PII_Identifier_ID": row.get("PII_Identifier_ID", "").strip(),
                         "Geographic_Cluster": row.get("Geographic_Cluster", "").strip(),
-                        "Treatment_Type": row.get("Treatment Type", "").strip(),
                         "Associated_Countries": row.get("Associated_Countries", "").strip(),
                         "Last_Name": row.get("Last_Name", "").strip(),
                         "Email": email_addr,
@@ -564,7 +563,6 @@ def scrape_gmail_accounts(
                 for email_data in emails:
                     email_data["PII_Identifier_ID"] = cred["PII_Identifier_ID"]
                     email_data["Geographic_Cluster"] = cred["Geographic_Cluster"]
-                    email_data["Treatment_Type"] = cred["Treatment_Type"]
                     email_data["Associated_Countries"] = cred["Associated_Countries"]
                     email_data["Last_Name"] = cred["Last_Name"]
                 

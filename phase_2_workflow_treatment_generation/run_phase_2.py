@@ -46,7 +46,7 @@ DELAY_QUICK = 2.0
 RUN_FROM_IDE = True  # Set to True to use the config below
 IDE_CONFIG = {
     "sector": "EEC",        # Target Sector
-    "files": ["EEC resume 13.pdf"],          # List of file IDs e.g. ["ITC-01.pdf"] or None for all
+    "files": ["EEC resume 12.pdf"],          # List of file IDs e.g. ["ITC-01.pdf"] or None for all
     "skip_ui": False,       # Set to True to skip manual validation
     "dry_run": False         # Set to True to print JSON to terminal and SKIP MongoDB save
 }

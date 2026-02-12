@@ -363,9 +363,11 @@ class GeminiProcessor:
             # Generate new embedding
             logger.info(f"Generating new embedding for text (length: {len(text)}) with task_type: {task_type}")
             
+            # Use gemini-embedding-001 with 768 dimensions for MongoDB compatibility
             response = self.client.models.embed_content(
-                model="models/embedding-001",
-                contents=text
+                model="models/gemini-embedding-001",
+                contents=text,
+                config={"output_dimensionality": 768}
             )
             
             embedding = response.embeddings[0].values
@@ -420,7 +422,7 @@ class GeminiProcessor:
         Returns:
             str: SHA256 hash
         """
-        content = f"{text}:{task_type}:embedding-001"
+        content = f"{text}:{task_type}:gemini-embedding-001:768"
         return hashlib.sha256(content.encode('utf-8')).hexdigest()
     
     def _check_embedding_cache(self, text_hash: str) -> Optional[List[float]]:
@@ -475,7 +477,8 @@ class GeminiProcessor:
             
             cache_doc = {
                 "text_hash": text_hash,
-                "model_name": "embedding-001",
+                "model_name": "gemini-embedding-001",
+                "dimensions": 768,
                 "task_type": task_type,
                 "embedding": embedding,
                 "created_at": datetime.now()

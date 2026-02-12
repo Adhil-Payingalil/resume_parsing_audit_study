@@ -120,7 +120,7 @@ class BatchJobEmbeddingProcessor:
                     "$set": {
                         "jd_embedding": embedding,
                         "embedding_generated_at": datetime.now(),
-                        "embedding_model": "embedding-001",
+                        "embedding_model": "gemini-embedding-001",
                         "embedding_task_type": "RETRIEVAL_QUERY"
                     }
                 }

@@ -27,7 +27,16 @@ from utils import get_logger
 from dotenv import load_dotenv
 
 load_dotenv()
+load_dotenv()
 logger = get_logger(__name__)
+
+# Import Gemini classifier
+try:
+    from gemini_classifier import validate_with_gemini
+    GEMINI_AVAILABLE = True
+except ImportError as e:
+    logger.warning(f"Could not import Gemini classifier: {e}")
+    GEMINI_AVAILABLE = False
 
 # Classification categories
 CATEGORY_APPLICATION_UPDATE = "application_update"
@@ -171,7 +180,9 @@ def classify_email(email: Dict[str, Any]) -> Dict[str, Any]:
         # Check for rejection
         rejection_keywords = ["unfortunately", "not moving forward", "not selected", 
                             "not a match", "not proceed", "not advance", "not chosen",
-                            "we've decided", "we have decided", "not the right fit"]
+                            "we've decided", "we have decided", "not the right fit",
+                            "not move forward", "not selected for", "decided to pursue",
+                            "better fit", "other candidates"]
         if any(kw in update_keywords_found for kw in rejection_keywords) or \
            any(kw in subject for kw in rejection_keywords):
             subcategory = "rejection"
@@ -187,10 +198,10 @@ def classify_email(email: Dict[str, Any]) -> Dict[str, Any]:
             subcategory = "next_steps"
             confidence_score = min(confidence_score + 0.2, 1.0)
         
-        # Check for offer
-        elif any(kw in update_keywords_found for kw in ["offer", "congratulations", "excited to", "pleased to"]):
-            subcategory = "offer"
-            confidence_score = min(confidence_score + 0.2, 1.0)
+        # Check for offer - REMOVED as per user request
+        # elif any(kw in update_keywords_found for kw in ["offer", "congratulations", "excited to", "pleased to"]):
+        #     subcategory = "offer"
+        #     confidence_score = min(confidence_score + 0.2, 1.0)
         
         else:
             subcategory = "status_update"
@@ -203,7 +214,48 @@ def classify_email(email: Dict[str, Any]) -> Dict[str, Any]:
         classification["reasoning"].append(f"Found update keywords: {', '.join(update_keywords_found[:5])}")
         classification["is_application_related"] = True
         classification["is_application_update"] = True
-        return classification
+        
+        # 4b. Validate with Gemini if available
+        if GEMINI_AVAILABLE:
+            try:
+                # Prepare context for Gemini
+                validation = validate_with_gemini(email, classification)
+                
+                if validation and not validation.get("is_correct"):
+                    logger.info(f"Gemini corrected classification for email {email.get('_id', 'unknown')}")
+                    logger.info(f"Original: {classification['category']}/{classification.get('subcategory')}")
+                    logger.info(f"New: {validation.get('corrected_category')}/{validation.get('corrected_subcategory')}")
+                    logger.info(f"Reasoning: {validation.get('reasoning')}")
+                    
+                    # Update classification based on Gemini
+                    if validation.get("corrected_category"):
+                        classification["category"] = validation["corrected_category"]
+                    
+                    # Handle subcategory update or removal
+                    if validation.get("corrected_subcategory"):
+                        classification["subcategory"] = validation["corrected_subcategory"]
+                        # If category is not application_update, remove subcategory usually
+                        if classification["category"] != CATEGORY_APPLICATION_UPDATE:
+                             classification["subcategory"] = None
+                    elif classification["category"] != CATEGORY_APPLICATION_UPDATE:
+                        classification["subcategory"] = None
+                        
+                    classification["reasoning"].append(f"Gemini Correction: {validation.get('reasoning')}")
+                    
+                    # Update flags
+                    classification["is_application_update"] = (classification["category"] == CATEGORY_APPLICATION_UPDATE)
+                    
+            except Exception as e:
+                logger.error(f"Error during Gemini validation: {e}")
+                classification["reasoning"].append(f"Gemini validation failed: {str(e)}")
+
+        # 5. Add manual validation fields for specific subcategories
+    if classification["category"] == "application_update" and \
+       classification.get("subcategory") in ["interview_invitation", "next_steps"]:
+        classification["is_interview_invitation"] = False
+        classification["manual_validation"] = False
+
+    return classification
     
     # 5. Check if from Greenhouse or other ATS (likely application-related but not classified)
     if is_greenhouse:
@@ -222,7 +274,8 @@ def classify_email(email: Dict[str, Any]) -> Dict[str, Any]:
 
 def classify_all_emails(
     collection_name: str = "email_scrapping_test",
-    update_mongodb: bool = True
+    update_mongodb: bool = True,
+    reclassify: bool = False
 ) -> Dict[str, Any]:
     """
     Classify all emails in MongoDB collection and update them with classification fields.
@@ -230,6 +283,7 @@ def classify_all_emails(
     Args:
         collection_name: MongoDB collection name to update
         update_mongodb: If True, update emails in the collection with classification fields
+        reclassify: If True, reclassify all emails even if they already have a category
         
     Returns:
         Dictionary with classification statistics
@@ -254,8 +308,8 @@ def classify_all_emails(
         db = mongo_client["Resume_study"]
         collection = db[collection_name]
         
-        # Get unclassified emails
-        query = {"email_category": {"$exists": False}}
+        # Get emails to process
+        query = {} if reclassify else {"email_category": {"$exists": False}}
         emails = list(collection.find(query))
         stats["total_emails"] = len(emails)
         
@@ -284,6 +338,12 @@ def classify_all_emails(
                     stats["application_related"] += 1
                 if classification["is_application_update"]:
                     stats["application_updates"] += 1
+                
+                # Add manual validation fields if present
+                if "is_interview_invitation" in classification:
+                    update_fields["is_interview_invitation"] = classification["is_interview_invitation"]
+                if "manual_validation" in classification:
+                    update_fields["manual_validation"] = classification["manual_validation"]
                 
                 stats["classified"] += 1
                 
@@ -454,7 +514,7 @@ def main():
     logger.info("APPLICATION UPDATES BREAKDOWN")
     logger.info("="*60)
     
-    for subcategory in ["rejection", "interview_invitation", "next_steps", "offer", "status_update"]:
+    for subcategory in ["rejection", "interview_invitation", "next_steps", "status_update"]:
         updates = get_application_updates(subcategory=subcategory)
         logger.info(f"{subcategory}: {len(updates)} emails")
     

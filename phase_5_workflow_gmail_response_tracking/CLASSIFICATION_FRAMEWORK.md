@@ -13,7 +13,6 @@ This document describes the classification framework used to categorize emails s
 - **`rejection`**: Application was rejected/not selected
 - **`interview_invitation`**: Invitation to interview or phone screen
 - **`next_steps`**: Instructions for next steps in the process
-- **`offer`**: Job offer or congratulations on selection
 - **`status_update`**: General status update without specific action
 
 **Keywords Used**:
@@ -116,8 +115,7 @@ from classify_emails import classify_all_emails
 
 stats = classify_all_emails(
     collection_name="email_scrapping_test",
-    update_mongodb=True,
-    output_collection="email_classifications"
+    update_mongodb=True
 )
 ```
 

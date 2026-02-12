@@ -1,0 +1,45 @@
+<!-- Please click on the CSS tab to edit the CSS Style -->
+<!-- Please click on the JSON tab to edit the data/markdown -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+
+		// Configure marked options for better security
+		marked.setOptions({
+			headerIds: false,
+			mangle: false,
+			breaks: true,
+			gfm: true,
+			langPrefix: 'hljs language-', // Important for highlight.js
+			highlight: function (code, lang) {
+				if (lang && hljs.getLanguage(lang)) {
+					try {
+						return hljs.highlight(code, {
+							language: lang
+						}).value;
+					} catch (err) { }
+				}
+				return code; // Use default escaping
+			}
+		});
+
+		const outputDiv = document.createElement('div');
+		outputDiv.id = 'output';
+		outputDiv.className = 'markdown-output';
+
+		const markdown = {{ markdown| tojson
+	}};
+	outputDiv.innerHTML = marked.parse(markdown);
+
+	// Append to body
+	document.body.appendChild(outputDiv);
+
+	document.querySelectorAll('pre code').forEach((block) => {
+		hljs.highlightElement(block);
+	});
+	});
+</script>

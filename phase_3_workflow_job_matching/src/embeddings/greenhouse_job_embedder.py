@@ -115,30 +115,12 @@ class GreenhouseJobEmbeddingProcessor:
             # Extract job description (main content)
             job_description = job_doc.get("job_description", "")
             if job_description:
-                # Focus on key sections for better embeddings
-                lines = job_description.split('\n')
-                key_sections = []
-                
-                for line in lines:
-                    line_lower = line.lower().strip()
-                    # Look for sections that typically contain requirements and skills
-                    if any(keyword in line_lower for keyword in [
-                        'requirements', 'qualifications', 'skills', 'responsibilities',
-                        'duties', 'experience', 'education', 'must have', 'should have',
-                        'preferred', 'knowledge of', 'proficiency in', 'familiarity with',
-                        'what you\'ll do', 'what we\'re looking for', 'nice to have'
-                    ]):
-                        key_sections.append(line.strip())
-                
-                # If we found key sections, use them; otherwise use the full description
-                if key_sections:
-                    content_parts.extend(key_sections)
-                else:
-                    # Use first 3000 characters of description
-                    content_parts.append(job_description[:3000])
+                # Clean up the description
+                cleaned_description = job_description.strip()
+                content_parts.append(cleaned_description)
             
             # Join all parts
-            extracted_content = " ".join(content_parts)
+            extracted_content = "\n\n".join(content_parts)
             
             # Limit to reasonable length for embedding (max 8000 characters)
             if len(extracted_content) > 8000:
@@ -169,14 +151,15 @@ class GreenhouseJobEmbeddingProcessor:
         
         for attempt in range(max_retries):
             try:
-                url = f"https://generativelanguage.googleapis.com/v1beta/models/embedding-001:embedContent?key={self.api_key}"
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-001:embedContent?key={self.api_key}"
                 
                 payload = {
-                    "model": "models/embedding-001",
+                    "model": "models/gemini-embedding-001",
                     "content": {
                         "parts": [{"text": text}]
                     },
-                    "taskType": task_type
+                    "taskType": task_type,
+                    "outputDimensionality": 768  # Reduce from default 3072 to 768 for MongoDB compatibility
                 }
                 
                 headers = {
@@ -260,7 +243,7 @@ class GreenhouseJobEmbeddingProcessor:
                     "$set": {
                         "jd_embedding": embedding,
                         "embedding_generated_at": datetime.now(),
-                        "embedding_model": "embedding-001",
+                        "embedding_model": "gemini-embedding-001",
                         "embedding_task_type": "RETRIEVAL_QUERY"
                     }
                 }

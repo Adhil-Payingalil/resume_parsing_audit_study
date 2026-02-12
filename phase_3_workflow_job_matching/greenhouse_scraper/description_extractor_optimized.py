@@ -3,6 +3,7 @@ import asyncio
 import aiohttp
 import time
 import json
+import re
 from datetime import datetime
 from typing import List, Dict, Optional, Tuple
 from pymongo import MongoClient
@@ -10,11 +11,9 @@ from pymongo.errors import ConnectionFailure, DuplicateKeyError
 from dotenv import load_dotenv
 import logging
 
-
 class CriticalAPIError(Exception):
     """Custom exception for critical Jina AI API errors (e.g., invalid key, persistent rate limits)."""
     pass
-
 
 # Load environment variables
 load_dotenv()
@@ -35,7 +34,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(logs_dir / 'description_extractor.log', encoding='utf-8'),
+        logging.FileHandler(logs_dir / 'description_extractor_optimized.log', encoding='utf-8'),
         logging.StreamHandler()
     ]
 )
@@ -141,7 +140,9 @@ class JobDescriptionExtractor:
                 'User-Agent': 'Job-Description-Extractor/1.0',
                 'X-Wait-For-Selector': 'body, main, .content, .job-description, [role="main"]',
                 'X-Wait-For-Timeout': '5000',
-                'x-timeout': '60'
+                'x-timeout': '60',
+                # 'Accept-cached-content-if-younger-than': '86400', # User disabled cache
+                # 'x-retain-images': 'none' # REMOVED: Potentially causing timeouts
             }
         )
 
@@ -165,17 +166,20 @@ class JobDescriptionExtractor:
             ]
         }
 
-    async def fetch_job_description(self, job_url: str, job_id: str, job_title: str = None) -> Tuple[str, Optional[str], bool, Optional[str]]:
+    async def fetch_job_description(self, job_url: str, job_id: str, job_title: str = None) -> Tuple[str, str, str, bool, Optional[str]]:
         """
         Fetch job description from a single URL using Jina AI Reader API
         
         Args:
             job_url: The job posting URL
             job_id: MongoDB document ID for logging
-            job_title: Job title to prepend to clean extractions
+            job_title: Job title to prepend to clean extractions and use as start marker
             
         Returns:
-            Tuple of (job_id, description, api_success, error_message) where:
+            Tuple of (job_id, description, extraction_method, raw_content, api_success, error_message) where:
+            - description: The cleaned description (or full content if fallback)
+            - extraction_method: "clean", "fallback", or "full_page_content"
+            - raw_content: The original content returned by Jina AI
             - api_success: True if API call succeeded
             - error_message: None if succeeded
             
@@ -185,7 +189,7 @@ class JobDescriptionExtractor:
         if not job_url or not job_url.startswith('http'):
             error_msg = f"Invalid URL: {job_url}"
             logger.warning(f"Invalid URL for job {job_id}: {job_url}")
-            return job_id, None, False, error_msg
+            return job_id, None, None, None, False, error_msg
             
         # Construct Jina AI Reader URL
         jina_url = f"{JINA_BASE_URL}{job_url}"
@@ -197,20 +201,20 @@ class JobDescriptionExtractor:
                         content = await response.text()
                         
                         # Parse the response to extract job description
-                        description, jd_extraction_success = self.extract_description_from_content(content)
+                        description, extraction_method = self.extract_description_from_content(content, job_title)
                         
                         if description:
-                            if jd_extraction_success:
-                                # Add job title to clean extractions
-                                if job_title:
-                                    description = f"# {job_title}\n\n{description}"
+                            if extraction_method == "clean":
                                 logger.info(f"✅ Successfully extracted clean job description for job {job_id}")
+                            elif extraction_method == "fallback":
+                                logger.info(f"⚠️ Clean extraction fallback for job {job_id}")
                             else:
-                                logger.info(f"✅ Using full Jina AI content for job {job_id} (extraction failed)")
-                            return job_id, (description, jd_extraction_success), True, None
+                                logger.info(f"⚠️ Using full Jina AI content for job {job_id} (extraction failed)")
+                            
+                            return job_id, description, extraction_method, content, True, None
                         else:
                             logger.warning(f"⚠️ No description found for job {job_id}")
-                            return job_id, None, True, None
+                            return job_id, None, None, content, True, None
                     elif response.status == 429:
                         # Rate limited - wait longer
                         if attempt == MAX_RETRIES - 1: # Last attempt failed due to rate limit
@@ -228,15 +232,17 @@ class JobDescriptionExtractor:
                         error_msg = f"HTTP {response.status} error for URL: {job_url}"
                         logger.error(f"HTTP {response.status} for job {job_id}: {job_url}")
                         if attempt == MAX_RETRIES - 1:
-                            # Max retries exceeded for HTTP error - Stop script
-                            raise CriticalAPIError(f"Persistent API error: {error_msg}")
+                            # Max retries exceeded for HTTP error - Log and return failure
+                            logger.error(f"❌ Persistent HTTP {response.status} for job {job_id}. Marking as failed.")
+                            return job_id, None, None, None, False, error_msg
                         await asyncio.sleep(1)
                         
             except asyncio.TimeoutError:
                 error_msg = f"Timeout after {MAX_RETRIES} attempts for URL: {job_url}"
-                logger.error(f"Timeout for job {job_id} (attempt {attempt + 1})")
+                logger.warning(f"Timeout for job {job_id} (attempt {attempt + 1})")
                 if attempt == MAX_RETRIES - 1:
-                    raise CriticalAPIError(f"Persistent Timeout error: {error_msg}")
+                   logger.error(f"❌ Persistent Timeout for job {job_id}. Marking as failed.")
+                   return job_id, None, None, None, False, error_msg # Return failure instead of raising CriticalAPIError
                 await asyncio.sleep(2 ** attempt)
                 
             except CriticalAPIError:
@@ -245,98 +251,261 @@ class JobDescriptionExtractor:
                 error_msg = f"Exception after {MAX_RETRIES} attempts: {str(e)} for URL: {job_url}"
                 logger.error(f"Error fetching job {job_id}: {e}")
                 if attempt == MAX_RETRIES - 1:
-                    raise CriticalAPIError(f"Persistent unexpected error: {error_msg}")
+                    logger.error(f"❌ Persistent Error ({type(e).__name__}) for job {job_id}. Marking as failed.")
+                    return job_id, None, None, None, False, error_msg # Return failure instead of raising CriticalAPIError
                 await asyncio.sleep(1)
         
-        # This point should not be reached if CriticalAPIError is raised properly above
-        raise CriticalAPIError(f"Max retries ({MAX_RETRIES}) exceeded for URL: {job_url}")
+        # This point should not be reached if handled properly above, but as a safeguard:
+        return job_id, None, None, None, False, f"Max retries ({MAX_RETRIES}) exceeded for URL: {job_url}"
 
-    def extract_description_from_content(self, content: str) -> tuple[Optional[str], bool]:
+    def extract_description_from_content(self, content: str, job_title: str = None) -> tuple[Optional[str], str]:
         """
-        Extract job description from Jina AI response content with fallback
+        Extract job description from Jina AI response content with robust state machine logic.
         
         Args:
             content: Raw content from Jina AI API
+            job_title: Job title to use as a potential start marker
             
         Returns:
-            Tuple of (extracted_description, jd_extraction_success)
-            - If extraction works: (clean_description, True)
-            - If extraction fails: (full_content, False)
+            Tuple of (extracted_description, extraction_method)
+            - extraction_method: "clean", "fallback", or "full_page_content"
         """
         try:
             if not content or len(content.strip()) == 0:
-                return None, False
+                return None, "full_page_content"
             
-            # Check for common non-job content patterns (more specific patterns)
+            # Check for common non-job content patterns (forms, redirects)
             content_lower = content.lower()
+            
+            # Pre-validation truncation: 
+            # Cut off content at known footer/form markers to prevent their contents (like EEO statements) 
+            # from triggering the non-job block.
+            validation_content = content_lower
+            validation_truncation_markers = [
+                "voluntary self-identification",
+                "create a job alert",
+                "candidate privacy notice"
+            ]
+            
+            for marker in validation_truncation_markers:
+                idx = validation_content.find(marker)
+                if idx != -1:
+                    # Keep only the part before the marker
+                    validation_content = validation_content[:idx]
+
             non_job_patterns = [
-                'equal employment opportunity policy',
+                # 'equal employment opportunity policy', # Too broad, appears in footers
                 'government reporting purposes',
                 'self-identification survey',
-                'veterans readjustment assistance act',
-                'federal contractor or subcontractor',
-                'omb control number 1250-0005',
-                'expires 04/30/2026',
+                # 'veterans readjustment assistance act', # Too broad
+                # 'federal contractor or subcontractor', # Too broad
+                'omb control number 1250-0005', # Specific to forms
+                'expires 04/30/2026', # Specific to forms
                 'form cc-305',
                 'page 1 of 1',
                 'completing this form is voluntary',
-                'vietnam era veterans readjustment'
+                # 'vietnam era veterans readjustment', # Too broad
+                # 'voluntary self-identification', # Too broad
+                # 'disability status', # Too broad
+                # 'protected veteran', # Too broad (appears in EEO statements)
+                'pay transparency non-discrimination provision'
             ]
             
-            # If content contains non-job patterns, use full content but mark as failed extraction
-            if any(pattern in content_lower for pattern in non_job_patterns):
-                logger.warning("Content appears to be a form or redirect, using full content")
-                return content.strip(), False
-            
-            # Try to extract clean job description
+            # If content contains non-job patterns significantly, marker as such
+            # Only block if we are SURE it's a form/survey and NOT a job description.
+            # EEO statements are common in JDs, so specific form identifiers (like OMB numbers) are safer.
+            if any(pattern in validation_content for pattern in non_job_patterns):
+                logger.warning("Content identified as a form/survey/redirect (blocked)")
+                return None, "full_page_content"  # This ensures jd_extraction=False
+
             lines = content.split('\n')
-            description_started = False
-            description_lines = []
             
-            for line in lines:
-                line = line.strip()
-                
-                # Skip empty lines but check headers for job description keywords
-                if not line:
-                    if description_started:
+            # --- Markers Setup ---
+            
+            # Start Markers
+            start_keywords = [
+                'about the role', 'what you\'ll do', 'responsibilities', 'requirements', 
+                'qualifications', 'what we\'re looking for', 'role overview', 'position overview',
+                'about this role', 'key responsibilities', 'job summary', 'role summary',
+                'position summary', 'we are looking for', 'the ideal candidate', 
+                'you will be responsible', 'about you and the role', 'about the position', 
+                'about this position', 'the role', 'this role', 'position details', 'job details',
+                'what you\'ll be doing', 'what you will do', 'key duties', 
+                'main responsibilities', 'primary responsibilities',
+                'who we are', 'about us', 'about the company', 'company overview',
+                'location:', 'why join', 'why work', 'why us'
+            ]
+            
+            # Start lines that might begin with "At [Company]" or "Why [Company]"
+            # We handle these by checking starts_with in the loop or adding general patterns here.
+            # "location:" is a strong signal if it appears early.
+
+            
+            # Exact match start markers (case insensitive, strip)
+            # "Apply" is often a button/link text that appears right before the description in some layouts
+            exact_start_markers = ["apply"]
+            
+            # End Markers
+            end_markers = [
+                "create a job alert",
+                "apply for this job",
+                "voluntary self-identification",
+                "privacy policy",
+                "candidate privacy notice",
+                "submit application",
+                "apply now"
+            ]
+            
+            # --- State Machine ---
+            # States: SEARCHING -> EXTRACTING -> STOPPED
+            
+            description_lines = []
+            extracted = False
+            state = "SEARCHING" # SEARCHING, EXTRACTING, STOPPED
+            
+            # Cleaning function for fuzzy matching
+            def simplify_line(line):
+                return re.sub(r'[^a-z0-9]', '', line.lower())
+            
+            simplified_title = simplify_line(job_title) if job_title else None
+            
+            start_index = -1
+            end_index = -1
+
+            for i, line in enumerate(lines):
+                line_stripped = line.strip()
+                if not line_stripped:
+                    # Keep empty lines only if we are extracting (to preserve paragraphs)
+                    if state == "EXTRACTING":
                         description_lines.append(line)
                     continue
                 
-                # Look for job description indicators
-                if any(keyword in line.lower() for keyword in [
-                    'job description', 'about the role', 'what you\'ll do', 
-                    'responsibilities', 'requirements', 'qualifications',
-                    'what we\'re looking for', 'role overview', 'position overview',
-                    'about this role', 'key responsibilities', 'job summary',
-                    'role summary', 'position summary', 'we are looking for',
-                    'the ideal candidate', 'you will be responsible',
-                    'about you and the role', 'about the position', 'about this position',
-                    'the role', 'this role', 'position details', 'job details',
-                    'what you\'ll be doing', 'what you will do', 'key duties',
-                    'main responsibilities', 'primary responsibilities'
-                ]):
-                    description_started = True
-                    description_lines.append(line)
-                elif description_started and not line.startswith('#'):
-                    description_lines.append(line)
+                line_lower = line_stripped.lower()
+                
+                # CHECK FOR END MARKERS (Priority Check to stop early)
+                # We check this in both SEARCHING and EXTRACTING states
+                # If we find an end marker in SEARCHING, it might mean we missed the start 
+                # or the intro was very short.
+                is_end = False
+                for marker in end_markers:
+                    if marker in line_lower:
+                        # Special check: "Apply" is both a start and part of "Apply for this job"
+                        # If the line is EXACTLY "Apply", treat as start (or ignored if extracting)
+                        # If "Apply for this job", treat as END.
+                        if line_lower == "apply" and "apply" in exact_start_markers:
+                            # It's a start marker, not an end marker here
+                            break 
+                        
+                        is_end = True
+                        break
+                
+                if is_end:
+                    if state == "EXTRACTING":
+                        state = "STOPPED"
+                        end_index = i
+                        break # Stop processing lines
+                    elif state == "SEARCHING":
+                        # We hit the end before finding a start. 
+                        # We will handle "Fallback" later (take content from 0 to here)
+                        end_index = i
+                        break
+                
+                # STATE: SEARCHING
+                if state == "SEARCHING":
+                    found_start = False
+                    
+                    # 1. Check Job Title (Fuzzy)
+                    if simplified_title:
+                        sim_line = simplify_line(line_stripped)
+                        if simplified_title in sim_line and len(sim_line) < len(simplified_title) + 20:
+                             # It's likely the title header
+                            found_start = True
+                    
+                    # 2. Check "Apply" exact match
+                    if not found_start:
+                        if line_lower in exact_start_markers:
+                            found_start = True
+                            
+                    # 3. Check Section Keywords
+                    if not found_start:
+                         if any(keyword in line_lower for keyword in start_keywords):
+                             # Ensure it's likely a header (length check or starts with #)
+                             if len(line_stripped) < 100 or line_stripped.startswith('#'):
+                                 found_start = True
+                    
+                    # 4. Check "At [Company]" or "Why [Company]" patterns
+                    # Many JDs start with "At CompanyName, we..." or "Why CompanyName:"
+                    if not found_start:
+                        if line_stripped.startswith("At ") or line_stripped.startswith("Why "):
+                             # Simple heuristic: if it looks like a sentence start or header about the company
+                             # "At SMCP, we embody..." -> len > 20
+                             # "Why SMCP:" -> len < 50
+                             if len(line_stripped) < 100 or line_stripped.strip().endswith(':'):
+                                 found_start = True
+                             # Also if it's "At [Company]..." and fairly long, it might be the intro paragraph start
+                             elif line_stripped.startswith("At ") and "we " in line_lower:
+                                 found_start = True
+
+                    if found_start:
+                        state = "EXTRACTING"
+                        extracted = True
+                        start_index = i
+                        # If the start marker is the title or a header, we usually want to include it.
+                        # If it's "Apply", we might NOT want to include "Apply" itself if it's a button text.
+                        # For now, let's include it, but we can refine.
+                        if line_lower not in ["apply"]:
+                             description_lines.append(line)
+                        continue # Move to next line
+
+                # STATE: EXTRACTING
+                elif state == "EXTRACTING":
+                    # Skip common button text that might appear in the middle of description
+                    if line_lower in ["apply", "apply now", "please apply"]:
+                        continue
+                    
+                    # Remove markdown image links (e.g. ![alt](url))
+                    # We use regex to replace them with empty string
+                    line_no_images = re.sub(r'!\[.*?\]\(.*?\)', '', line).strip()
+                    
+                    if line_no_images:
+                        # Remove [Back to jobs] links
+                        if "[Back to jobs]" in line_no_images:
+                             line_no_images = line_no_images.replace("[Back to jobs]", "")
+                             # Clean up any leftover url parts if they were attached tightly
+                             line_no_images = re.sub(r'\(http.*?\)', '', line_no_images).strip()
+                        
+                        if line_no_images:
+                            description_lines.append(line_no_images)
+
+            # --- Result Processing ---
             
-            # Clean up the description
-            extracted_description = '\n'.join(description_lines).strip()
+            clean_text = '\n'.join(description_lines).strip()
             
-            # If we found a good extracted description, use it
-            if len(extracted_description) >= 100:
-                logger.info("Successfully extracted clean job description")
-                return extracted_description, True
-            else:
-                # Fallback to full content if extraction didn't work well
-                logger.warning("Job description extraction failed, using full content")
-                return content.strip(), False
+            if extracted and len(clean_text) > 100:
+                # Add title if provided and not already likely there
+                if job_title and job_title.lower() not in clean_text.lower()[:200]:
+                    clean_text = f"# {job_title}\n\n{clean_text}"
+                return clean_text, "clean"
+            
+            # Fallback Logic
+            # If we didn't find a start marker, but we found an end marker
+            if not extracted and end_index > 0:
+                # Take everything from start to end marker
+                # We might want to skip the first few lines if they are nav links
+                fallback_lines = lines[:end_index]
+                fallback_text = '\n'.join(fallback_lines).strip()
+                if len(fallback_text) > 100:
+                    return fallback_text, "fallback"
+
+            # If cleaned text is too short or logic failed completely
+            logger.warning("Job description extraction failed to find markers, using full content")
+            return content.strip(), "full_page_content"
                 
         except Exception as e:
             logger.error(f"Error processing content: {e}")
-            return content.strip() if content else None, False
+            return content.strip() if content else None, "full_page_content"
 
-    async def process_batch(self, jobs: List[Dict]) -> List[Tuple[str, Optional[str], bool, Optional[str]]]:
+    async def process_batch(self, jobs: List[Dict]) -> List[Tuple[str, Optional[str], str, str, bool, Optional[str]]]:
         """
         Process a batch of jobs concurrently
         
@@ -344,7 +513,7 @@ class JobDescriptionExtractor:
             jobs: List of job documents from MongoDB
             
         Returns:
-            List of (job_id, description, api_success, error_message) tuples
+            List of (job_id, description, extraction_method, raw_content, api_success, error_message) tuples
         """
         tasks = []
         
@@ -374,18 +543,18 @@ class JobDescriptionExtractor:
             if isinstance(result, Exception):
                 logger.error(f"Task failed with exception: {result}")
                 self.failed_count += 1
-            elif isinstance(result, tuple) and len(result) == 4:
+            elif isinstance(result, tuple) and len(result) == 6:
                 valid_results.append(result)
         
         return valid_results
 
-    async def update_job_descriptions(self, results: List[Tuple[str, Optional[str], bool, Optional[str]]]):
+    async def update_job_descriptions(self, results: List[Tuple[str, Optional[str], str, str, bool, Optional[str]]]):
         """
         Update MongoDB with job descriptions. 
         Note: ONLY updates successful extractions. Failed extractions stop the script before this point.
         
         Args:
-            results: List of (job_id, description, api_success, error_message) tuples
+            results: List of (job_id, description, extraction_method, raw_content, api_success, error_message) tuples
         """
         if not results:
             return
@@ -393,23 +562,19 @@ class JobDescriptionExtractor:
         from bson import ObjectId
         
         # Update jobs individually to avoid bulk write issues
-        for job_id, description_data, api_success, error_message in results:
+        for job_id, description, extraction_method, raw_content, api_success, error_message in results:
             try:
-                from bson import ObjectId
-                
-                if description_data and api_success:
-                    # API succeeded - handle both old format (string) and new format (tuple)
-                    if isinstance(description_data, tuple):
-                        description, jd_extraction_success = description_data
-                    else:
-                        # Backward compatibility for old format
-                        description = description_data
-                        jd_extraction_success = True
+                if api_success:
+                    # Determine success flag based on method
+                    # User requested that fallback/failures be marked as False
+                    jd_extraction_success = (extraction_method == "clean")
                     
-                    # Update MongoDB with both description and extraction flag
+                    # Update MongoDB with description, extraction method, and raw content
                     update_data = {
-                        'job_description': description,
-                        'jd_extraction': jd_extraction_success,
+                        'job_description': description, # The "best" description we have
+                        'jd_extraction': jd_extraction_success, 
+                        'jd_extraction_method': extraction_method, # "clean", "fallback", "full_page_content"
+                        'jina_raw_content': raw_content, # NEW: Full raw content for audit
                         'api_error': None  # Clear any previous error
                     }
                     
@@ -420,20 +585,13 @@ class JobDescriptionExtractor:
                     
                     if result.modified_count > 0:
                         self.processed_count += 1
-                        extraction_status = "clean extraction" if jd_extraction_success else "full content"
-                        logger.info(f"✅ Updated job {job_id} with description ({extraction_status})")
+                        logger.info(f"✅ Updated job {job_id} ({extraction_method})")
                     else:
                         logger.warning(f"⚠️ No changes made to job {job_id}")
                         
                 else:
-                    # This branch should rarely be reached if CriticalAPIError works as intended,
-                    # but logic is kept for any non-critical failures if any exist (e.g. invalid URL)
                     if not api_success:
-                         logger.warning(f"⚠️ Skipping update for job {job_id} due to API failure (Script should have stopped if critical)")
-                    else:
-                        # No description data but API succeeded (shouldn't happen)
-                        self.failed_count += 1
-                        logger.warning(f"⚠️ No description data for job {job_id} despite API success")
+                         logger.warning(f"⚠️ Skipping update for job {job_id} due to API failure")
                     
             except Exception as e:
                 logger.error(f"Error updating job {job_id}: {e}")
@@ -449,6 +607,9 @@ class JobDescriptionExtractor:
         Returns:
             List of job documents
         """
+        # Using the same logic as before, but potentially we could use this to re-process 
+        # jobs that have 'full_page_content' if we wanted to improve them. 
+        # For now, stick to missing descriptions.
         query = {
             'job_link': {'$exists': True, '$ne': ''},
             'jd_extraction': {'$ne': False},  # Exclude jobs that failed API calls
@@ -505,39 +666,6 @@ class JobDescriptionExtractor:
         logger.info(f"Found {len(jobs)} jobs with API errors")
         return jobs
 
-    async def retry_jobs_with_errors(self, job_ids: List[str] = None, limit: Optional[int] = None):
-        """
-        Retry jobs that previously had API errors by clearing their error status
-        
-        Args:
-            job_ids: Specific job IDs to retry (None for all error jobs)
-            limit: Maximum number of jobs to retry (None for all)
-        """
-        from bson import ObjectId
-        
-        if job_ids:
-            # Retry specific jobs
-            query = {'_id': {'$in': [ObjectId(jid) for jid in job_ids]}}
-        else:
-            # Retry all jobs with API errors
-            query = {
-                'api_error': {'$exists': True, '$ne': None},
-                'jd_extraction': False
-            }
-
-        query = self.build_job_query(query)
-        
-        # Clear the error status to allow retry
-        update_data = {
-            'api_error': None,
-            'jd_extraction': None  # Reset to allow processing
-        }
-        
-        result = self.collection.update_many(query, {'$unset': update_data})
-        
-        logger.info(f"Cleared error status for {result.modified_count} jobs - ready for retry")
-        return result.modified_count
-
     async def run_extraction(self, limit: Optional[int] = None, batch_size: int = BATCH_SIZE):
         """
         Main extraction process
@@ -586,11 +714,16 @@ class JobDescriptionExtractor:
                 rate = (self.processed_count + self.failed_count) / elapsed if elapsed > 0 else 0
                 logger.info(f"Progress: {self.processed_count} processed, {self.failed_count} failed, {rate:.2f} jobs/sec")
                 
-                # Small delay between batches
-                if i + batch_size < len(all_jobs):
-                    await asyncio.sleep(1)
+                # Small delay between batches (Removed as per user request for speed)
+                # if i + batch_size < len(all_jobs):
+                #     await asyncio.sleep(RATE_LIMIT_DELAY)
             
-            # Final summary
+                # Small delay between batches to prevent sustained rate limiting
+            if i + batch_size < len(all_jobs):
+                logger.info(f"Sleeping 2s between batches...")
+                await asyncio.sleep(2)
+        
+        # Final summary
             total_time = time.time() - self.start_time
             logger.info(f"✅ Extraction completed!")
             logger.info(f"📊 Total processed: {self.processed_count}")
@@ -601,6 +734,9 @@ class JobDescriptionExtractor:
         except Exception as e:
             logger.error(f"Extraction failed: {e}")
             raise
+        finally:
+            if self.session:
+                await self.session.close()
 
 async def main():
     """Main function"""
@@ -608,7 +744,7 @@ async def main():
         logger.error("❌ JINAAI_API_KEY not found in environment variables")
         return
     
-    print("Job Description Extractor")
+    print("Job Description Extractor (Optimized)")
     print("=" * 50)
     
     # Get cycle input
@@ -633,17 +769,6 @@ async def main():
         # Setup MongoDB connection first
         await extractor.setup_mongodb_connection()
         
-        # Check for jobs with API errors
-        error_jobs = await extractor.get_jobs_with_api_errors(limit=10)
-        if error_jobs:
-            print(f"\n⚠️ Found {len(error_jobs)} jobs with API errors:")
-            for job in error_jobs[:5]:  # Show first 5
-                print(f"  - {job.get('title', 'Unknown')} at {job.get('company', 'Unknown')}")
-                print(f"    Error: {job.get('api_error', 'Unknown')}")
-            if len(error_jobs) > 5:
-                print(f"  ... and {len(error_jobs) - 5} more")
-            print()
-        
         limit_input = input("Enter number of jobs to process (press Enter for all): ").strip()
         limit = int(limit_input) if limit_input else None
         
@@ -656,60 +781,16 @@ async def main():
         print(f"Rate limit delay: {RATE_LIMIT_DELAY}s")
         print("-" * 50)
         
-        # Diagnostic counts
-        total_cycle_jobs = extractor.collection.count_documents(extractor.job_filter)
-        print(f"📊 Diagnostic Check:")
-        print(f"   - Total jobs found for Cycle {extractor.cycle}: {total_cycle_jobs}")
-        
-        # Count excluding the 'jd_extraction: False' filter to see if jobs are being hidden
-        pending_query = {
-            '$and': [
-                extractor.job_filter,
-                {
-                    'job_link': {'$exists': True, '$ne': ''},
-                    '$or': [
-                        {'job_description': {'$exists': False}},
-                        {'job_description': {'$eq': ''}},
-                        {'job_description': None}
-                    ]
-                }
-            ]
-        }
-        pending_count_total = extractor.collection.count_documents(pending_query)
-        print(f"   - Jobs without description (Total): {pending_count_total}")
-        
-        # Count actually eligible (excluding failed attempts)
-        eligible_query = extractor.build_job_query({
-            'job_link': {'$exists': True, '$ne': ''},
-            'jd_extraction': {'$ne': False},
-            '$or': [
-                {'job_description': {'$exists': False}},
-                {'job_description': {'$eq': ''}},
-                {'job_description': None}
-            ]
-        })
-        eligible_count = extractor.collection.count_documents(eligible_query)
-        print(f"   - Jobs eligible for extraction (excluding previous failures): {eligible_count}")
-        
-        if eligible_count == 0 and pending_count_total > 0:
-            print(f"\n⚠️ NOTE: {pending_count_total} jobs are missing descriptions but are marked as 'failed' (jd_extraction=False).")
-            print("   You may want to reset their status to retry them.")
-            
-        print("-" * 50)
-        
         await extractor.run_extraction(limit=limit, batch_size=batch_size)
         
     except KeyboardInterrupt:
         logger.info("Extraction interrupted by user")
     except CriticalAPIError as e:
         logger.error(f"❌ Critical API Error: {e}")
-        logger.error("Please check your JINAAI_API_KEY and API usage limits.")
     except Exception as e:
         logger.error(f"Extraction failed: {e}")
         raise
     finally:
-        if extractor.session:
-            await extractor.session.close()
         if extractor.mongo_client:
             extractor.mongo_client.close()
 
