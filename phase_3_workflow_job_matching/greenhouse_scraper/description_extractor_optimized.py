@@ -410,6 +410,10 @@ class JobDescriptionExtractor:
                         end_index = i
                         break
                 
+                # CHECK FOR METADATA LINES (Prevent false start triggers)
+                if line_lower.startswith("title:") or line_lower.startswith("url source:") or line_lower.startswith("markdown content:"):
+                    continue
+
                 # STATE: SEARCHING
                 if state == "SEARCHING":
                     found_start = False
