@@ -333,7 +333,10 @@ class JobDescriptionExtractor:
                 'what you\'ll be doing', 'what you will do', 'key duties', 
                 'main responsibilities', 'primary responsibilities',
                 'who we are', 'about us', 'about the company', 'company overview',
-                'location:', 'why join', 'why work', 'why us'
+                'location:', 'why join', 'why work', 'why us',
+                'what you bring', 'what you\'ll bring', 'what you will bring',
+                'join our team', 'join the team', 'join us', 'exciting time to join', 
+                'what you can expect', 'your impact', 'unlock your potential'
             ]
             
             # Start lines that might begin with "At [Company]" or "Why [Company]"
@@ -380,7 +383,8 @@ class JobDescriptionExtractor:
                         description_lines.append(line)
                     continue
                 
-                line_lower = line_stripped.lower()
+                # Normalize smart quotes and backticks to standard single quotes for keyword matching
+                line_lower = line_stripped.lower().replace('’', "'").replace('‘', "'").replace('`', "'")
                 
                 # CHECK FOR END MARKERS (Priority Check to stop early)
                 # We check this in both SEARCHING and EXTRACTING states
@@ -437,17 +441,15 @@ class JobDescriptionExtractor:
                              if len(line_stripped) < 100 or line_stripped.startswith('#'):
                                  found_start = True
                     
-                    # 4. Check "At [Company]" or "Why [Company]" patterns
+                    # 4. Check "At [Company]" or "Why [Company]" or "As the [Title]" patterns
                     # Many JDs start with "At CompanyName, we..." or "Why CompanyName:"
                     if not found_start:
-                        if line_stripped.startswith("At ") or line_stripped.startswith("Why "):
+                        if line_stripped.startswith("At ") or line_stripped.startswith("Why ") or line_stripped.startswith("As a ") or line_stripped.startswith("As an ") or line_stripped.startswith("As the "):
                              # Simple heuristic: if it looks like a sentence start or header about the company
-                             # "At SMCP, we embody..." -> len > 20
-                             # "Why SMCP:" -> len < 50
                              if len(line_stripped) < 100 or line_stripped.strip().endswith(':'):
                                  found_start = True
                              # Also if it's "At [Company]..." and fairly long, it might be the intro paragraph start
-                             elif line_stripped.startswith("At ") and "we " in line_lower:
+                             elif (line_stripped.startswith("At ") and "we " in line_lower) or line_stripped.startswith("As "):
                                  found_start = True
 
                     if found_start:
