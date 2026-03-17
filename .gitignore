@@ -34,6 +34,8 @@ Processed_resumes/
 Exported_resumes/
 Adhoc/
 Adhoc analysis/
+logs/
+Documentation/
 
 
 # Phase Specific Data/Testing (redundant with above, but explicit for safety)
