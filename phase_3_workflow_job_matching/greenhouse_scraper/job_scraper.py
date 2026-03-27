@@ -839,9 +839,6 @@ def main():
     
     # Define list of locations to scrape
 
-    locations = ["canada"]
-    
-    ''' # New "Canada" filter supported in greenhouse, so we can just use "Canada" as the location
     locations = [
         "toronto",
         "vancouver",
@@ -857,7 +854,7 @@ def main():
         "st. john's",
         "saskatoon"
     ]
-    '''
+    
     # Option to customize locations
     print(f"\nDefault locations: {', '.join(locations)}")
     custom_locations = input("Enter custom locations (comma-separated) or press Enter to use default: ").strip()
